@@ -88,6 +88,20 @@ int gimmix_next(MpdObj *mo)
 	return 0;
 }
 
+int gimmix_seek(MpdObj *mo, int seektime)
+{
+	int state;
+	
+	state = mpd_player_get_state(mo);
+	if(state == MPD_PLAYER_PLAY || state == MPD_PLAYER_PAUSE)
+	{
+		mpd_player_seek(mo, seektime);
+		return 1;
+	}
+	
+	return 0;
+}
+
 void gimmix_set_volume(MpdObj *mo, int vol)
 {
 	mpd_status_set_volume(mo, vol);
@@ -98,6 +112,13 @@ int gimmix_get_volume(MpdObj *mo)
 	int volume;
 	volume = mpd_status_get_volume(mo);
 	return volume;
+}
+
+int gimmix_get_total_song_time(MpdObj *mo)
+{
+	int time;
+	time = mpd_status_get_total_song_time(mo);
+	return time;
 }
 
 SongInfo * gimmix_get_song_info(MpdObj *mo)

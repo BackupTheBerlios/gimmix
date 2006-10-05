@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 		button_info = glade_xml_get_widget(xml,"info_button");
 		volume_scale = glade_xml_get_widget(xml,"volume_scale");
 		progress = glade_xml_get_widget(xml,"progress");
+		progressbox = glade_xml_get_widget(xml,"progress_event_box");
 
 		gimmix_init();
 

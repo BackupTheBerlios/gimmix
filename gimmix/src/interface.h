@@ -13,6 +13,7 @@ GtkWidget *button_prefs;
 GtkWidget *button_info;
 GtkWidget *volume_scale;
 GtkWidget *progress;
+GtkWidget *progressbox;
 GtkAdjustment *volume_adj;
 GtkStatusIcon *tray_icon;
 
@@ -38,3 +39,4 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data);
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data);
 void on_info_button_clicked(GtkWidget *widget, gpointer data);
 void on_volume_scale_changed(GtkWidget *widget, gpointer data);
+void gimmix_progress_seek(GtkWidget *, GdkEvent *);

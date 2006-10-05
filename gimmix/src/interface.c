@@ -36,6 +36,7 @@ void gimmix_init()
 	g_signal_connect (G_OBJECT(button_prefs), "clicked", G_CALLBACK(on_prefs_button_clicked), NULL);
 	g_signal_connect (G_OBJECT(button_info), "clicked", G_CALLBACK(on_info_button_clicked), NULL);
 	g_signal_connect(G_OBJECT(volume_scale), "value_changed", G_CALLBACK(on_volume_scale_changed), NULL);
+	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL); 
 
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
 	gimmix_systray_icon_create();
@@ -121,6 +122,23 @@ void on_volume_scale_changed(GtkWidget *widget, gpointer data)
 
 	value = gtk_adjustment_get_value(GTK_ADJUSTMENT(volume_adj));
 	gimmix_set_volume(pub->gmo, value);
+}
+
+void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
+{
+	GtkAllocation allocation;
+	gint x, newtime, totaltime;
+	gdouble seektime;
+
+	x = event->button.x;
+	allocation = GTK_WIDGET(progressbox)->allocation;
+	totaltime = gimmix_get_total_song_time(pub->gmo);
+	seektime = (gdouble)x/allocation.width;
+	newtime = seektime * totaltime;
+	if(gimmix_seek(pub->gmo, newtime))
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), seektime);
+	//}
+	return;
 }
 
 GtkWidget * get_image(const gchar *id, GtkIconSize size)
