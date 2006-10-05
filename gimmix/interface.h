@@ -1,7 +1,6 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include "gimmixcore.h"
-#include "eggtrayicon.h"
 
 GtkWidget *song_label;
 GtkWidget *artist_label;
