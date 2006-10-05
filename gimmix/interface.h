@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include "gimmixcore.h"
 
 GtkWidget *song_label;
 GtkWidget *artist_label;
@@ -18,7 +19,7 @@ GtkWidget * get_image(const gchar *, GtkIconSize);
 void gimmix_set_song_info(void);
 
 /* Callbacks */
-void connect_callbacks(void);
+void gimmix_init(void);
 
 void on_prev_button_clicked(GtkWidget *widget, gpointer data);
 void on_next_button_clicked(GtkWidget *widget, gpointer data);

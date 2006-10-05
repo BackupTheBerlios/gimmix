@@ -19,6 +19,6 @@ void gimmix_set_volume(MpdObj *, int);
 SongInfo * gimmix_get_song_info(MpdObj *);
 
 int gimmix_mpd_play (MpdObj *);
-int gimmix_mpd_stop (void);
+int gimmix_mpd_stop (MpdObj *);
 int gimmix_mpd_prev (void);
 int gimmix_mpd_next (void);

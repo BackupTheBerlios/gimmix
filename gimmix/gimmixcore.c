@@ -1,4 +1,3 @@
-
 #include "gimmixcore.h"
 
 MpdObj * gimmix_mpd_connect(void)
@@ -15,6 +14,7 @@ MpdObj * gimmix_mpd_connect(void)
 
 	fprintf(stderr, "Error! Couldn't connect to mpd.\n\
 					Check whether mpd is running.\n");
+	return NULL;
 }
 
 int gimmix_play(MpdObj *mo)
@@ -37,6 +37,7 @@ int gimmix_play(MpdObj *mo)
 			return 1;
 		}
 	}
+	return -1;
 }
 
 int gimmix_stop(MpdObj *mo)
@@ -56,11 +57,13 @@ int gimmix_stop(MpdObj *mo)
 int gimmix_prev(MpdObj *mo)
 {
 	/* does nothing for now */
+	return 0;
 }
 
 int gimmix_next(MpdObj *mo)
 {
 	/* does nothing for now */
+	return 0;
 }
 
 void gimmix_set_volume(MpdObj *mo, int vol)

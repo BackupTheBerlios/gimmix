@@ -1,11 +1,10 @@
 #include "interface.h"
 #include "gimmix.h"
-#include "gimmixcore.h"
 
 #define PLAYING 0
 #define PAUSED  1
 
-void connect_callbacks()
+void gimmix_init()
 {
 	g_signal_connect (G_OBJECT(button_play), "clicked", G_CALLBACK(on_play_button_clicked), NULL);
 	g_signal_connect (G_OBJECT(button_prev), "clicked", G_CALLBACK(on_prev_button_clicked), NULL);

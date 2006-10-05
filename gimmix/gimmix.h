@@ -14,4 +14,4 @@ typedef struct Gimmix
 
 GM *pub;
 
-int gimmix_init (void);
+int gimmix_connect (void);

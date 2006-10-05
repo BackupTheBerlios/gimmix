@@ -1,10 +1,9 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
-#include "gimmixcore.h"
-#include "interface.h"
 #include "gimmix.h"
+#include "interface.h"
 
-int gimmix_init(void)
+int gimmix_connect(void)
 {
 	MpdObj *mo;
 	
@@ -22,7 +21,7 @@ int main(int argc, char *argv[])
 	GtkWidget *main_window;
 
 	pub = (GM *) malloc(sizeof(GM));
-	gimmix_init();
+	gimmix_connect();
 
 	gtk_init(&argc, &argv);
 
@@ -41,7 +40,7 @@ int main(int argc, char *argv[])
 	button_info = glade_xml_get_widget(xml,"info_button");
 	volume_scale = glade_xml_get_widget(xml,"volume_scale");
 
-	connect_callbacks();
+	gimmix_init();
 
 	gtk_main();
 
