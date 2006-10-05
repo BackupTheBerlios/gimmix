@@ -25,5 +25,5 @@ void gimmix_set_volume(MpdObj *, int);
 
 /* other functions */
 SongInfo * gimmix_get_song_info(MpdObj *);
-
+int gimmix_get_progress_status(MpdObj *, float *, char *);
 

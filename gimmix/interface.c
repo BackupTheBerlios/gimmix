@@ -40,6 +40,26 @@ void gimmix_init()
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
 	//gimmix_set_song_info();
 	gimmix_systray_icon_create();
+	g_timeout_add(50, gimmix_timer, NULL);
+}
+
+gboolean gimmix_timer()
+{
+	gchar time[15];
+	float fraction;
+	
+	if(gimmix_get_progress_status(pub->gmo, &fraction, time))
+	{
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), fraction);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), time);
+	}
+	else
+	{
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 0.0);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Stopped");
+		//return FALSE;
+	}
+	return TRUE;
 }
 
 void on_prev_button_clicked(GtkWidget *widget, gpointer data)
@@ -56,6 +76,8 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *image;
 	gint state;
+	gchar time[15];
+	float fraction;
 	
 	state = gimmix_play(pub->gmo);
 	if(state == PLAYING)
@@ -68,7 +90,11 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 		image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(button_play), image);
 	}
+	else
+	return;
+
 	gimmix_set_song_info();
+	
 }
 
 void on_stop_button_clicked(GtkWidget *widget, gpointer data)

@@ -35,8 +35,7 @@ MpdObj * gimmix_mpd_connect(void)
 		return mo;
 	}
 
-	fprintf(stderr, "Error! Couldn't connect to mpd.\n\
-					Check whether mpd is running.\n");
+	fprintf(stderr, "Error! Couldn't connect to mpd. Check whether mpd is running.\n");
 	return NULL;
 }
 
@@ -105,5 +104,33 @@ SongInfo * gimmix_get_song_info(MpdObj *mo)
 	si->album_name = ms->album;
 
 	return si;
+}
+
+int gimmix_get_progress_status(MpdObj *mo, float *fraction, char *time)
+{
+	int state;
+	int total, elapsed;
+		
+	state = mpd_player_get_state(mo);
+	
+	switch(state)
+	{
+		case MPD_PLAYER_PLAY:
+		case MPD_PLAYER_PAUSE:
+			mpd_status_update(mo);
+			total = mpd_status_get_total_song_time(mo);
+			elapsed = mpd_status_get_elapsed_song_time(mo);
+			snprintf(time, 20, "%02i:%02i / %02i:%02i", elapsed/60,
+					elapsed%60,
+					total/60,
+					total%60);
+			*fraction = (float)((float)elapsed/(float)total);
+			break;
+
+		case MPD_PLAYER_STOP:
+		case MPD_PLAYER_UNKNOWN:
+			return 0;
+	}
+	return 1;
 }
 
