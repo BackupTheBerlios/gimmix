@@ -6,8 +6,9 @@
 
 /* mpd control functions */
 MpdObj * gimmix_mpd_connect(void);
+void gimmix_set_volume(MpdObj *, int);
 
-void gimmix_mpd_play (MpdObj *);
-void gimmix_mpd_stop (MpdObj *);
-void gimmix_mpd_prev (MpdObj *);
-void gimmix_mpd_next (MpdObj *);
+int gimmix_mpd_play (MpdObj *);
+int gimmix_mpd_stop (void);
+int gimmix_mpd_prev (void);
+int gimmix_mpd_next (void);

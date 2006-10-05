@@ -11,6 +11,10 @@ GtkWidget *button_next;
 GtkWidget *button_prefs;
 GtkWidget *button_info;
 GtkWidget *volume_scale;
+GtkAdjustment *volume_adj;
+
+/* Utility functions */
+GtkWidget * get_image(const gchar *, GtkIconSize);
 
 /* Callbacks */
 void connect_callbacks(void);
