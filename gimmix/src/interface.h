@@ -14,6 +14,7 @@ GtkWidget *button_info;
 GtkWidget *volume_scale;
 GtkWidget *progress;
 GtkAdjustment *volume_adj;
+GtkStatusIcon *tray_icon;
 
 /* Timer */
 gboolean gimmix_timer(void);

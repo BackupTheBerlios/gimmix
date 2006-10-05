@@ -38,8 +38,9 @@ void gimmix_init()
 	g_signal_connect(G_OBJECT(volume_scale), "value_changed", G_CALLBACK(on_volume_scale_changed), NULL);
 
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
-	//gimmix_set_song_info();
 	gimmix_systray_icon_create();
+	gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), gimmix_get_volume(pub->gmo));
+	gimmix_set_song_info();
 	g_timeout_add(50, gimmix_timer, NULL);
 }
 
@@ -76,8 +77,6 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *image;
 	gint state;
-	gchar time[15];
-	float fraction;
 	
 	state = gimmix_play(pub->gmo);
 	if(state == PLAYING)
@@ -91,7 +90,7 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 		gtk_button_set_image(GTK_BUTTON(button_play), image);
 	}
 	else
-	return;
+		return;
 
 	gimmix_set_song_info();
 	
@@ -137,6 +136,7 @@ void gimmix_set_song_info()
 	gchar *song_name;
 	gchar *artist_name;
 	gchar *album_name;
+	gchar *markup;
 	SongInfo *si;
 
 	si = gimmix_get_song_info(pub->gmo);
@@ -144,7 +144,8 @@ void gimmix_set_song_info()
 	artist_name = si->artist_name;
 	album_name = si->album_name;
 
-	gtk_label_set_text(GTK_LABEL(song_label), song_name);
+	markup = g_markup_printf_escaped ("<span style=\"italic\"><b>%s</b></span>", song_name);
+	gtk_label_set_markup(GTK_LABEL(song_label), markup);
 	gtk_label_set_text(GTK_LABEL(artist_label), artist_name);
 	gtk_label_set_text(GTK_LABEL(album_label), album_name);
 	g_free(si);
@@ -152,7 +153,6 @@ void gimmix_set_song_info()
 
 void gimmix_systray_icon_create()
 {
-	GtkStatusIcon *tray_icon;
 	gchar *icon_tooltip = "Gimmix";
 	tray_icon = gtk_status_icon_new_from_stock("gtk-cdrom");
 	gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);

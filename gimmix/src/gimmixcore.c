@@ -93,6 +93,13 @@ void gimmix_set_volume(MpdObj *mo, int vol)
 	mpd_status_set_volume(mo, vol);
 }
 
+int gimmix_get_volume(MpdObj *mo)
+{
+	int volume;
+	volume = mpd_status_get_volume(mo);
+	return volume;
+}
+
 SongInfo * gimmix_get_song_info(MpdObj *mo)
 {
 	mpd_Song *ms;

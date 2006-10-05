@@ -21,6 +21,7 @@ int gimmix_mpd_prev (MpdObj *);
 int gimmix_mpd_next (MpdObj *);
 
 /* voulme control */
+int gimmix_get_volume(MpdObj *mo);
 void gimmix_set_volume(MpdObj *, int);
 
 /* other functions */
