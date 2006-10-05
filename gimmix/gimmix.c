@@ -37,7 +37,9 @@ int main(int argc, char *argv[])
 	button_prev = glade_xml_get_widget(xml,"prev_button");
 	button_next = glade_xml_get_widget(xml,"next_button");
 	button_stop = glade_xml_get_widget(xml,"stop_button");
-	button_next = glade_xml_get_widget(xml,"next_button");
+	button_prefs = glade_xml_get_widget(xml,"pref_button");
+	button_info = glade_xml_get_widget(xml,"info_button");
+	volume_scale = glade_xml_get_widget(xml,"volume_scale");
 
 	connect_callbacks();
 

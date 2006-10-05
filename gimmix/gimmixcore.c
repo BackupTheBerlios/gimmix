@@ -1,4 +1,4 @@
-#include "gm_mpd.h"
+#include "gimmixcore.h"
 
 MpdObj * gimmix_mpd_connect(void)
 {

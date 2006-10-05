@@ -8,7 +8,9 @@ GtkWidget *button_play;
 GtkWidget *button_stop;
 GtkWidget *button_prev;
 GtkWidget *button_next;
+GtkWidget *button_prefs;
 GtkWidget *button_info;
+GtkWidget *volume_scale;
 
 /* Callbacks */
 void connect_callbacks(void);
@@ -19,3 +21,4 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data);
 void on_stop_button_clicked(GtkWidget *widget, gpointer data);
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data);
 void on_info_button_clicked(GtkWidget *widget, gpointer data);
+void on_volume_scale_changed(GtkWidget *widget, gpointer data);
