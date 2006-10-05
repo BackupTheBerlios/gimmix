@@ -61,21 +61,23 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 	if(state == PLAYING)
 	{
 		image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
-		gtk_button_set_image(GTK_BUTTON(widget), image);
+		gtk_button_set_image(GTK_BUTTON(button_play), image);
 	}
 	else if(state == PAUSED)
 	{
 		image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
-		gtk_button_set_image(GTK_BUTTON(widget), image);
+		gtk_button_set_image(GTK_BUTTON(button_play), image);
 	}
 	gimmix_set_song_info();
 }
 
 void on_stop_button_clicked(GtkWidget *widget, gpointer data)
 {
-	//GtkWidget *image;
+	GtkWidget *image;
 	
 	gimmix_stop(pub->gmo);
+	image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image(GTK_BUTTON(button_play), image);
 }
 
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data)

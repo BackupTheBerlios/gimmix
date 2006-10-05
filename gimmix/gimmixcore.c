@@ -69,7 +69,7 @@ int gimmix_stop(MpdObj *mo)
 	
 	state = mpd_player_get_state(mo);
 	
-	if (state == MPD_PLAYER_STOP || state == MPD_PLAYER_PLAY)
+	if (state == MPD_PLAYER_PAUSE || state == MPD_PLAYER_PLAY)
 	{
 		mpd_player_stop(mo);
 		return 0;
