@@ -30,22 +30,20 @@ gimmix: $(OBJS)
 	$(CC) $(OBJS) -o gimmix $(LIBS)
 
 clean:
-	rm -f *.o core *.so* *.bak *~ gimmix
+	rm -f *.o core *.so* *.bak *~ src/*~ gimmix
 
 #config.o:		src/config.c
 #	$(CC) $(CFLAGS) -c src/config.c
 #prefs.o:		src/prefs.c
 #	$(CC) $(CFLAGS) -c src/prefs.c
-#systray.o:		src/systray.c
-#	$(CC) $(CFLAGS) -c src/systray.c
-gimmixcore.o:		gimmixcore.c
-	$(CC) $(CFLAGS) -c gimmixcore.c
-interface.o:		interface.c
-	$(CC) $(CFLAGS) -c interface.c
+gimmixcore.o:		src/gimmixcore.c
+	$(CC) $(CFLAGS) -c src/gimmixcore.c
+interface.o:		src/interface.c
+	$(CC) $(CFLAGS) -c src/interface.c
 #playlist.o:		src/playlist.c
 #	$(CC) $(CFLAGS) -c src/playlist.c
-gimmix.o:			gimmix.c
-	$(CC) $(CFLAGS) -c gimmix.c
+gimmix.o:			src/gimmix.c
+	$(CC) $(CFLAGS) -c src/gimmix.c
 	
 install:
 	install -D gimmix $(PREFIX)/bin/gimmix
