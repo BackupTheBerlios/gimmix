@@ -31,14 +31,11 @@ gimmix: $(OBJS)
 
 clean:
 	rm -f *.o core *.so* *.bak *~ gimmix
-	rm *~
 
 #config.o:		src/config.c
 #	$(CC) $(CFLAGS) -c src/config.c
 #prefs.o:		src/prefs.c
 #	$(CC) $(CFLAGS) -c src/prefs.c
-#eggtrayicon.o:	src/eggtrayicon.c
-#	$(CC) $(CFLAGS) -c src/eggtrayicon.c
 #systray.o:		src/systray.c
 #	$(CC) $(CFLAGS) -c src/systray.c
 gimmixcore.o:		gimmixcore.c

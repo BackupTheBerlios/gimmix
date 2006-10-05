@@ -1,3 +1,26 @@
+/*
+ * interface.c
+ *
+ * Copyright (C) 2006 Priyank Gosalia
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ *
+ * Author: Priyank Gosalia <priyankmg@gmail.com>
+ */
+
 #include "interface.h"
 #include "gimmix.h"
 
@@ -15,6 +38,8 @@ void gimmix_init()
 	g_signal_connect(G_OBJECT(volume_scale), "value_changed", G_CALLBACK(on_volume_scale_changed), NULL);
 
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
+	//gimmix_set_song_info();
+	gimmix_systray_icon_create();
 }
 
 void on_prev_button_clicked(GtkWidget *widget, gpointer data)
@@ -95,4 +120,61 @@ void gimmix_set_song_info()
 	gtk_label_set_text(GTK_LABEL(artist_label), artist_name);
 	gtk_label_set_text(GTK_LABEL(album_label), album_name);
 	g_free(si);
+}
+
+void gimmix_systray_icon_create()
+{
+	GtkStatusIcon *tray_icon;
+	gchar *icon_tooltip = "Gimmix";
+	tray_icon = gtk_status_icon_new_from_stock("gtk-cdrom");
+	gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);
+	g_signal_connect (tray_icon, "popup-menu", G_CALLBACK (gimmix_systray_popup_menu), NULL);
+}
+
+void gimmix_systray_popup_menu()
+{
+	GtkWidget *menu, *menu_item;
+
+	menu = gtk_menu_new();
+
+	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ABOUT, NULL);
+	//g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_about_show), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+
+	menu_item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+
+	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_MEDIA_PLAY, NULL);
+	//g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (on_play_button_clicked), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+
+	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_MEDIA_STOP, NULL);
+	//g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_stop), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+
+	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_MEDIA_PREVIOUS, NULL);
+	//g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_prev), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+
+	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_MEDIA_NEXT, NULL);
+	//g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_next), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+
+	menu_item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+
+	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
+	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gtk_main_quit), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+
+	gtk_widget_show (menu);
+	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 1,gtk_get_current_event_time());
 }

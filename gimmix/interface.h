@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include "gimmixcore.h"
+#include "eggtrayicon.h"
 
 GtkWidget *song_label;
 GtkWidget *artist_label;
@@ -16,11 +17,14 @@ GtkAdjustment *volume_adj;
 
 /* Utility functions */
 GtkWidget * get_image(const gchar *, GtkIconSize);
+void gimmix_systray_icon_create(void);
+void gimmix_systray_popup_menu(void);
 void gimmix_set_song_info(void);
 
 /* Callbacks */
 void gimmix_init(void);
 
+void gimmix_systray_popup_menu(void);
 void on_prev_button_clicked(GtkWidget *widget, gpointer data);
 void on_next_button_clicked(GtkWidget *widget, gpointer data);
 void on_play_button_clicked(GtkWidget *widget, gpointer data);
