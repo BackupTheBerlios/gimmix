@@ -184,7 +184,7 @@ void gimmix_systray_popup_menu()
 	menu = gtk_menu_new();
 
 	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ABOUT, NULL);
-	//g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_about_show), NULL);
+	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_about_show), NULL);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 	gtk_widget_show (menu_item);
 
@@ -223,4 +223,29 @@ void gimmix_systray_popup_menu()
 
 	gtk_widget_show (menu);
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 1,gtk_get_current_event_time());
+}
+
+void gimmix_about_show(void)
+{
+	GdkPixbuf *about_pixbuf;
+	about_pixbuf= gdk_pixbuf_new_from_file("gimmix.png", NULL);
+
+	gchar *website = "http://priyank.one09.net/";
+	gchar *website_label = "http://priyank.one09.net/";
+	gchar *authors[] = 	{ "Priyank M. Gosalia <priyankmg@gmail.com>",
+						 "Part of song seek code taken from Pygmy.",
+						 NULL
+						};
+	
+	gtk_show_about_dialog (NULL,
+                           "name", "Gimmix",
+                           "version", "0.1alpha",
+                           "copyright", "\xC2\xA9 2006 Priyank Gosalia  (GPL)",
+                           "comments", "Gimmix is a GUI MPD client written in C",
+                           "authors", authors,
+                           "website", website,
+                           "website-label", website_label,
+                           "logo", about_pixbuf, 
+                           NULL);
+	return;
 }

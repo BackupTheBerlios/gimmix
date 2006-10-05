@@ -17,6 +17,8 @@ GtkWidget *progressbox;
 GtkAdjustment *volume_adj;
 GtkStatusIcon *tray_icon;
 
+void gimmix_init(void);
+
 /* Timer */
 gboolean gimmix_timer(void);
 
@@ -29,8 +31,6 @@ void gimmix_systray_icon_create(void);
 void gimmix_systray_popup_menu(void);
 
 /* Callbacks */
-void gimmix_init(void);
-
 void gimmix_systray_popup_menu(void);
 void on_prev_button_clicked(GtkWidget *widget, gpointer data);
 void on_next_button_clicked(GtkWidget *widget, gpointer data);
@@ -40,3 +40,5 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data);
 void on_info_button_clicked(GtkWidget *widget, gpointer data);
 void on_volume_scale_changed(GtkWidget *widget, gpointer data);
 void gimmix_progress_seek(GtkWidget *, GdkEvent *);
+
+void gimmix_about_show(void);
