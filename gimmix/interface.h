@@ -15,6 +15,7 @@ GtkAdjustment *volume_adj;
 
 /* Utility functions */
 GtkWidget * get_image(const gchar *, GtkIconSize);
+void gimmix_set_song_info(void);
 
 /* Callbacks */
 void connect_callbacks(void);

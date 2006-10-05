@@ -44,6 +44,7 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 		image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(widget), image);
 	}
+	gimmix_set_song_info();
 }
 
 void on_stop_button_clicked(GtkWidget *widget, gpointer data)
@@ -77,4 +78,22 @@ GtkWidget * get_image(const gchar *id, GtkIconSize size)
 
 	image = gtk_image_new_from_stock (id, size);
 	return image;
+}
+
+void gimmix_set_song_info()
+{
+	gchar *song_name;
+	gchar *artist_name;
+	gchar *album_name;
+	SongInfo *si;
+
+	si = gimmix_get_song_info(pub->gmo);
+	song_name = si->song_name;
+	artist_name = si->artist_name;
+	album_name = si->album_name;
+
+	gtk_label_set_text(GTK_LABEL(song_label), song_name);
+	gtk_label_set_text(GTK_LABEL(artist_label), artist_name);
+	gtk_label_set_text(GTK_LABEL(album_label), album_name);
+	g_free(si);
 }

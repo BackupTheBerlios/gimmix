@@ -68,3 +68,16 @@ void gimmix_set_volume(MpdObj *mo, int vol)
 	mpd_status_set_volume(mo, vol);
 }
 
+SongInfo * gimmix_get_song_info(MpdObj *mo)
+{
+	mpd_Song *ms;
+	SongInfo *si = (SongInfo *) malloc(sizeof(SongInfo));
+
+	ms = mpd_playlist_get_current_song(mo);
+	si->song_name = ms->title;
+	si->artist_name = ms->artist;
+	si->album_name = ms->album;
+
+	return si;
+}
+
