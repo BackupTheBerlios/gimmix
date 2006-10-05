@@ -41,7 +41,7 @@ void gimmix_init()
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
 	gimmix_systray_icon_create();
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), gimmix_get_volume(pub->gmo));
-	gimmix_set_song_info();
+	//gimmix_set_song_info();
 	g_timeout_add(50, gimmix_timer, NULL);
 }
 
