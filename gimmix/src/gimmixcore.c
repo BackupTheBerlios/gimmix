@@ -39,6 +39,17 @@ MpdObj * gimmix_mpd_connect(void)
 	return NULL;
 }
 
+bool gimmix_is_playing(MpdObj *mo)
+{
+	int status;
+	status = mpd_player_get_state(mo);
+	
+	if(status == MPD_PLAYER_PAUSE || status == MPD_PLAYER_PLAY)
+		return true;
+	else
+		return false;
+}
+
 int gimmix_play(MpdObj *mo)
 {
 	if(mpd_playlist_get_playlist_length(mo))

@@ -1,7 +1,9 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "gimmixcore.h"
 
+GtkWidget *pref_window;
 GtkWidget *song_label;
 GtkWidget *artist_label;
 GtkWidget *album_label;

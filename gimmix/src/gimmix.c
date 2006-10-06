@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 		glade_xml_signal_autoconnect(xml);
 
 		main_window = glade_xml_get_widget(xml, "main_window");
+		pref_window = glade_xml_get_widget(xml, "prefs_window");
 		song_label = glade_xml_get_widget(xml,"song_label");
 		artist_label = glade_xml_get_widget(xml,"artist_label");
 		album_label = glade_xml_get_widget(xml,"album_label");

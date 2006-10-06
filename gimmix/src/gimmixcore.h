@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <libmpd/libmpd.h>
 #include <libmpd/libmpdclient.h>
 
@@ -29,4 +30,5 @@ void gimmix_set_volume(MpdObj *, int);
 SongInfo * gimmix_get_song_info(MpdObj *);
 int gimmix_get_progress_status(MpdObj *, float *, char *);
 int gimmix_get_total_song_time(MpdObj *);
+bool gimmix_is_playing(MpdObj *);
 

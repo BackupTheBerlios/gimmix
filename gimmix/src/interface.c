@@ -41,7 +41,8 @@ void gimmix_init()
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
 	gimmix_systray_icon_create();
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), gimmix_get_volume(pub->gmo));
-	//gimmix_set_song_info();
+	if(gimmix_is_playing(pub->gmo))
+		gimmix_set_song_info();
 	g_timeout_add(50, gimmix_timer, NULL);
 }
 
@@ -108,7 +109,7 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data)
 
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 {
-	g_print("Prefs clicked\n");
+	gtk_widget_show(GTK_WINDOW(pref_window));
 }
 
 void on_info_button_clicked(GtkWidget *widget, gpointer data)
@@ -137,7 +138,6 @@ void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
 	newtime = seektime * totaltime;
 	if(gimmix_seek(pub->gmo, newtime))
 			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), seektime);
-	//}
 	return;
 }
 
