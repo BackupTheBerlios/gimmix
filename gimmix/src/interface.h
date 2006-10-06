@@ -5,6 +5,7 @@
 
 GtkWidget *main_window;
 GtkWidget *pref_window;
+GtkWidget *info_window;
 GtkWidget *song_label;
 GtkWidget *artist_label;
 GtkWidget *album_label;

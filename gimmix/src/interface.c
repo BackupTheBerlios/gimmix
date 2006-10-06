@@ -116,12 +116,12 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data)
 
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 {
-	gtk_widget_show(GTK_WINDOW(pref_window));
+	gtk_widget_show(GTK_WIDGET(pref_window));
 }
 
 void on_info_button_clicked(GtkWidget *widget, gpointer data)
 {
-	g_print("Info clicked\n");
+	gtk_widget_show(GTK_WIDGET(info_window));
 }
 
 void on_volume_scale_changed(GtkWidget *widget, gpointer data)

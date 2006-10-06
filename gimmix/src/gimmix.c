@@ -3,16 +3,16 @@
 #include "gimmix.h"
 #include "interface.h"
 
-int gimmix_connect(void)
+bool gimmix_connect(void)
 {
 	MpdObj *mo;
 	
 	if((mo = gimmix_mpd_connect()))
 	{	
 		pub->gmo = mo;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
 int main(int argc, char *argv[])
@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 
 		main_window = glade_xml_get_widget(xml, "main_window");
 		pref_window = glade_xml_get_widget(xml, "prefs_window");
+		info_window = glade_xml_get_widget(xml, "info_window");
 		song_label = glade_xml_get_widget(xml,"song_label");
 		artist_label = glade_xml_get_widget(xml,"artist_label");
 		album_label = glade_xml_get_widget(xml,"album_label");

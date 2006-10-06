@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <libmpd/libmpd.h>
 #include <libmpd/libmpdclient.h>
 
@@ -14,4 +15,4 @@ typedef struct Gimmix
 
 GM *pub;
 
-int gimmix_connect (void);
+bool gimmix_connect (void);

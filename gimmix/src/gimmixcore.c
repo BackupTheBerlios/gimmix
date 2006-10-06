@@ -31,7 +31,7 @@ MpdObj * gimmix_mpd_connect(void)
 
 	if(mpd_check_connected(mo))
 	{	
-		fprintf(stdout, "Connected...\n");
+		//fprintf(stdout, "Connected...\n");
 		return mo;
 	}
 
