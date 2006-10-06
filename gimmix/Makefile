@@ -18,7 +18,7 @@ GLIB_LIB=`pkg-config --libs glib-2.0 glib`
 CFLAGS=-march=i686 -pipe -O2 -Wall -fPIC $(GTK_CFLAGS) $(GLADE_CFLAGS) $(MPD_CFLAGS) $(GLIB_CFLAGS) -I.
 LIBS=$(CONFUSE_LIB) $(GTK_LIB) $(GLADE_LIB) $(MPD_LIB) $(GLIB_LIB)
 
-OBJS = gimmixcore.o interface.o gimmix.o
+OBJS = config.o gimmixcore.o interface.o gimmix.o
 
 CC=gcc
 
@@ -32,8 +32,8 @@ gimmix: $(OBJS)
 clean:
 	rm -f *.o core *.so* *.bak *~ src/*~ gimmix
 
-#config.o:		src/config.c
-#	$(CC) $(CFLAGS) -c src/config.c
+config.o:			src/config.c
+	$(CC) $(CFLAGS) -c src/config.c
 #prefs.o:		src/prefs.c
 #	$(CC) $(CFLAGS) -c src/prefs.c
 gimmixcore.o:		src/gimmixcore.c
