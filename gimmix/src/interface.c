@@ -65,6 +65,8 @@ gboolean gimmix_timer()
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), time);
 		return TRUE;
 	}
+	GtkWidget *image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
+	gtk_button_set_image(GTK_BUTTON(button_play), image);
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 0.0);
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Stopped");
 	return FALSE;
@@ -122,25 +124,28 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 
 void on_info_button_clicked(GtkWidget *widget, gpointer data)
 {
-	SongInfo *si;
-	//gchar *file;
-	gchar *title;
-	gchar *artist;
-	gchar *album;
-	//gchar *genre;
+	if(gimmix_is_playing(pub->gmo))
+	{
+		SongInfo *si;
+		//gchar *file;
+		gchar *title;
+		gchar *artist;
+		gchar *album;
+		//gchar *genre;
 
-	si = gimmix_get_song_info(pub->gmo);
+		si = gimmix_get_song_info(pub->gmo);
 
-	title = g_strdup(si->title);
-	artist = g_strdup(si->artist);
-	album = g_strdup(si->album);
-	//genre = si->genre;
-	gtk_label_set_text(GTK_LABEL(info_title), title);
-	gtk_label_set_text(GTK_LABEL(info_artist), artist);
-	gtk_label_set_text(GTK_LABEL(info_album), album);
-	//gtk_label_set_text(GTK_LABEL(info_genre), genre);
-	gtk_widget_show(GTK_WIDGET(info_window));
-	free(si);
+		title = g_strdup(si->title);
+		artist = g_strdup(si->artist);
+		album = g_strdup(si->album);
+		//genre = si->genre;
+		gtk_label_set_text(GTK_LABEL(info_title), title);
+		gtk_label_set_text(GTK_LABEL(info_artist), artist);
+		gtk_label_set_text(GTK_LABEL(info_album), album);
+		//gtk_label_set_text(GTK_LABEL(info_genre), genre);
+		gtk_widget_show(GTK_WIDGET(info_window));
+		free(si);
+	}
 }
 
 void on_volume_scale_changed(GtkWidget *widget, gpointer data)
