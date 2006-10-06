@@ -22,6 +22,11 @@ GtkAdjustment *volume_adj;
 GtkStatusIcon *tray_icon;
 gboolean visible;
 
+GtkWidget *info_title;
+GtkWidget *info_artist;
+GtkWidget *info_album;
+GtkWidget *info_genre;
+
 void gimmix_init(void);
 
 /* Timer */
@@ -44,6 +49,7 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data);
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data);
 void on_info_button_clicked(GtkWidget *widget, gpointer data);
 void on_volume_scale_changed(GtkWidget *widget, gpointer data);
+void gimmix_scroll_volume_slider(GtkWidget *, GdkEventScroll *);
 void gimmix_progress_seek(GtkWidget *, GdkEvent *);
 void gimmix_about_show(void);
 void gimmix_window_visible(void);

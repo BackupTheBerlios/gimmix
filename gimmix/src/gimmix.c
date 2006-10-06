@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 		main_window = glade_xml_get_widget(xml, "main_window");
 		pref_window = glade_xml_get_widget(xml, "prefs_window");
 		info_window = glade_xml_get_widget(xml, "info_window");
+
 		song_label = glade_xml_get_widget(xml,"song_label");
 		artist_label = glade_xml_get_widget(xml,"artist_label");
 		album_label = glade_xml_get_widget(xml,"album_label");
@@ -43,6 +44,12 @@ int main(int argc, char *argv[])
 		volume_scale = glade_xml_get_widget(xml,"volume_scale");
 		progress = glade_xml_get_widget(xml,"progress");
 		progressbox = glade_xml_get_widget(xml,"progress_event_box");
+
+		/* Info dialog widgets */
+		info_title = glade_xml_get_widget(xml,"info_title");
+		info_artist = glade_xml_get_widget(xml,"info_artist");
+		info_album = glade_xml_get_widget(xml,"info_album");
+		info_genre = glade_xml_get_widget(xml,"info_genre");
 
 		gimmix_init();
 

@@ -36,6 +36,7 @@ void gimmix_init()
 	g_signal_connect (G_OBJECT(button_prefs), "clicked", G_CALLBACK(on_prefs_button_clicked), NULL);
 	g_signal_connect (G_OBJECT(button_info), "clicked", G_CALLBACK(on_info_button_clicked), NULL);
 	g_signal_connect(G_OBJECT(volume_scale), "value_changed", G_CALLBACK(on_volume_scale_changed), NULL);
+	g_signal_connect (G_OBJECT(volume_scale), "scroll_event", G_CALLBACK(gimmix_scroll_volume_slider), NULL);
 	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL); 
 
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
@@ -121,7 +122,25 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 
 void on_info_button_clicked(GtkWidget *widget, gpointer data)
 {
+	SongInfo *si;
+	//gchar *file;
+	gchar *title;
+	gchar *artist;
+	gchar *album;
+	//gchar *genre;
+
+	si = gimmix_get_song_info(pub->gmo);
+
+	title = g_strdup(si->title);
+	artist = g_strdup(si->artist);
+	album = g_strdup(si->album);
+	//genre = si->genre;
+	gtk_label_set_text(GTK_LABEL(info_title), title);
+	gtk_label_set_text(GTK_LABEL(info_artist), artist);
+	gtk_label_set_text(GTK_LABEL(info_album), album);
+	//gtk_label_set_text(GTK_LABEL(info_genre), genre);
 	gtk_widget_show(GTK_WIDGET(info_window));
+	free(si);
 }
 
 void on_volume_scale_changed(GtkWidget *widget, gpointer data)
@@ -130,6 +149,27 @@ void on_volume_scale_changed(GtkWidget *widget, gpointer data)
 
 	value = gtk_adjustment_get_value(GTK_ADJUSTMENT(volume_adj));
 	gimmix_set_volume(pub->gmo, value);
+}
+
+void gimmix_scroll_volume_slider(GtkWidget *object, GdkEventScroll *event)
+{
+	if(event->type != GDK_SCROLL)
+		return;
+
+	gint volume;
+	switch(event->direction)
+	{
+		case GDK_SCROLL_UP:
+			volume = gtk_adjustment_get_value(GTK_ADJUSTMENT(volume_adj)) + 2;
+			gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), volume);
+			break;
+		case GDK_SCROLL_DOWN:
+			volume = gtk_adjustment_get_value(GTK_ADJUSTMENT(volume_adj)) - 2;
+			gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), volume);
+			break;
+		default:
+			return;
+	}
 }
 
 void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
@@ -172,21 +212,23 @@ GtkWidget * get_image(const gchar *id, GtkIconSize size)
 
 void gimmix_set_song_info()
 {
-	gchar *song_name;
-	gchar *artist_name;
-	gchar *album_name;
+	gchar *file;
+	gchar *title;
+	gchar *artist;
+	gchar *album;
 	gchar *markup;
 	SongInfo *si;
 
 	si = gimmix_get_song_info(pub->gmo);
-	song_name = si->song_name;
-	artist_name = si->artist_name;
-	album_name = si->album_name;
+	file = g_strdup(si->file);
+	title = g_strdup(si->title);
+	artist = g_strdup(si->artist);
+	album = g_strdup(si->album);
 
-	markup = g_markup_printf_escaped ("<span style=\"italic\"><b>%s</b></span>", song_name);
+	markup = g_markup_printf_escaped ("<span style=\"italic\"><b>%s</b></span>", title);
 	gtk_label_set_markup(GTK_LABEL(song_label), markup);
-	gtk_label_set_text(GTK_LABEL(artist_label), artist_name);
-	gtk_label_set_text(GTK_LABEL(album_label), album_name);
+	gtk_label_set_text(GTK_LABEL(artist_label), artist);
+	gtk_label_set_text(GTK_LABEL(album_label), album);
 	g_free(si);
 }
 
