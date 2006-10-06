@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "gimmixcore.h"
 
+GtkWidget *main_window;
 GtkWidget *pref_window;
 GtkWidget *song_label;
 GtkWidget *artist_label;
@@ -18,6 +19,7 @@ GtkWidget *progress;
 GtkWidget *progressbox;
 GtkAdjustment *volume_adj;
 GtkStatusIcon *tray_icon;
+gboolean visible;
 
 void gimmix_init(void);
 
@@ -42,5 +44,5 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data);
 void on_info_button_clicked(GtkWidget *widget, gpointer data);
 void on_volume_scale_changed(GtkWidget *widget, gpointer data);
 void gimmix_progress_seek(GtkWidget *, GdkEvent *);
-
 void gimmix_about_show(void);
+void gimmix_window_visible(void);

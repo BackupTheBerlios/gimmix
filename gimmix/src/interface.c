@@ -41,6 +41,7 @@ void gimmix_init()
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
 	gimmix_systray_icon_create();
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), gimmix_get_volume(pub->gmo));
+
 	if(gimmix_is_playing(pub->gmo))
 	{	
 		gimmix_set_song_info();
@@ -48,6 +49,7 @@ void gimmix_init()
 		gtk_button_set_image(GTK_BUTTON(button_play), image);
 	}
 	g_timeout_add(50, gimmix_timer, NULL);
+	visible = true;
 }
 
 gboolean gimmix_timer()
@@ -146,6 +148,20 @@ void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
 	return;
 }
 
+void gimmix_window_visible()
+{
+	if(!visible)
+	{	
+		gtk_widget_show(GTK_WIDGET(main_window));
+		visible = true;
+	}
+	else
+	{
+		gtk_widget_hide(GTK_WIDGET(main_window));
+		visible = false;
+	}
+}
+
 GtkWidget * get_image(const gchar *id, GtkIconSize size)
 {
 	GtkWidget *image;
@@ -180,6 +196,7 @@ void gimmix_systray_icon_create()
 	tray_icon = gtk_status_icon_new_from_stock("gtk-cdrom");
 	gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);
 	g_signal_connect (tray_icon, "popup-menu", G_CALLBACK (gimmix_systray_popup_menu), NULL);
+	g_signal_connect (tray_icon, "activate", G_CALLBACK(gimmix_window_visible), NULL);
 }
 
 void gimmix_systray_popup_menu()

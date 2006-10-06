@@ -18,7 +18,6 @@ int gimmix_connect(void)
 int main(int argc, char *argv[])
 {
 	GladeXML *xml;
-	GtkWidget *main_window;
 
 	pub = (GM *) malloc(sizeof(GM));
 	
