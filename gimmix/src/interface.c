@@ -51,18 +51,16 @@ gboolean gimmix_timer()
 	gchar time[15];
 	float fraction;
 	
-	if(gimmix_get_progress_status(pub->gmo, &fraction, time))
+	if(gimmix_is_playing(pub->gmo))
 	{
+		gimmix_get_progress_status(pub->gmo, &fraction, time);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), fraction);
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), time);
+		return TRUE;
 	}
-	else
-	{
-		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 0.0);
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Stopped");
-		//return FALSE;
-	}
-	return TRUE;
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 0.0);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Stopped");
+	return FALSE;
 }
 
 void on_prev_button_clicked(GtkWidget *widget, gpointer data)
@@ -80,7 +78,11 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 	GtkWidget *image;
 	gint state;
 	
-	state = gimmix_play(pub->gmo);
+	if(!gimmix_is_playing(pub->gmo))
+	{
+		state = gimmix_play(pub->gmo);
+		g_timeout_add(50, gimmix_timer, NULL);
+	}
 	if(state == PLAYING)
 	{
 		image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
@@ -93,9 +95,7 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 	}
 	else
 		return;
-
 	gimmix_set_song_info();
-	
 }
 
 void on_stop_button_clicked(GtkWidget *widget, gpointer data)
