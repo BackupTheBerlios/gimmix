@@ -123,20 +123,16 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 {
 	Conf *conf;
 	gchar port[8];
-	gchar *hostname;
-	gchar *password;
 	gint systray_enable;
 
 	conf = pub->conf;
-	hostname = g_strdup(conf->hostname);
-	password = g_strdup(conf->password);
 	sprintf(port, "%d", conf->port);
 	systray_enable = conf->systray_enable;
 
-	gtk_entry_set_text(GTK_ENTRY(host_entry), hostname);
+	gtk_entry_set_text(GTK_ENTRY(host_entry), conf->hostname);
 	gtk_entry_set_text(GTK_ENTRY(port_entry), port);
-	if(password)
-		gtk_entry_set_text(GTK_ENTRY(password_entry), password);
+	if(conf->password)
+		gtk_entry_set_text(GTK_ENTRY(password_entry), conf->password);
 	if(systray_enable == 1)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(systray_toggle), TRUE);
 	g_signal_connect (G_OBJECT(systray_toggle), "toggled", G_CALLBACK(on_systray_checkbox_toggled), NULL);
@@ -150,11 +146,15 @@ void on_info_button_clicked(GtkWidget *widget, gpointer data)
 		SongInfo *si;
 		si = gimmix_get_song_info(pub->gmo);
 
-		gtk_label_set_text(GTK_LABEL(info_title), si->title);
-		gtk_label_set_text(GTK_LABEL(info_artist), si->artist);
-		gtk_label_set_text(GTK_LABEL(info_album), si->album);
+		if(si->title)
+			gtk_label_set_text(GTK_LABEL(info_title), si->title);
+		if(si->artist)
+			gtk_label_set_text(GTK_LABEL(info_artist), si->artist);
+		if(si->album)
+			gtk_label_set_text(GTK_LABEL(info_album), si->album);
 		if(si->genre != NULL)
 			gtk_label_set_text(GTK_LABEL(info_genre), si->genre);
+
 		gtk_widget_show(GTK_WIDGET(info_window));
 		free(si);
 	}
@@ -234,7 +234,7 @@ void gimmix_set_song_info()
 		gtk_label_set_text(GTK_LABEL(artist_label), si->artist);
 	if(si->album != NULL)
 		gtk_label_set_text(GTK_LABEL(album_label), si->album);
-	g_free(si);
+	free(si);
 }
 
 void gimmix_systray_icon_create()
