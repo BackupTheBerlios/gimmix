@@ -6,9 +6,8 @@
 #include <stdbool.h>
 #include "gimmixcore.h"
 
+/* Main window widgets */
 GtkWidget *main_window;
-GtkWidget *pref_window;
-GtkWidget *info_window;
 GtkWidget *song_label;
 GtkWidget *artist_label;
 GtkWidget *album_label;
@@ -23,13 +22,24 @@ GtkWidget *progress;
 GtkWidget *progressbox;
 GtkAdjustment *volume_adj;
 GtkStatusIcon *tray_icon;
+
+/* Preferences window widgets */
+GtkWidget *pref_window;
+GtkWidget *host_entry;
+GtkWidget *port_entry;
+GtkWidget *password_entry;
+
+/* Controls visibility of window */
 gboolean visible;
 
+/* Info dialog widgets */
+GtkWidget *info_window;
 GtkWidget *info_title;
 GtkWidget *info_artist;
 GtkWidget *info_album;
 GtkWidget *info_genre;
 
+/* Initializes default interface signals */
 void gimmix_init(void);
 
 /* Timer */

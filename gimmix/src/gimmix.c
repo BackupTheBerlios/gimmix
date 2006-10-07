@@ -74,6 +74,11 @@ int main(int argc, char *argv[])
 		info_artist = glade_xml_get_widget(xml,"info_artist");
 		info_album = glade_xml_get_widget(xml,"info_album");
 		info_genre = glade_xml_get_widget(xml,"info_genre");
+		
+		/* Preferences dialog widgets */
+		host_entry = glade_xml_get_widget(xml,"host_entry");
+		port_entry = glade_xml_get_widget(xml,"port_entry");
+		password_entry = glade_xml_get_widget(xml,"password_entry");
 
 		gimmix_init();
 

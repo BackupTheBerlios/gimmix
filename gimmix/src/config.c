@@ -46,12 +46,11 @@ Conf * gimmix_config_init(void)
 	
 	cfg = cfg_init(opts, 0);
 	cfg_parse(cfg, "~/.gimmixrc");
-	//printf("systray status: %d\n", enable_systray);
-	//printf("hostname: %s\n", hostname);
 	
 	conf->hostname = hostname;
 	conf->port = port;
 	conf->password = password;
 	conf->systray_enable = enable_systray;
+
 	return conf;
 }

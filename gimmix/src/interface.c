@@ -18,9 +18,10 @@
  * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  *
- * Author: Priyank Gosalia <priyankmg@gmail.com>
+ * Author: Priyank Gosalia <priyankmgg@gmail.com>
  */
-
+ 
+#include <glib.h>
 #include "interface.h"
 #include "gimmix.h"
 
@@ -119,6 +120,22 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data)
 
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 {
+	Conf *conf;
+	gchar port[8];
+	gchar *hostname;
+	gchar *password;
+	gchar *systray_enable;
+
+	conf = pub->conf;
+	hostname = g_strdup(conf->hostname);
+	password = g_strdup(conf->password);
+	g_sprintf(port, "%d", conf->port);
+
+	gtk_entry_set_text(GTK_ENTRY(host_entry), hostname);
+	gtk_entry_set_text(GTK_ENTRY(port_entry), port);
+	if(password)
+		gtk_entry_set_text(GTK_ENTRY(password_entry), password);
+	
 	gtk_widget_show(GTK_WIDGET(pref_window));
 }
 

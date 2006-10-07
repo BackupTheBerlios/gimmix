@@ -675,12 +675,12 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkEntry" id="entry1">
+			<widget class="GtkEntry" id="host_entry">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="editable">True</property>
 			  <property name="visibility">True</property>
-			  <property name="max_length">0</property>
+			  <property name="max_length">255</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
 			  <property name="invisible_char">*</property>
@@ -696,12 +696,12 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkEntry" id="entry2">
+			<widget class="GtkEntry" id="port_entry">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="editable">True</property>
 			  <property name="visibility">True</property>
-			  <property name="max_length">0</property>
+			  <property name="max_length">5</property>
 			  <property name="text" translatable="yes"></property>
 			  <property name="has_frame">True</property>
 			  <property name="invisible_char">*</property>
@@ -717,7 +717,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkEntry" id="entry3">
+			<widget class="GtkEntry" id="password_entry">
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="editable">True</property>
