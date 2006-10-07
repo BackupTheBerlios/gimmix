@@ -47,6 +47,7 @@ void gimmix_init()
 
 	if(gimmix_is_playing(pub->gmo))
 	{	
+		
 		gimmix_set_song_info();
 		GtkWidget *image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(button_play), image);
@@ -199,8 +200,8 @@ void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
 	totaltime = gimmix_get_total_song_time(pub->gmo);
 	seektime = (gdouble)x/allocation.width;
 	newtime = seektime * totaltime;
-	if(gimmix_seek(pub->gmo, newtime))
-			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), seektime);
+	//if(gimmix_seek(pub->gmo, newtime))
+	//		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), seektime);
 	return;
 }
 
@@ -222,23 +223,17 @@ GtkWidget * get_image(const gchar *id, GtkIconSize size)
 
 void gimmix_set_song_info()
 {
-	gchar *file;
-	gchar *title;
-	gchar *artist;
-	gchar *album;
 	gchar *markup;
 	SongInfo *si;
-
+	
 	si = gimmix_get_song_info(pub->gmo);
-	file = g_strdup(si->file);
-	title = g_strdup(si->title);
-	artist = g_strdup(si->artist);
-	album = g_strdup(si->album);
 
-	markup = g_markup_printf_escaped ("<span style=\"italic\"><b>%s</b></span>", title);
+	markup = g_markup_printf_escaped("<span style=\"italic\"><b>%s</b></span>", si->title);
 	gtk_label_set_markup(GTK_LABEL(song_label), markup);
-	gtk_label_set_text(GTK_LABEL(artist_label), artist);
-	gtk_label_set_text(GTK_LABEL(album_label), album);
+	if(si->artist != NULL)
+		gtk_label_set_text(GTK_LABEL(artist_label), si->artist);
+	if(si->album != NULL)
+		gtk_label_set_text(GTK_LABEL(album_label), si->album);
 	g_free(si);
 }
 

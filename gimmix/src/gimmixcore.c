@@ -137,15 +137,18 @@ int gimmix_get_total_song_time(MpdObj *mo)
 SongInfo * gimmix_get_song_info(MpdObj *mo)
 {
 	mpd_Song *ms;
-	SongInfo *si = (SongInfo *) malloc(sizeof(SongInfo));
+	SongInfo *s = (SongInfo *)malloc(sizeof(SongInfo));
 
 	ms = mpd_playlist_get_current_song(mo);
-	si->file = ms->file;
-	si->title = ms->title;
-	si->artist = ms->artist;
-	si->album = ms->album;
-
-	return si;
+	s->file = ms->file;
+	s->title = ms->title;
+	s->artist = ms->artist;
+	s->album = ms->album;
+	s->genre = NULL;
+	s->length = 0;
+	//mpd_freeSong(ms);
+	
+	return s;
 }
 
 SongInfo * gimmix_get_full_song_info(MpdObj *mo)
@@ -160,7 +163,7 @@ SongInfo * gimmix_get_full_song_info(MpdObj *mo)
 	fsi->album = strdup(ms->album);
 	fsi->genre = strdup(ms->genre);
 	//fsi->length = ms->time;
-
+	mpd_freeSong(ms);
 	return fsi;
 }
 
