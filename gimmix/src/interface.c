@@ -142,20 +142,19 @@ void on_info_button_clicked(GtkWidget *widget, gpointer data)
 {
 	if(gimmix_is_playing(pub->gmo))
 	{
-		SongInfo *si;
-		si = gimmix_get_song_info(pub->gmo);
+		SongInfo *info = NULL;
+		info = gimmix_get_song_info(pub->gmo);
 
-		if(si->title)
-			gtk_label_set_text(GTK_LABEL(info_title), si->title);
-		if(si->artist)
-			gtk_label_set_text(GTK_LABEL(info_artist), si->artist);
-		if(si->album)
-			gtk_label_set_text(GTK_LABEL(info_album), si->album);
-		if(si->genre != NULL)
-			gtk_label_set_text(GTK_LABEL(info_genre), si->genre);
+		if(info->title)
+			gtk_label_set_text(GTK_LABEL(info_title), info->title);
+		if(info->artist)
+			gtk_label_set_text(GTK_LABEL(info_artist), info->artist);
+		if(info->album)
+			gtk_label_set_text(GTK_LABEL(info_album), info->album);
+		/*if(info->genre != NULL)
+			gtk_label_set_text(GTK_LABEL(info_genre), info->genre);*/
 
 		gtk_widget_show(GTK_WIDGET(info_window));
-		free(si);
 	}
 }
 
@@ -199,8 +198,8 @@ void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
 	totaltime = gimmix_get_total_song_time(pub->gmo);
 	seektime = (gdouble)x/allocation.width;
 	newtime = seektime * totaltime;
-	//if(gimmix_seek(pub->gmo, newtime))
-	//		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), seektime);
+	if(gimmix_seek(pub->gmo, newtime))
+			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), seektime);
 	return;
 }
 
@@ -223,20 +222,21 @@ GtkWidget * get_image(const gchar *id, GtkIconSize size)
 void gimmix_set_song_info()
 {
 	gchar *markup;
-	SongInfo *si;
+	SongInfo *song = NULL;
 	
-	si = gimmix_get_song_info(pub->gmo);
+	song = gimmix_get_song_info(pub->gmo);
 
-	if(si->title)
+	if(song->title)
 	{
-		markup = g_markup_printf_escaped("<span style=\"italic\"><b>%s</b></span>", si->title);
+		markup = g_markup_printf_escaped("<span style=\"italic\"><b>%s</b></span>", song->title);
 		gtk_label_set_markup(GTK_LABEL(song_label), markup);
 	}
-	if(si->artist)
-		gtk_label_set_text(GTK_LABEL(artist_label), si->artist);
-	if(si->album)
-		gtk_label_set_text(GTK_LABEL(album_label), si->album);
-	free(si);
+	if(song->artist)
+		gtk_label_set_text(GTK_LABEL(artist_label), song->artist);
+	if(song->album)
+		gtk_label_set_text(GTK_LABEL(album_label), song->album);
+
+	gimmix_free_song_info(song);
 }
 
 void gimmix_systray_icon_create()
