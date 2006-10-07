@@ -96,8 +96,7 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 	if(state == PLAYING)
 	{
 		image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
-		gtk_button_set_image(GTK_BUTTON(button_play), image);
-		
+		gtk_button_set_image(GTK_BUTTON(button_play), image);		
 	}
 	else if(state == PAUSED)
 	{
@@ -153,6 +152,7 @@ void on_info_button_clicked(GtkWidget *widget, gpointer data)
 			gtk_label_set_text(GTK_LABEL(info_album), info->album);
 		/*if(info->genre != NULL)
 			gtk_label_set_text(GTK_LABEL(info_genre), info->genre);*/
+		gimmix_free_song_info(info);
 
 		gtk_widget_show(GTK_WIDGET(info_window));
 	}

@@ -154,10 +154,11 @@ SongInfo * gimmix_get_song_info(MpdObj *mo)
 
 void gimmix_free_song_info(SongInfo *si)
 {
-	free(si->title);
-	free(si->artist);
-	free(si->album);
-	free(si->file);
+	si->title = NULL;
+	si->artist = NULL;
+	si->album = NULL;
+	si->file = NULL;
+	si->genre = NULL;
 	free(si);
 }
 
