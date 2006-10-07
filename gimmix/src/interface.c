@@ -123,20 +123,20 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 	gchar port[8];
 	gchar *hostname;
 	gchar *password;
-	gchar *systray_enable;
+	gint systray_enable;
 
 	conf = pub->conf;
 	hostname = g_strdup(conf->hostname);
 	password = g_strdup(conf->password);
 	g_sprintf(port, "%d", conf->port);
+	systray_enable = conf->systray_enable;
 
 	gtk_entry_set_text(GTK_ENTRY(host_entry), hostname);
 	gtk_entry_set_text(GTK_ENTRY(port_entry), port);
 	if(password)
 		gtk_entry_set_text(GTK_ENTRY(password_entry), password);
-	
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(systray_toggle), TRUE);
-	//g_object_set(GTK_OBJECT(systray_toggle), "active", 1, NULL); 
+	if(systray_enable == 1)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(systray_toggle), TRUE);
 
 	gtk_widget_show(GTK_WIDGET(pref_window));
 }
