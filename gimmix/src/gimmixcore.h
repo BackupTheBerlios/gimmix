@@ -23,10 +23,10 @@ typedef struct songinfo
 MpdObj * gimmix_mpd_connect(void);
 
 /* playback control */
-int gimmix_mpd_play (MpdObj *);
-int gimmix_mpd_stop (MpdObj *);
-int gimmix_mpd_prev (MpdObj *);
-int gimmix_mpd_next (MpdObj *);
+int gimmix_play (MpdObj *);
+int gimmix_stop (MpdObj *);
+int gimmix_prev (MpdObj *);
+int gimmix_next (MpdObj *);
 int gimmix_seek(MpdObj *, int);
 
 /* voulme control */
