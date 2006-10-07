@@ -90,7 +90,7 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 	
 	if(!gimmix_is_playing(pub->gmo))
 	{
-		g_timeout_add(50, gimmix_timer, NULL);		
+		g_timeout_add(100, gimmix_timer, NULL);		
 	}
 	state = gimmix_play(pub->gmo);
 	if(state == PLAYING)
@@ -115,6 +115,10 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data)
 	gimmix_stop(pub->gmo);
 	image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image(GTK_BUTTON(button_play), image);
+	
+	gtk_label_set_text(GTK_LABEL(song_label), NULL);
+	gtk_label_set_text(GTK_LABEL(artist_label), NULL);
+	gtk_label_set_text(GTK_LABEL(album_label), NULL);
 }
 
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
