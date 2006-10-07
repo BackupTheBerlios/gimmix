@@ -28,9 +28,7 @@ GtkWidget *pref_window;
 GtkWidget *host_entry;
 GtkWidget *port_entry;
 GtkWidget *password_entry;
-
-/* Controls visibility of window */
-gboolean visible;
+GtkWidget *systray_toggle;
 
 /* Info dialog widgets */
 GtkWidget *info_window;

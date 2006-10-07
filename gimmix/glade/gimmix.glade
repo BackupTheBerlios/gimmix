@@ -820,7 +820,7 @@
 		      <property name="spacing">0</property>
 
 		      <child>
-			<widget class="GtkCheckButton" id="checkbutton1">
+			<widget class="GtkCheckButton" id="systray_checkbutton">
 			  <property name="border_width">6</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>

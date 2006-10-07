@@ -51,7 +51,6 @@ void gimmix_init()
 		gtk_button_set_image(GTK_BUTTON(button_play), image);
 	}
 	g_timeout_add(50, gimmix_timer, NULL);
-	visible = true;
 }
 
 gboolean gimmix_timer()
@@ -136,6 +135,9 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 	if(password)
 		gtk_entry_set_text(GTK_ENTRY(password_entry), password);
 	
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(systray_toggle), TRUE);
+	//g_object_set(GTK_OBJECT(systray_toggle), "active", 1, NULL); 
+
 	gtk_widget_show(GTK_WIDGET(pref_window));
 }
 
@@ -212,16 +214,10 @@ void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
 
 void gimmix_window_visible()
 {
-	if(!visible)
-	{	
+	if(!GTK_WIDGET_VISIBLE(main_window))
 		gtk_widget_show(GTK_WIDGET(main_window));
-		visible = true;
-	}
 	else
-	{
 		gtk_widget_hide(GTK_WIDGET(main_window));
-		visible = false;
-	}
 }
 
 GtkWidget * get_image(const gchar *id, GtkIconSize size)

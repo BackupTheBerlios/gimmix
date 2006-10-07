@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
 		host_entry = glade_xml_get_widget(xml,"host_entry");
 		port_entry = glade_xml_get_widget(xml,"port_entry");
 		password_entry = glade_xml_get_widget(xml,"password_entry");
+		systray_toggle = glade_xml_get_widget(xml, "systray_checkbutton");
 
 		gimmix_init();
 
