@@ -41,7 +41,8 @@ void gimmix_init()
 	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL); 
 
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
-	gimmix_systray_icon_create();
+	if(pub->conf->systray_enable == 1)
+		gimmix_systray_icon_create();
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), gimmix_get_volume(pub->gmo));
 
 	if(gimmix_is_playing(pub->gmo))
@@ -128,7 +129,7 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 	conf = pub->conf;
 	hostname = g_strdup(conf->hostname);
 	password = g_strdup(conf->password);
-	g_sprintf(port, "%d", conf->port);
+	sprintf(port, "%d", conf->port);
 	systray_enable = conf->systray_enable;
 
 	gtk_entry_set_text(GTK_ENTRY(host_entry), hostname);
