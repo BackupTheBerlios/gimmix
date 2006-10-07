@@ -65,4 +65,7 @@ void gimmix_progress_seek(GtkWidget *, GdkEvent *);
 void gimmix_about_show(void);
 void gimmix_window_visible(void);
 
+/* Preferences dialog callbacks */
+void on_systray_checkbox_toggled(GtkWidget *, gpointer);
+
 #endif

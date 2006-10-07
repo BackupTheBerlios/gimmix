@@ -138,7 +138,7 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 		gtk_entry_set_text(GTK_ENTRY(password_entry), password);
 	if(systray_enable == 1)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(systray_toggle), TRUE);
-
+	g_signal_connect (G_OBJECT(systray_toggle), "toggled", G_CALLBACK(on_systray_checkbox_toggled), NULL);
 	gtk_widget_show(GTK_WIDGET(pref_window));
 }
 
@@ -147,22 +147,13 @@ void on_info_button_clicked(GtkWidget *widget, gpointer data)
 	if(gimmix_is_playing(pub->gmo))
 	{
 		SongInfo *si;
-		//gchar *file;
-		gchar *title;
-		gchar *artist;
-		gchar *album;
-		//gchar *genre;
-
 		si = gimmix_get_song_info(pub->gmo);
 
-		title = g_strdup(si->title);
-		artist = g_strdup(si->artist);
-		album = g_strdup(si->album);
-		//genre = si->genre;
-		gtk_label_set_text(GTK_LABEL(info_title), title);
-		gtk_label_set_text(GTK_LABEL(info_artist), artist);
-		gtk_label_set_text(GTK_LABEL(info_album), album);
-		//gtk_label_set_text(GTK_LABEL(info_genre), genre);
+		gtk_label_set_text(GTK_LABEL(info_title), si->title);
+		gtk_label_set_text(GTK_LABEL(info_artist), si->artist);
+		gtk_label_set_text(GTK_LABEL(info_album), si->album);
+		if(si->genre != NULL)
+			gtk_label_set_text(GTK_LABEL(info_genre), si->genre);
 		gtk_widget_show(GTK_WIDGET(info_window));
 		free(si);
 	}
@@ -306,6 +297,12 @@ void gimmix_systray_popup_menu()
 
 	gtk_widget_show (menu);
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 1,gtk_get_current_event_time());
+}
+
+/* Callbacks for preferences dialog */
+void on_systray_checkbox_toggled(GtkWidget *widget, gpointer data)
+{
+	g_object_unref(tray_icon);
 }
 
 void gimmix_about_show(void)

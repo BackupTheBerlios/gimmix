@@ -158,7 +158,7 @@ SongInfo * gimmix_get_full_song_info(MpdObj *mo)
 	fsi->title = strdup(ms->title);
 	fsi->artist = strdup(ms->artist);
 	fsi->album = strdup(ms->album);
-	//fsi->genre = strdup(ms->genre);
+	fsi->genre = strdup(ms->genre);
 	//fsi->length = ms->time;
 
 	return fsi;
