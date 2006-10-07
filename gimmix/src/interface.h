@@ -1,3 +1,6 @@
+#ifndef INTERFACE_H
+#define INTERFACE_H
+
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -53,3 +56,5 @@ void gimmix_scroll_volume_slider(GtkWidget *, GdkEventScroll *);
 void gimmix_progress_seek(GtkWidget *, GdkEvent *);
 void gimmix_about_show(void);
 void gimmix_window_visible(void);
+
+#endif

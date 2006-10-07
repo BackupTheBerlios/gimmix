@@ -1,3 +1,6 @@
+#ifndef GIMMIXCORE_H
+#define GIMMIXCORE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,3 +40,4 @@ int gimmix_get_progress_status(MpdObj *, float *, char *);
 int gimmix_get_total_song_time(MpdObj *);
 bool gimmix_is_playing(MpdObj *);
 
+#endif

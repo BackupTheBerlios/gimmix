@@ -1,3 +1,6 @@
+#ifndef GIMMIX_H
+#define GIMMIX_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,3 +21,5 @@ typedef struct Gimmix
 GM *pub;
 
 bool gimmix_connect (void);
+
+#endif
