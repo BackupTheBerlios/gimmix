@@ -46,8 +46,7 @@ void gimmix_init()
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), gimmix_get_volume(pub->gmo));
 
 	if(gimmix_is_playing(pub->gmo))
-	{	
-		
+	{
 		gimmix_set_song_info();
 		GtkWidget *image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(button_play), image);
@@ -228,11 +227,14 @@ void gimmix_set_song_info()
 	
 	si = gimmix_get_song_info(pub->gmo);
 
-	markup = g_markup_printf_escaped("<span style=\"italic\"><b>%s</b></span>", si->title);
-	gtk_label_set_markup(GTK_LABEL(song_label), markup);
-	if(si->artist != NULL)
+	if(si->title)
+	{
+		markup = g_markup_printf_escaped("<span style=\"italic\"><b>%s</b></span>", si->title);
+		gtk_label_set_markup(GTK_LABEL(song_label), markup);
+	}
+	if(si->artist)
 		gtk_label_set_text(GTK_LABEL(artist_label), si->artist);
-	if(si->album != NULL)
+	if(si->album)
 		gtk_label_set_text(GTK_LABEL(album_label), si->album);
 	free(si);
 }

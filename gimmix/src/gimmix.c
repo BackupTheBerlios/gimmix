@@ -53,8 +53,6 @@ int main(int argc, char *argv[])
 		glade_xml_signal_autoconnect(xml);
 
 		main_window = glade_xml_get_widget(xml, "main_window");
-		pref_window = glade_xml_get_widget(xml, "prefs_window");
-		info_window = glade_xml_get_widget(xml, "info_window");
 
 		song_label = glade_xml_get_widget(xml,"song_label");
 		artist_label = glade_xml_get_widget(xml,"artist_label");
@@ -69,13 +67,15 @@ int main(int argc, char *argv[])
 		progress = glade_xml_get_widget(xml,"progress");
 		progressbox = glade_xml_get_widget(xml,"progress_event_box");
 
-		/* Info dialog widgets */
+		/* Info dialog */
+		info_window = glade_xml_get_widget(xml, "info_window");
 		info_title = glade_xml_get_widget(xml,"info_title");
 		info_artist = glade_xml_get_widget(xml,"info_artist");
 		info_album = glade_xml_get_widget(xml,"info_album");
 		info_genre = glade_xml_get_widget(xml,"info_genre");
 		
-		/* Preferences dialog widgets */
+		/* Preferences dialog */
+		pref_window = glade_xml_get_widget(xml, "prefs_window");
 		host_entry = glade_xml_get_widget(xml,"host_entry");
 		port_entry = glade_xml_get_widget(xml,"port_entry");
 		password_entry = glade_xml_get_widget(xml,"password_entry");

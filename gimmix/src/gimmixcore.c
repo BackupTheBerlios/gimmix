@@ -138,7 +138,7 @@ SongInfo * gimmix_get_song_info(MpdObj *mo)
 {
 	mpd_Song *ms;
 	SongInfo *s = (SongInfo *)malloc(sizeof(SongInfo));
-
+	mpd_status_update(mo);
 	ms = mpd_playlist_get_current_song(mo);
 	s->file = ms->file;
 	s->title = ms->title;
@@ -161,7 +161,7 @@ SongInfo * gimmix_get_full_song_info(MpdObj *mo)
 	fsi->title = strdup(ms->title);
 	fsi->artist = strdup(ms->artist);
 	fsi->album = strdup(ms->album);
-	fsi->genre = strdup(ms->genre);
+	//fsi->genre = strdup(ms->genre);
 	//fsi->length = ms->time;
 	mpd_freeSong(ms);
 	return fsi;
