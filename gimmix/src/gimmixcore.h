@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <libmpd/libmpd.h>
 #include <libmpd/libmpdclient.h>
+#include "config.h"
 
 typedef struct songinfo
 {
@@ -20,13 +21,13 @@ typedef struct songinfo
 } SongInfo;
 
 /* mpd control functions */
-MpdObj * gimmix_mpd_connect(void);
+MpdObj * gimmix_mpd_connect(Conf *);
 
 /* playback control */
-int gimmix_play (MpdObj *);
-int gimmix_stop (MpdObj *);
-int gimmix_prev (MpdObj *);
-int gimmix_next (MpdObj *);
+int gimmix_play(MpdObj *);
+int gimmix_stop(MpdObj *);
+int gimmix_prev(MpdObj *);
+int gimmix_next(MpdObj *);
 int gimmix_seek(MpdObj *, int);
 
 /* voulme control */

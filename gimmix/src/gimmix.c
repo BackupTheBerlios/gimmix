@@ -30,7 +30,7 @@ bool gimmix_connect(void)
 {
 	MpdObj *mo;
 	
-	if((mo = gimmix_mpd_connect()))
+	if((mo = gimmix_mpd_connect(pub->conf)))
 	{	
 		pub->gmo = mo;
 		return true;
@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
 	GladeXML *xml;
 
 	pub = (GM *) malloc(sizeof(GM));
+	pub->conf = gimmix_config_init();
 	
 	if(gimmix_connect())
 	{

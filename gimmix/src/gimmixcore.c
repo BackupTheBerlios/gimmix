@@ -23,10 +23,13 @@
 
 #include "gimmixcore.h"
 
-MpdObj * gimmix_mpd_connect(void)
+MpdObj * gimmix_mpd_connect(Conf *conf)
 {
 	MpdObj *mo;
-	mo = mpd_new_default();
+	//printf("%s",conf->hostname);
+	mo = mpd_new(conf->hostname, conf->port, conf->password);
+	
+	//mo = mpd_new_default();
 	mpd_connect(mo);
 
 	if(mpd_check_connected(mo))
@@ -42,6 +45,7 @@ MpdObj * gimmix_mpd_connect(void)
 bool gimmix_is_playing(MpdObj *mo)
 {
 	int status;
+	mpd_status_update(mo);
 	status = mpd_player_get_state(mo);
 	
 	if(status == MPD_PLAYER_PAUSE || status == MPD_PLAYER_PLAY)
@@ -52,6 +56,7 @@ bool gimmix_is_playing(MpdObj *mo)
 
 int gimmix_play(MpdObj *mo)
 {
+	mpd_status_update(mo);
 	if(mpd_playlist_get_playlist_length(mo))
 	{
 		int state;
@@ -76,7 +81,8 @@ int gimmix_play(MpdObj *mo)
 int gimmix_stop(MpdObj *mo)
 {
 	int state;
-	
+
+	mpd_status_update(mo);
 	state = mpd_player_get_state(mo);
 	
 	if (state == MPD_PLAYER_PAUSE || state == MPD_PLAYER_PLAY)

@@ -30,28 +30,28 @@ Conf * gimmix_config_init(void)
 {
 	Conf *conf = (Conf*)malloc(sizeof(Conf));
 	int enable_systray;
+	int port;
 	char *hostname = NULL;
 	char *password = NULL;
 	
 	cfg_opt_t opts[] = {
-		CFG_SIMPLE_INT("enable_systray", &enable_systray),
+		CFG_SIMPLE_INT("mpd_port", &port),
 		CFG_SIMPLE_STR("mpd_hostname", &hostname),
 		CFG_SIMPLE_STR("mpd_password", &password),
+		CFG_SIMPLE_INT("enable_systray", &enable_systray),
 		CFG_END()
 	};
 
 	cfg_t *cfg;
 	
 	cfg = cfg_init(opts, 0);
-	if (cfg_parse(cfg, "~/.gimmixrc"))
-	{	
-		printf("systray status: %d\n", enable_systray);
-		printf("hostname: %s\n", hostname);
-
-		conf->systray_enable = enable_systray;
-		conf->hostname = hostname;
-		conf->password = password;
-		return conf;
-	}
-	return NULL;
+	cfg_parse(cfg, "~/.gimmixrc");
+	//printf("systray status: %d\n", enable_systray);
+	//printf("hostname: %s\n", hostname);
+	
+	conf->hostname = hostname;
+	conf->port = port;
+	conf->password = password;
+	conf->systray_enable = enable_systray;
+	return conf;
 }
