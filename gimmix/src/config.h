@@ -13,6 +13,13 @@ typedef struct
 	char *password;
 } Conf;
 
+/* Parse config file and set the initial config values */
 Conf * gimmix_config_init(void);
+
+/* Save current settings back to gimmixrc */
+void gimmix_config_save(Conf *);
+
+/* Free conf */
+void gimmix_config_free(Conf *);
 
 #endif

@@ -53,6 +53,39 @@ Conf * gimmix_config_init(void)
 
 	/* Free the memory */
 	cfg_free(cfg);
-
 	return conf;
+}
+
+void gimmix_config_save(Conf *conf)
+{
+	FILE *fp;
+	cfg_t *cfg;
+	
+	cfg_opt_t opts[] = {
+		CFG_SIMPLE_STR("mpd_hostname", NULL),
+		CFG_SIMPLE_INT("mpd_port", 0),
+		CFG_SIMPLE_STR("mpd_password", NULL),
+		CFG_SIMPLE_INT("enable_systray", 0),
+		CFG_END()
+	};
+
+	cfg = cfg_init(opts, 0);
+    char *rcfile = cfg_tilde_expand("~/.gimmixrc");
+	if((fp = fopen(rcfile, "w")))
+	{	cfg_setstr(cfg, "mpd_hostname", conf->hostname);
+		cfg_setint(cfg, "mpd_port", conf->port);
+		cfg_setint(cfg, "enable_systray", conf->systray_enable);
+		cfg_setstr(cfg, "mpd_password", conf->password);
+		cfg_print(cfg, fp);
+        free(rcfile);
+		fclose(fp);
+	}
+	else
+		fprintf(stderr, "Error while saving config.\n");
+	return;
+}
+
+void gimmix_config_free(Conf *conf)
+{
+	free(conf);
 }
