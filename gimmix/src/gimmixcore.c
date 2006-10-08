@@ -152,6 +152,16 @@ SongInfo * gimmix_get_song_info(MpdObj *mo)
 	return s;
 }
 
+char * gimmix_get_song_length(SongInfo *s)
+{
+	int time;
+	char *length = malloc(10);
+	
+	time = s->length;
+	snprintf(length, 7, "%02i:%02i", time/60, time%60);
+	return length;
+}
+
 void gimmix_free_song_info(SongInfo *si)
 {
 	free(si->title);
@@ -159,6 +169,7 @@ void gimmix_free_song_info(SongInfo *si)
 	free(si->album);
 	free(si->file);
 	//free(si->genre);
+	si->length = NULL;
 	free(si);
 }
 
@@ -189,4 +200,3 @@ int gimmix_get_progress_status(MpdObj *mo, float *fraction, char *time)
 	}
 	return 1;
 }
-

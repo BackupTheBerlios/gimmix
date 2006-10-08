@@ -32,10 +32,12 @@ GtkWidget *systray_toggle;
 
 /* Info dialog widgets */
 GtkWidget *info_window;
+GtkWidget *info_file;
 GtkWidget *info_title;
 GtkWidget *info_artist;
 GtkWidget *info_album;
 GtkWidget *info_genre;
+GtkWidget *info_length;
 
 /* Initializes default interface signals */
 void gimmix_init(void);

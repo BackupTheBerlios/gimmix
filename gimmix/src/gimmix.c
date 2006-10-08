@@ -69,10 +69,12 @@ int main(int argc, char *argv[])
 
 		/* Info dialog */
 		info_window = glade_xml_get_widget(xml, "info_window");
+		info_file = glade_xml_get_widget(xml, "info_file");
 		info_title = glade_xml_get_widget(xml,"info_title");
 		info_artist = glade_xml_get_widget(xml,"info_artist");
 		info_album = glade_xml_get_widget(xml,"info_album");
 		info_genre = glade_xml_get_widget(xml,"info_genre");
+		info_length = glade_xml_get_widget(xml, "info_length");
 		
 		/* Preferences dialog */
 		pref_window = glade_xml_get_widget(xml, "prefs_window");
