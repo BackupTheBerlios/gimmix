@@ -51,6 +51,7 @@ void gimmix_init()
 		GtkWidget *image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(button_play), image);
 	}
+	gimmix_show_ver_info();
 	g_timeout_add(50, gimmix_timer, NULL);
 }
 
@@ -115,10 +116,7 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data)
 	gimmix_stop(pub->gmo);
 	image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
 	gtk_button_set_image(GTK_BUTTON(button_play), image);
-	
-	gtk_label_set_text(GTK_LABEL(song_label), NULL);
-	gtk_label_set_text(GTK_LABEL(artist_label), NULL);
-	gtk_label_set_text(GTK_LABEL(album_label), NULL);
+	gimmix_show_ver_info();
 }
 
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
@@ -163,8 +161,8 @@ void on_info_button_clicked(GtkWidget *widget, gpointer data)
 			gtk_label_set_text(GTK_LABEL(info_length), length);
 			g_free(length);
 		}
-		/*if(info->genre != NULL)
-			gtk_label_set_text(GTK_LABEL(info_genre), info->genre);*/
+		if(info->genre)
+			gtk_label_set_text(GTK_LABEL(info_genre), info->genre);
 		gimmix_free_song_info(info);
 
 		gtk_widget_show(GTK_WIDGET(info_window));
@@ -241,7 +239,7 @@ void gimmix_set_song_info()
 
 	if(song->title)
 	{
-		markup = g_markup_printf_escaped("<span style=\"italic\"><b>%s</b></span>", song->title);
+		markup = g_markup_printf_escaped("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", song->title);
 		gtk_label_set_markup(GTK_LABEL(song_label), markup);
 	}
 	if(song->artist)
@@ -338,4 +336,15 @@ void gimmix_about_show(void)
                            "logo", about_pixbuf, 
                            NULL);
 	return;
+}
+
+void gimmix_show_ver_info()
+{
+	gchar *markup;
+
+	markup = g_markup_printf_escaped("<span size=\"large\"weight=\"bold\">%s</span>", "Gimmix 0.1 alpha");
+	gtk_label_set_markup(GTK_LABEL(song_label), markup);
+	gtk_label_set_text(GTK_LABEL(artist_label), "http://priyank.one09.net/gimmix");
+	gtk_label_set_text(GTK_LABEL(album_label), NULL);
+	free(markup);
 }

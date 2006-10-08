@@ -141,12 +141,12 @@ SongInfo * gimmix_get_song_info(MpdObj *mo)
 	
 	mpd_status_update(mo);
 	ms = mpd_playlist_get_current_song(mo);
-	s->file = strdup(ms->file);
-	s->title = strdup(ms->title);
-	s->artist = strdup(ms->artist);
-	s->album = strdup(ms->album);
-	//s->genre = strdup(ms->genre);
-	s->length = ms->time;
+	s->file 	= (ms->file) 	? strdup(ms->file) : NULL;
+	s->title 	= (ms->title) 	? strdup(ms->title) : NULL;
+	s->artist 	= (ms->artist) 	? strdup(ms->artist) : NULL;
+	s->album 	= (ms->album) 	? strdup(ms->album) : NULL;
+	s->genre 	= (ms->genre) 	? strdup(ms->genre) : NULL;
+	s->length 	= ms->time;
 	//mpd_freeSong(ms);
 	
 	return s;
@@ -158,19 +158,27 @@ char * gimmix_get_song_length(SongInfo *s)
 	char *length = malloc(10);
 	
 	time = s->length;
-	snprintf(length, 7, "%02i:%02i", time/60, time%60);
+	snprintf(length, 10, "%02i:%02i", time/60, time%60);
 	return length;
 }
 
 void gimmix_free_song_info(SongInfo *si)
 {
-	free(si->title);
-	free(si->artist);
-	free(si->album);
-	free(si->file);
-	//free(si->genre);
-	si->length = NULL;
-	free(si);
+	if(si != NULL)
+	{
+		if(si->title)
+			free(si->title);
+		if(si->artist)
+			free(si->artist);
+		if(si->album)
+			free(si->album);
+		if(si->file)
+			free(si->file);
+		//free(si->genre);
+		si->length = 0;
+		free(si);
+	}
+	return;
 }
 
 int gimmix_get_progress_status(MpdObj *mo, float *fraction, char *time)

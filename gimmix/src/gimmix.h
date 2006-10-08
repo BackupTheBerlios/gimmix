@@ -10,7 +10,7 @@
 #include "config.h"
 
 #define APPNAME "Gimmix"
-#define VERSION "0.1alpha"
+#define VERSION "0.1 alpha"
 
 typedef struct Gimmix
 {
