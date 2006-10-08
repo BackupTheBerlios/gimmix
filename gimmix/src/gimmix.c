@@ -85,7 +85,5 @@ int main(int argc, char *argv[])
 
 		gtk_main();
 	}
-	gimmix_config_save(pub->conf);
-	gimmix_config_free(pub->conf);
 	return(0);
 }

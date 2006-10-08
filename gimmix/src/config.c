@@ -54,6 +54,7 @@ Conf * gimmix_config_init(void)
 	/* Free the memory */
 	cfg_free_value(opts);
 	cfg_free(cfg);
+
 	return conf;
 }
 
@@ -83,8 +84,10 @@ void gimmix_config_save(Conf *conf)
 	}
 	else
 		fprintf(stderr, "Error while saving config.\n");
+
 	cfg_free_value(opts);
 	cfg_free(cfg);
+
 	return;
 }
 

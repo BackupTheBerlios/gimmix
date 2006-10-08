@@ -156,7 +156,7 @@ void on_info_button_clicked(GtkWidget *widget, gpointer data)
 			gtk_label_set_text(GTK_LABEL(info_album), info->album);
 		/*if(info->genre != NULL)
 			gtk_label_set_text(GTK_LABEL(info_genre), info->genre);*/
-		//gimmix_free_song_info(info);
+		gimmix_free_song_info(info);
 
 		gtk_widget_show(GTK_WIDGET(info_window));
 	}
