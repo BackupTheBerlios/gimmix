@@ -29,16 +29,12 @@
 Conf * gimmix_config_init(void)
 {
 	Conf *conf = (Conf*)malloc(sizeof(Conf));
-	int enable_systray;
-	int port;
-	char *hostname = NULL;
-	char *password = NULL;
 	
 	cfg_opt_t opts[] = {
-		CFG_SIMPLE_INT("mpd_port", &port),
-		CFG_SIMPLE_STR("mpd_hostname", &hostname),
-		CFG_SIMPLE_STR("mpd_password", &password),
-		CFG_SIMPLE_INT("enable_systray", &enable_systray),
+		CFG_SIMPLE_INT("mpd_port", &conf->port),
+		CFG_SIMPLE_STR("mpd_hostname", &conf->hostname),
+		CFG_SIMPLE_STR("mpd_password", &conf->password),
+		CFG_SIMPLE_INT("enable_systray", &conf->systray_enable),
 		CFG_END()
 	};
 
@@ -47,10 +43,16 @@ Conf * gimmix_config_init(void)
 	cfg = cfg_init(opts, 0);
 	cfg_parse(cfg, "~/.gimmixrc");
 	
-	conf->hostname = hostname;
-	conf->port = port;
-	conf->password = password;
-	conf->systray_enable = enable_systray;
+	/* Set default configuration values if reading from config file fails */
+	if(!conf->hostname)
+		conf->hostname = "localhost";
+	if(!conf->port)
+		conf->port = 6600;
+	if(!conf->systray_enable)
+		conf->systray_enable = 1;
+
+	/* Free the memory */
+	cfg_free(cfg);
 
 	return conf;
 }
