@@ -29,6 +29,7 @@ GtkWidget *host_entry;
 GtkWidget *port_entry;
 GtkWidget *password_entry;
 GtkWidget *systray_toggle;
+GtkWidget *button_apply;
 
 /* Info dialog widgets */
 GtkWidget *info_window;
@@ -63,6 +64,7 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data);
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data);
 void on_info_button_clicked(GtkWidget *widget, gpointer data);
 void on_volume_scale_changed(GtkWidget *widget, gpointer data);
+void on_preferences_apply(GtkWidget *widget, gpointer data);
 void gimmix_scroll_volume_slider(GtkWidget *, GdkEventScroll *);
 void gimmix_progress_seek(GtkWidget *, GdkEvent *);
 void gimmix_about_show(void);

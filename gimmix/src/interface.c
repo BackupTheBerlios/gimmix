@@ -38,7 +38,8 @@ void gimmix_init()
 	g_signal_connect (G_OBJECT(button_info), "clicked", G_CALLBACK(on_info_button_clicked), NULL);
 	g_signal_connect(G_OBJECT(volume_scale), "value_changed", G_CALLBACK(on_volume_scale_changed), NULL);
 	g_signal_connect (G_OBJECT(volume_scale), "scroll_event", G_CALLBACK(gimmix_scroll_volume_slider), NULL);
-	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL); 
+	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL);
+	g_signal_connect (G_OBJECT(button_apply), "clicked", G_CALLBACK(on_preferences_apply), NULL);
 
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
 	if(pub->conf->systray_enable == 1)
@@ -169,6 +170,24 @@ void on_info_button_clicked(GtkWidget *widget, gpointer data)
 
 		gtk_widget_show(GTK_WIDGET(info_window));
 	}
+}
+
+void on_preferences_apply(GtkWidget *widget, gpointer data)
+{
+	const gchar *host;
+	const gchar *port;
+	const gchar *password;
+	gint systray_enable;
+
+	host = gtk_entry_get_text(GTK_ENTRY(host_entry));
+	port = gtk_entry_get_text(GTK_ENTRY(port_entry));
+	password = gtk_entry_get_text(GTK_ENTRY(password_entry));
+	
+	pub->conf->hostname = host;
+	pub->conf->password = password;
+	pub->conf->port = atoi(port);
+	pub->conf->systray_enable = 1;
+	gimmix_config_save(pub->conf);
 }
 
 void on_volume_scale_changed(GtkWidget *widget, gpointer data)
