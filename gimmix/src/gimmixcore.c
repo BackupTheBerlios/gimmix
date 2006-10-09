@@ -96,7 +96,11 @@ bool gimmix_prev(MpdObj *mo)
 
 bool gimmix_next(MpdObj *mo)
 {
-	/* does nothing for now */
+	if (gimmix_is_playing(mo))
+	{
+		mpd_player_next(mo);
+		return true;
+	}
 	return false;
 }
 
