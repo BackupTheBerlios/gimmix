@@ -174,8 +174,11 @@ void gimmix_free_song_info(SongInfo *si)
 			free(si->album);
 		if(si->file)
 			free(si->file);
-		//free(si->genre);
-		si->length = 0;
+		if(si->genre)
+			free(si->genre);
+		si->length = -1;
+		si->pos = -1;
+		si->id = -1;
 		free(si);
 	}
 	return;
