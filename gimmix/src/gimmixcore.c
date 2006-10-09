@@ -106,15 +106,12 @@ bool gimmix_next(MpdObj *mo)
 
 int gimmix_seek(MpdObj *mo, int seektime)
 {
-	int state;
-	
-	state = mpd_player_get_state(mo);
-	if(state == MPD_PLAYER_PLAY || state == MPD_PLAYER_PAUSE)
+	if(gimmix_is_playing(mo))
 	{
 		mpd_player_seek(mo, seektime);
 		return 1;
 	}
-	
+
 	return 0;
 }
 
