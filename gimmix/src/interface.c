@@ -186,7 +186,10 @@ void on_preferences_apply(GtkWidget *widget, gpointer data)
 	pub->conf->hostname = host;
 	pub->conf->password = password;
 	pub->conf->port = atoi(port);
-	pub->conf->systray_enable = 1;
+	if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(systray_toggle)))
+		pub->conf->systray_enable = 1;
+	else
+		pub->conf->systray_enable = 0;
 	gimmix_config_save(pub->conf);
 }
 
@@ -328,10 +331,19 @@ void gimmix_systray_popup_menu()
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 1,gtk_get_current_event_time());
 }
 
-/* Callbacks for preferences dialog */
+/* Enables or disables system tray icon */
 void on_systray_checkbox_toggled(GtkWidget *widget, gpointer data)
 {
-	g_object_unref(tray_icon);
+	if(pub->conf->systray_enable == 1)
+	{	
+		pub->conf->systray_enable = 0;
+		g_object_unref(tray_icon);
+	}
+	else if(pub->conf->systray_enable == 0)
+	{
+		pub->conf->systray_enable = 1;
+		gimmix_systray_icon_create();
+	}
 }
 
 void gimmix_about_show(void)
