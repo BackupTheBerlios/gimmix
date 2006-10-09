@@ -76,7 +76,8 @@ gboolean gimmix_timer()
 
 void on_prev_button_clicked(GtkWidget *widget, gpointer data)
 {
-	g_print("Prev clicked\n");
+	if(gimmix_prev(pub->gmo))
+		gimmix_set_song_info();
 }
 
 void on_next_button_clicked(GtkWidget *widget, gpointer data)
@@ -285,7 +286,7 @@ void gimmix_systray_popup_menu()
 	gtk_widget_show (menu_item);
 
 	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_MEDIA_PREVIOUS, NULL);
-	//g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_prev), NULL);
+	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_prev), NULL);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 	gtk_widget_show (menu_item);
 

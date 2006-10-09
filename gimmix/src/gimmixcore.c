@@ -74,31 +74,30 @@ int gimmix_play(MpdObj *mo)
 	return -1;
 }
 
-int gimmix_stop(MpdObj *mo)
+bool gimmix_stop(MpdObj *mo)
 {
-	int state;
-
-	mpd_status_update(mo);
-	state = mpd_player_get_state(mo);
-	
-	if (state == MPD_PLAYER_PAUSE || state == MPD_PLAYER_PLAY)
+	if (gimmix_is_playing(mo))
 	{
 		mpd_player_stop(mo);
-		return 0;
+		return true;
 	}
-	return 1;
+	return false;
 }
 
-int gimmix_prev(MpdObj *mo)
+bool gimmix_prev(MpdObj *mo)
 {
-	/* does nothing for now */
-	return 0;
+	if (gimmix_is_playing(mo))
+	{
+		mpd_player_prev(mo);
+		return true;
+	}
+	return false;
 }
 
-int gimmix_next(MpdObj *mo)
+bool gimmix_next(MpdObj *mo)
 {
 	/* does nothing for now */
-	return 0;
+	return false;
 }
 
 int gimmix_seek(MpdObj *mo, int seektime)

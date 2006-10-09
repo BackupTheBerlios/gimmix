@@ -25,9 +25,9 @@ MpdObj * gimmix_mpd_connect(Conf *);
 
 /* playback control */
 int gimmix_play(MpdObj *);
-int gimmix_stop(MpdObj *);
-int gimmix_prev(MpdObj *);
-int gimmix_next(MpdObj *);
+bool gimmix_stop(MpdObj *);
+bool gimmix_prev(MpdObj *);
+bool gimmix_next(MpdObj *);
 int gimmix_seek(MpdObj *, int);
 
 /* voulme control */
