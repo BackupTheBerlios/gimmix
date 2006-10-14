@@ -364,7 +364,7 @@ NotifyNotification * gimmix_notify_init(GtkStatusIcon *status_icon)
 	if(!notify_is_initted())
 		notify_init("Gimmix");
 	
-	notify = notify_notification_new_with_status_icon("Gimmix", "Gimmix", "gtk-cdrom", status_icon);
+	notify = notify_notification_new_with_status_icon(APPNAME, APPNAME, "gtk-cdrom", status_icon);
 	
 	notify_notification_set_timeout (notify, 1000);
 	//notify_notification_show(notify, NULL);
