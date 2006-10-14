@@ -22,6 +22,8 @@ typedef struct songinfo
 	int pos;
 } SongInfo;
 
+bool status_is_changed;
+
 /* create a mpd object and connect to mpd using the conf */
 MpdObj * gimmix_mpd_connect(Conf *);
 
@@ -33,7 +35,7 @@ bool gimmix_next(MpdObj *);
 int gimmix_seek(MpdObj *, int);
 
 /* voulme control */
-int gimmix_get_volume(MpdObj *mo);
+int gimmix_get_volume(MpdObj *);
 void gimmix_set_volume(MpdObj *, int);
 
 /* Gets the information of currently playing song (artist, title, genre.etc)*/
@@ -45,9 +47,11 @@ void gimmix_free_song_info(SongInfo *);
 int gimmix_get_progress_status(MpdObj *, float *, char *);
 int gimmix_get_total_song_time(MpdObj *);
 char * gimmix_get_song_length(SongInfo *);
-bool gimmix_check_new_song(MpdObj *);
 
 /* Check whether gimmix is paused/playing or stopped */
 bool gimmix_is_playing(MpdObj *);
+
+/* Status changed callback */
+void status_changed(MpdObj *, ChangedStatusType);
 
 #endif

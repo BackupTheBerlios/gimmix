@@ -32,7 +32,10 @@ MpdObj * gimmix_mpd_connect(Conf *conf)
 	mpd_connect(mo);
 
 	if(mpd_check_connected(mo))
+	{
+		mpd_signal_connect_status_changed(mo, (StatusChangedCallback)status_changed, NULL);
 		return mo;
+	}
 
 	fprintf(stderr, "Error! Couldn't connect to mpd. Check whether mpd is running.\n");
 	return NULL;
@@ -212,15 +215,11 @@ int gimmix_get_progress_status(MpdObj *mo, float *fraction, char *time)
 	return 1;
 }
 
-bool gimmix_check_new_song(MpdObj *mo)
+void status_changed(MpdObj *mo, ChangedStatusType id)
 {
-	static int id;
-	int new_id;
-
-	new_id = mpd_player_get_current_song_id(mo);
-	if(id == new_id)
-		return TRUE;
+	if(id&MPD_CST_SONGID)
+		status_is_changed = true;
 	else
-		id = new_id;
-	return FALSE;
+		status_is_changed = false;
+	return;
 }

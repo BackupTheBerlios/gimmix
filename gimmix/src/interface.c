@@ -60,7 +60,7 @@ void gimmix_init()
 	{	
 		gimmix_show_ver_info();
 	}
-	g_timeout_add(50, gimmix_timer, NULL);
+	g_timeout_add(300, gimmix_timer, NULL);
 }
 
 gboolean gimmix_timer()
@@ -73,7 +73,7 @@ gboolean gimmix_timer()
 		gimmix_get_progress_status(pub->gmo, &fraction, time);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), fraction);
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), time);
-		if(gimmix_check_new_song(pub->gmo))
+		if(status_is_changed)
 			gimmix_set_song_info();
 		return TRUE;
 	}
