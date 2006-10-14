@@ -52,11 +52,11 @@ gboolean gimmix_timer(void);
 GtkWidget * get_image(const gchar *, GtkIconSize);
 void gimmix_set_song_info(void);
 void gimmix_show_ver_info(void);
+gchar * strip_filename(gchar *);
 
 /* Systray and Popup menu */
 void gimmix_systray_icon_create(void);
 void gimmix_systray_popup_menu(void);
-NotifyNotification * gimmix_notify_init(GtkStatusIcon *);
 
 /* Callbacks */
 void gimmix_systray_popup_menu(void);

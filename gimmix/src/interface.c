@@ -151,6 +151,8 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 		gtk_entry_set_text(GTK_ENTRY(password_entry), conf->password);
 	if(systray_enable == 1)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(systray_toggle), TRUE);
+	else
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(systray_toggle), FALSE);
 	g_signal_connect (G_OBJECT(systray_toggle), "toggled", G_CALLBACK(on_systray_checkbox_toggled), NULL);
 	gtk_widget_show(GTK_WIDGET(pref_window));
 }
@@ -284,7 +286,8 @@ void gimmix_set_song_info()
 	}
 	else
 	{
-		gtk_label_set_markup(GTK_LABEL(song_label), song->file);
+		markup = g_markup_printf_escaped("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", g_path_get_basename(song->file));
+		gtk_label_set_markup(GTK_LABEL(song_label), markup);
 		gtk_window_set_title(GTK_WINDOW(main_window), "Gimmix");
 	}
 	if(song->artist)
@@ -366,8 +369,8 @@ NotifyNotification * gimmix_notify_init(GtkStatusIcon *status_icon)
 	
 	notify = notify_notification_new_with_status_icon("Gimmix", "Gimmix", "gtk-cdrom", status_icon);
 	
-	notify_notification_set_timeout (notify, 3000);
-	notify_notification_show(notify, NULL);
+	notify_notification_set_timeout (notify, 1000);
+	//notify_notification_show(notify, NULL);
 	return notify;
 }
 
@@ -377,13 +380,14 @@ void on_systray_checkbox_toggled(GtkWidget *widget, gpointer data)
 	if(pub->conf->systray_enable == 1)
 	{	
 		pub->conf->systray_enable = 0;
-		g_object_unref(notify);
+		g_object_unref(G_OBJECT(notify));
 		g_object_unref(tray_icon);
 	}
 	else if(pub->conf->systray_enable == 0)
 	{
 		pub->conf->systray_enable = 1;
 		gimmix_systray_icon_create();
+		notify = gimmix_notify_init(tray_icon);
 	}
 }
 
