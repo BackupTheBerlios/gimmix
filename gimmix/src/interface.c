@@ -283,7 +283,10 @@ void gimmix_set_song_info()
 		g_free(markup);
 	}
 	else
-		gtk_label_set_markup(GTK_LABEL(song_label), NULL);
+	{
+		gtk_label_set_markup(GTK_LABEL(song_label), song->file);
+		gtk_window_set_title(GTK_WINDOW(main_window), "Gimmix");
+	}
 	if(song->artist)
 		gtk_label_set_text(GTK_LABEL(artist_label), song->artist);
 	else
@@ -298,9 +301,9 @@ void gimmix_set_song_info()
 
 void gimmix_systray_icon_create()
 {
-	//gchar *icon_tooltip = "Gimmix";
+	/* gchar *icon_tooltip = "Gimmix";
+	gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);*/
 	tray_icon = gtk_status_icon_new_from_stock("gtk-cdrom");
-	/*gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);*/
 	g_signal_connect (tray_icon, "popup-menu", G_CALLBACK (gimmix_systray_popup_menu), NULL);
 	g_signal_connect (tray_icon, "activate", G_CALLBACK(gimmix_window_visible), NULL);
 }
