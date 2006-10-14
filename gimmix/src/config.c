@@ -48,7 +48,7 @@ Conf * gimmix_config_init(void)
 		conf->hostname = "localhost";
 	if(!conf->port)
 		conf->port = 6600;
-	if((conf->systray_enable != 0) || (conf->systray_enable != 1))
+	if((conf->systray_enable != 0) && (conf->systray_enable != 1))
 		conf->systray_enable = 1;
 
 	/* Free the memory */

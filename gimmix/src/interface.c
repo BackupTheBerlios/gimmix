@@ -43,7 +43,7 @@ void gimmix_init()
 	g_signal_connect (G_OBJECT(button_apply), "clicked", G_CALLBACK(on_preferences_apply), NULL);
 
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
-	if(pub->conf->systray_enable)
+	if(pub->conf->systray_enable == 1)
 	{	
 		gimmix_systray_icon_create();
 		notify = gimmix_notify_init(tray_icon);
@@ -56,7 +56,10 @@ void gimmix_init()
 		GtkWidget *image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(button_play), image);
 	}
-	gimmix_show_ver_info();
+	else
+	{	
+		gimmix_show_ver_info();
+	}
 	g_timeout_add(50, gimmix_timer, NULL);
 }
 
@@ -344,15 +347,19 @@ NotifyNotification * gimmix_notify_init(GtkStatusIcon *status_icon)
 		notify_init("Gimmix");
 	
 	notify = notify_notification_new_with_status_icon("Gimmix", "Gimmix", "gtk-cdrom", status_icon);
+	
+	notify_notification_set_timeout (notify, 3000);
+	notify_notification_show(notify, NULL);
 	return notify;
 }
 
-/* Enables or disables system tray icon */
+/* Enables / disables system tray icon */
 void on_systray_checkbox_toggled(GtkWidget *widget, gpointer data)
 {
 	if(pub->conf->systray_enable == 1)
 	{	
 		pub->conf->systray_enable = 0;
+		g_object_unref(notify);
 		g_object_unref(tray_icon);
 	}
 	else if(pub->conf->systray_enable == 0)
