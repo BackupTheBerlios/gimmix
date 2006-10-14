@@ -211,3 +211,16 @@ int gimmix_get_progress_status(MpdObj *mo, float *fraction, char *time)
 	}
 	return 1;
 }
+
+bool gimmix_check_new_song(MpdObj *mo)
+{
+	static int id;
+	int new_id;
+	
+	new_id = mpd_player_get_current_song_id(mo);
+	if(id == new_id)
+		return TRUE;
+	else
+		id = new_id;
+	return FALSE;
+}

@@ -45,6 +45,7 @@ void gimmix_free_song_info(SongInfo *);
 int gimmix_get_progress_status(MpdObj *, float *, char *);
 int gimmix_get_total_song_time(MpdObj *);
 char * gimmix_get_song_length(SongInfo *);
+bool gimmix_check_new_song(MpdObj *);
 
 /* Check whether gimmix is paused/playing or stopped */
 bool gimmix_is_playing(MpdObj *);

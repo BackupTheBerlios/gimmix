@@ -50,6 +50,7 @@ gboolean gimmix_timer(void);
 
 /* Utility functions */
 GtkWidget * get_image(const gchar *, GtkIconSize);
+NotifyNotification * gimmix_notify_init(GtkStatusIcon *);
 void gimmix_set_song_info(void);
 void gimmix_show_ver_info(void);
 gchar * strip_filename(gchar *);
