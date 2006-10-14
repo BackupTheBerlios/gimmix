@@ -84,14 +84,20 @@ gboolean gimmix_timer()
 
 void on_prev_button_clicked(GtkWidget *widget, gpointer data)
 {
-	if(gimmix_prev(pub->gmo))
-		gimmix_set_song_info();
+	if(gimmix_is_playing(pub->gmo))
+	{	
+		if(gimmix_prev(pub->gmo))
+			gimmix_set_song_info();
+	}
 }
 
 void on_next_button_clicked(GtkWidget *widget, gpointer data)
 {
-	if(gimmix_next(pub->gmo))
-		gimmix_set_song_info();
+	if(gimmix_is_playing(pub->gmo))
+	{	
+		if(gimmix_next(pub->gmo))
+			gimmix_set_song_info();
+	}
 }
 
 void on_play_button_clicked(GtkWidget *widget, gpointer data)
@@ -263,19 +269,29 @@ GtkWidget * get_image(const gchar *id, GtkIconSize size)
 void gimmix_set_song_info()
 {
 	gchar *markup;
+	gchar title[30];
 	SongInfo *song = NULL;
 	
 	song = gimmix_get_song_info(pub->gmo);
 
 	if(song->title)
 	{
+		g_sprintf(title, "Gimmix - %s", song->title);
+		gtk_window_set_title(GTK_WINDOW(main_window), title);
 		markup = g_markup_printf_escaped("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", song->title);
 		gtk_label_set_markup(GTK_LABEL(song_label), markup);
+		g_free(markup);
 	}
+	else
+		gtk_label_set_markup(GTK_LABEL(song_label), NULL);
 	if(song->artist)
 		gtk_label_set_text(GTK_LABEL(artist_label), song->artist);
+	else
+		gtk_label_set_text(GTK_LABEL(artist_label), NULL);
 	if(song->album)
 		gtk_label_set_text(GTK_LABEL(album_label), song->album);
+	else
+		gtk_label_set_text(GTK_LABEL(album_label), NULL);
 
 	gimmix_free_song_info(song);
 }
@@ -283,7 +299,6 @@ void gimmix_set_song_info()
 void gimmix_systray_icon_create()
 {
 	//gchar *icon_tooltip = "Gimmix";
-	//GError *error = NULL;
 	tray_icon = gtk_status_icon_new_from_stock("gtk-cdrom");
 	/*gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);*/
 	g_signal_connect (tray_icon, "popup-menu", G_CALLBACK (gimmix_systray_popup_menu), NULL);
