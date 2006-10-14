@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <libnotify/notify.h>
 #include "gimmixcore.h"
 
 /* Main window widgets */
@@ -22,6 +23,7 @@ GtkWidget *progress;
 GtkWidget *progressbox;
 GtkAdjustment *volume_adj;
 GtkStatusIcon *tray_icon;
+NotifyNotification *notify;
 
 /* Preferences window widgets */
 GtkWidget *pref_window;
@@ -54,6 +56,7 @@ void gimmix_show_ver_info(void);
 /* Systray and Popup menu */
 void gimmix_systray_icon_create(void);
 void gimmix_systray_popup_menu(void);
+NotifyNotification * gimmix_notify_init(GtkStatusIcon *);
 
 /* Callbacks */
 void gimmix_systray_popup_menu(void);

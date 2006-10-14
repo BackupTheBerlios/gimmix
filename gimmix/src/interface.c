@@ -22,6 +22,7 @@
  */
  
 #include <glib.h>
+#include <libnotify/notify.h>
 #include "interface.h"
 #include "gimmix.h"
 
@@ -42,8 +43,11 @@ void gimmix_init()
 	g_signal_connect (G_OBJECT(button_apply), "clicked", G_CALLBACK(on_preferences_apply), NULL);
 
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
-	if(pub->conf->systray_enable == 1)
+	if(pub->conf->systray_enable)
+	{	
 		gimmix_systray_icon_create();
+		notify = gimmix_notify_init(tray_icon);
+	}
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), gimmix_get_volume(pub->gmo));
 
 	if(gimmix_is_playing(pub->gmo))
@@ -177,7 +181,6 @@ void on_preferences_apply(GtkWidget *widget, gpointer data)
 	const gchar *host;
 	const gchar *port;
 	const gchar *password;
-	gint systray_enable;
 
 	host = gtk_entry_get_text(GTK_ENTRY(host_entry));
 	port = gtk_entry_get_text(GTK_ENTRY(port_entry));
@@ -276,9 +279,10 @@ void gimmix_set_song_info()
 
 void gimmix_systray_icon_create()
 {
-	gchar *icon_tooltip = "Gimmix";
+	//gchar *icon_tooltip = "Gimmix";
+	//GError *error = NULL;
 	tray_icon = gtk_status_icon_new_from_stock("gtk-cdrom");
-	gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);
+	/*gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);*/
 	g_signal_connect (tray_icon, "popup-menu", G_CALLBACK (gimmix_systray_popup_menu), NULL);
 	g_signal_connect (tray_icon, "activate", G_CALLBACK(gimmix_window_visible), NULL);
 }
@@ -329,6 +333,18 @@ void gimmix_systray_popup_menu()
 
 	gtk_widget_show (menu);
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 1,gtk_get_current_event_time());
+}
+
+NotifyNotification * gimmix_notify_init(GtkStatusIcon *status_icon)
+{
+	NotifyNotification *notify;
+	
+	/* Initialize notify */
+	if(!notify_is_initted())
+		notify_init("Gimmix");
+	
+	notify = notify_notification_new_with_status_icon("Gimmix", "Gimmix", "gtk-cdrom", status_icon);
+	return notify;
 }
 
 /* Enables or disables system tray icon */
