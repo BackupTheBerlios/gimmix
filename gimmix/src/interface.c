@@ -167,22 +167,17 @@ void on_info_button_clicked(GtkWidget *widget, gpointer data)
 		gchar *length;
 		info = gimmix_get_song_info(pub->gmo);
 
-		if(info->file)
-			gtk_entry_set_text(GTK_ENTRY(info_file), info->file);
-		if(info->title)
-			gtk_label_set_text(GTK_LABEL(info_title), info->title);
-		if(info->artist)
-			gtk_label_set_text(GTK_LABEL(info_artist), info->artist);
-		if(info->album)
-			gtk_label_set_text(GTK_LABEL(info_album), info->album);
+		gtk_entry_set_text(GTK_ENTRY(info_file), info->file ? info->file : NULL);
+		gtk_label_set_text(GTK_LABEL(info_title), info->title ? info->title : NULL);
+		gtk_label_set_text(GTK_LABEL(info_artist), info->artist ? info->artist : NULL);
+		gtk_label_set_text(GTK_LABEL(info_album), info->album ? info->album : NULL);
 		length = gimmix_get_song_length(info);
 		if(length)
-		{	
+		{
 			gtk_label_set_text(GTK_LABEL(info_length), length);
 			g_free(length);
 		}
-		if(info->genre)
-			gtk_label_set_text(GTK_LABEL(info_genre), info->genre);
+		gtk_label_set_text(GTK_LABEL(info_genre), info->genre ? info->genre : NULL);
 		gimmix_free_song_info(info);
 
 		gtk_widget_show(GTK_WIDGET(info_window));

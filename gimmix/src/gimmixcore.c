@@ -216,7 +216,7 @@ bool gimmix_check_new_song(MpdObj *mo)
 {
 	static int id;
 	int new_id;
-	
+
 	new_id = mpd_player_get_current_song_id(mo);
 	if(id == new_id)
 		return TRUE;
