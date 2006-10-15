@@ -49,7 +49,7 @@ int gimmix_get_total_song_time(MpdObj *);
 char * gimmix_get_song_length(SongInfo *);
 
 /* Check whether gimmix is paused/playing or stopped */
-bool gimmix_is_playing(MpdObj *);
+int gimmix_is_playing(MpdObj *);
 
 /* Status changed callback */
 void status_changed(MpdObj *, ChangedStatusType);

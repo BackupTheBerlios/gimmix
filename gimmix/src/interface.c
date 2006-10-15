@@ -26,8 +26,9 @@
 #include "interface.h"
 #include "gimmix.h"
 
-#define PLAYING 0
-#define PAUSED  1
+#define PLAY 0
+#define PAUSE 1
+#define STOP 2
 
 void gimmix_init()
 {
@@ -50,7 +51,7 @@ void gimmix_init()
 	}
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), gimmix_get_volume(pub->gmo));
 
-	if(gimmix_is_playing(pub->gmo))
+	if(gimmix_is_playing(pub->gmo) == PLAY)
 	{
 		gimmix_set_song_info();
 		GtkWidget *image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
@@ -66,9 +67,11 @@ void gimmix_init()
 gboolean gimmix_timer()
 {
 	gchar time[15];
+	gint state;
 	float fraction;
-	
-	if(gimmix_is_playing(pub->gmo))
+
+	state = gimmix_is_playing(pub->gmo);
+	if(state == PLAY || state == PAUSE)
 	{
 		gimmix_get_progress_status(pub->gmo, &fraction, time);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), fraction);
@@ -77,25 +80,26 @@ gboolean gimmix_timer()
 			gimmix_set_song_info();
 		return TRUE;
 	}
-	GtkWidget *image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
-	gtk_button_set_image(GTK_BUTTON(button_play), image);
-	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 0.0);
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Stopped");
-	return FALSE;
+	else if(state == STOP)
+	{
+		GtkWidget *image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
+		gtk_button_set_image(GTK_BUTTON(button_play), image);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 0.0);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Stopped");
+		return TRUE;
+	}
+	//return FALSE;
 }
 
 void on_prev_button_clicked(GtkWidget *widget, gpointer data)
 {
-	if(gimmix_is_playing(pub->gmo))
-	{	
 		if(gimmix_prev(pub->gmo))
 			gimmix_set_song_info();
-	}
 }
 
 void on_next_button_clicked(GtkWidget *widget, gpointer data)
 {
-	if(gimmix_is_playing(pub->gmo))
+	if(gimmix_is_playing(pub->gmo) == PLAY)
 	{	
 		if(gimmix_next(pub->gmo))
 			gimmix_set_song_info();
@@ -106,18 +110,14 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *image;
 	gint state;
-	
-	if(!gimmix_is_playing(pub->gmo))
-	{
-		g_timeout_add(100, gimmix_timer, NULL);		
-	}
+
 	state = gimmix_play(pub->gmo);
-	if(state == PLAYING)
+	if(state == PLAY)
 	{
 		image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(button_play), image);		
 	}
-	else if(state == PAUSED)
+	else if(state == PAUSE)
 	{
 		image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image(GTK_BUTTON(button_play), image);
@@ -161,7 +161,7 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 
 void on_info_button_clicked(GtkWidget *widget, gpointer data)
 {
-	if(gimmix_is_playing(pub->gmo))
+	if(gimmix_is_playing(pub->gmo) == PLAY)
 	{
 		SongInfo *info = NULL;
 		gchar *length;

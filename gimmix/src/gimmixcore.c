@@ -22,6 +22,9 @@
  */
 
 #include "gimmixcore.h"
+#define PLAY 0
+#define PAUSE 1
+#define STOP 2
 
 MpdObj * gimmix_mpd_connect(Conf *conf)
 {
@@ -41,16 +44,18 @@ MpdObj * gimmix_mpd_connect(Conf *conf)
 	return NULL;
 }
 
-bool gimmix_is_playing(MpdObj *mo)
+int gimmix_is_playing(MpdObj *mo)
 {
 	int status;
 	mpd_status_update(mo);
 	status = mpd_player_get_state(mo);
 	
-	if(status == MPD_PLAYER_PAUSE || status == MPD_PLAYER_PLAY)
-		return true;
-	else
-		return false;
+	if(status == MPD_PLAYER_PAUSE)
+		return PAUSE;
+	else if(status == MPD_PLAYER_PLAY)
+		return PLAY;
+	else if(status == MPD_PLAYER_STOP)
+		return STOP;
 }
 
 int gimmix_play(MpdObj *mo)
@@ -79,7 +84,8 @@ int gimmix_play(MpdObj *mo)
 
 bool gimmix_stop(MpdObj *mo)
 {
-	if (gimmix_is_playing(mo))
+	int state = gimmix_is_playing(mo);
+	if (state == PLAY || state == PAUSE)
 	{
 		mpd_player_stop(mo);
 		return true;
@@ -89,7 +95,8 @@ bool gimmix_stop(MpdObj *mo)
 
 bool gimmix_prev(MpdObj *mo)
 {
-	if (gimmix_is_playing(mo))
+	int state = gimmix_is_playing(mo);
+	if (state == PLAY || state == PAUSE)
 	{
 		mpd_player_prev(mo);
 		return true;
@@ -99,7 +106,8 @@ bool gimmix_prev(MpdObj *mo)
 
 bool gimmix_next(MpdObj *mo)
 {
-	if (gimmix_is_playing(mo))
+	int state = gimmix_is_playing(mo);
+	if (state == PLAY || state == PAUSE)
 	{
 		mpd_player_next(mo);
 		return true;
