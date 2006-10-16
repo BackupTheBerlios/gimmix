@@ -20,7 +20,7 @@
  *
  * Author: Priyank Gosalia <priyankmgg@gmail.com>
  */
- 
+
 #include <glib.h>
 #include <libnotify/notify.h>
 #include "interface.h"
@@ -88,22 +88,19 @@ gboolean gimmix_timer()
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), "Stopped");
 		return TRUE;
 	}
-	//return FALSE;
+	return TRUE;
 }
 
 void on_prev_button_clicked(GtkWidget *widget, gpointer data)
 {
-		if(gimmix_prev(pub->gmo))
-			gimmix_set_song_info();
+	if(gimmix_prev(pub->gmo))
+		gimmix_set_song_info();
 }
 
 void on_next_button_clicked(GtkWidget *widget, gpointer data)
 {
-	if(gimmix_is_playing(pub->gmo) == PLAY)
-	{	
-		if(gimmix_next(pub->gmo))
-			gimmix_set_song_info();
-	}
+	if(gimmix_next(pub->gmo))
+		gimmix_set_song_info();
 }
 
 void on_play_button_clicked(GtkWidget *widget, gpointer data)
@@ -268,7 +265,7 @@ GtkWidget * get_image(const gchar *id, GtkIconSize size)
 void gimmix_set_song_info()
 {
 	gchar *markup;
-	gchar title[30];
+	gchar title[80];
 	SongInfo *song = NULL;
 	
 	song = gimmix_get_song_info(pub->gmo);
@@ -278,6 +275,7 @@ void gimmix_set_song_info()
 		g_sprintf(title, "Gimmix - %s", song->title);
 		gtk_window_set_title(GTK_WINDOW(main_window), title);
 		markup = g_markup_printf_escaped("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", song->title);
+		g_print(song->title);
 		gtk_label_set_markup(GTK_LABEL(song_label), markup);
 		g_free(markup);
 	}
@@ -288,11 +286,14 @@ void gimmix_set_song_info()
 		gtk_window_set_title(GTK_WINDOW(main_window), "Gimmix");
 	}
 	if(song->artist)
-		gtk_label_set_text(GTK_LABEL(artist_label), song->artist);
+	{	gtk_label_set_text(GTK_LABEL(artist_label), song->artist);
+		g_print(song->artist);}
 	else
 		gtk_label_set_text(GTK_LABEL(artist_label), NULL);
 	if(song->album)
-		gtk_label_set_text(GTK_LABEL(album_label), song->album);
+	{	gtk_label_set_text(GTK_LABEL(album_label), song->album);
+		g_print(song->album);
+	}
 	else
 		gtk_label_set_text(GTK_LABEL(album_label), NULL);
 

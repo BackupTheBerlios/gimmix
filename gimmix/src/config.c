@@ -20,7 +20,7 @@
  *
  * Author: Priyank Gosalia <priyankmg@gmail.com>
  */
- 
+
 #include <stdlib.h>
 #include <string.h>
 #include <confuse.h>

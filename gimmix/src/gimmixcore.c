@@ -84,7 +84,9 @@ int gimmix_play(MpdObj *mo)
 
 bool gimmix_stop(MpdObj *mo)
 {
-	int state = gimmix_is_playing(mo);
+	int state;
+	state = gimmix_is_playing(mo);
+
 	if (state == PLAY || state == PAUSE)
 	{
 		mpd_player_stop(mo);
@@ -106,8 +108,10 @@ bool gimmix_prev(MpdObj *mo)
 
 bool gimmix_next(MpdObj *mo)
 {
-	int state = gimmix_is_playing(mo);
-	if (state == PLAY || state == PAUSE)
+	int state;
+	state = gimmix_is_playing(mo);
+
+	if(state == PLAY || state == PAUSE)
 	{
 		mpd_player_next(mo);
 		return true;
@@ -117,7 +121,10 @@ bool gimmix_next(MpdObj *mo)
 
 int gimmix_seek(MpdObj *mo, int seektime)
 {
-	if(gimmix_is_playing(mo))
+	int state;
+	state = gimmix_is_playing(mo);
+
+	if(state == PLAY || state == PAUSE)
 	{
 		mpd_player_seek(mo, seektime);
 		return 1;
@@ -141,6 +148,7 @@ int gimmix_get_volume(MpdObj *mo)
 int gimmix_get_total_song_time(MpdObj *mo)
 {
 	int time;
+
 	time = mpd_status_get_total_song_time(mo);
 	return time;
 }
