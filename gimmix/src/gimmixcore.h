@@ -32,7 +32,7 @@ int gimmix_play(MpdObj *);
 bool gimmix_stop(MpdObj *);
 bool gimmix_prev(MpdObj *);
 bool gimmix_next(MpdObj *);
-int gimmix_seek(MpdObj *, int);
+bool gimmix_seek(MpdObj *, int);
 
 /* voulme control */
 int gimmix_get_volume(MpdObj *);

@@ -22,9 +22,11 @@
  */
 
 #include "gimmixcore.h"
-#define PLAY 0
-#define PAUSE 1
-#define STOP 2
+
+enum { 	PLAY,
+		PAUSE,
+		STOP
+	};
 
 MpdObj * gimmix_mpd_connect(Conf *conf)
 {
@@ -56,6 +58,7 @@ int gimmix_is_playing(MpdObj *mo)
 		return PLAY;
 	else if(status == MPD_PLAYER_STOP)
 		return STOP;
+	return -1;
 }
 
 int gimmix_play(MpdObj *mo)
@@ -97,8 +100,10 @@ bool gimmix_stop(MpdObj *mo)
 
 bool gimmix_prev(MpdObj *mo)
 {
-	int state = gimmix_is_playing(mo);
-	if (state == PLAY || state == PAUSE)
+	int state;
+	state = gimmix_is_playing(mo);
+
+	if(state == PLAY || state == PAUSE)
 	{
 		mpd_player_prev(mo);
 		return true;
@@ -119,7 +124,7 @@ bool gimmix_next(MpdObj *mo)
 	return false;
 }
 
-int gimmix_seek(MpdObj *mo, int seektime)
+bool gimmix_seek(MpdObj *mo, int seektime)
 {
 	int state;
 	state = gimmix_is_playing(mo);
@@ -127,10 +132,10 @@ int gimmix_seek(MpdObj *mo, int seektime)
 	if(state == PLAY || state == PAUSE)
 	{
 		mpd_player_seek(mo, seektime);
-		return 1;
+		return true;
 	}
 
-	return 0;
+	return false;
 }
 
 void gimmix_set_volume(MpdObj *mo, int vol)

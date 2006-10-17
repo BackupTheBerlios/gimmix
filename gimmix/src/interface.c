@@ -26,9 +26,10 @@
 #include "interface.h"
 #include "gimmix.h"
 
-#define PLAY 0
-#define PAUSE 1
-#define STOP 2
+enum {	PLAY,
+		PAUSE,
+		STOP
+	};
 
 void gimmix_init()
 {
@@ -53,9 +54,8 @@ void gimmix_init()
 
 	if(gimmix_is_playing(pub->gmo) == PLAY)
 	{
-		gimmix_set_song_info();
-		GtkWidget *image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
-		gtk_button_set_image(GTK_BUTTON(button_play), image);
+		//gimmix_set_song_info();
+		
 	}
 	else
 	{	
@@ -76,10 +76,21 @@ gboolean gimmix_timer()
 		gimmix_get_progress_status(pub->gmo, &fraction, time);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), fraction);
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(progress), time);
+		if(state == PAUSE)
+		{
+			GtkWidget *image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
+			gtk_button_set_image(GTK_BUTTON(button_play), image);
+		}
+		else
+		{
+			GtkWidget *image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
+			gtk_button_set_image(GTK_BUTTON(button_play), image);
+		}
 		if(status_is_changed)
 			gimmix_set_song_info();
 		return TRUE;
 	}
+	
 	else if(state == STOP)
 	{
 		GtkWidget *image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
@@ -105,33 +116,21 @@ void on_next_button_clicked(GtkWidget *widget, gpointer data)
 
 void on_play_button_clicked(GtkWidget *widget, gpointer data)
 {
-	GtkWidget *image;
-	gint state;
-
-	state = gimmix_play(pub->gmo);
-	if(state == PLAY)
-	{
-		image = get_image("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
-		gtk_button_set_image(GTK_BUTTON(button_play), image);		
-	}
-	else if(state == PAUSE)
-	{
-		image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
-		gtk_button_set_image(GTK_BUTTON(button_play), image);
-	}
-	else
-		return;
-	gimmix_set_song_info();
+	if(gimmix_play(pub->gmo))
+		gimmix_set_song_info();
 }
 
 void on_stop_button_clicked(GtkWidget *widget, gpointer data)
 {
 	GtkWidget *image;
 	
-	gimmix_stop(pub->gmo);
-	image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
-	gtk_button_set_image(GTK_BUTTON(button_play), image);
-	gimmix_show_ver_info();
+	if(gimmix_stop(pub->gmo))
+	{
+		image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
+		gtk_button_set_image(GTK_BUTTON(button_play), image);
+		gimmix_show_ver_info();
+	}
+	return;
 }
 
 void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
@@ -190,7 +189,7 @@ void on_preferences_apply(GtkWidget *widget, gpointer data)
 	host = gtk_entry_get_text(GTK_ENTRY(host_entry));
 	port = gtk_entry_get_text(GTK_ENTRY(port_entry));
 	password = gtk_entry_get_text(GTK_ENTRY(password_entry));
-	
+
 	pub->conf->hostname = host;
 	pub->conf->password = password;
 	pub->conf->port = atoi(port);
@@ -242,7 +241,7 @@ void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
 	seektime = (gdouble)x/allocation.width;
 	newtime = seektime * totaltime;
 	if(gimmix_seek(pub->gmo, newtime))
-			gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), seektime);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), seektime);
 	return;
 }
 
@@ -277,7 +276,6 @@ void gimmix_set_song_info()
 		markup = g_markup_printf_escaped("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", song->title);
 		g_print(song->title);
 		gtk_label_set_markup(GTK_LABEL(song_label), markup);
-		g_free(markup);
 	}
 	else
 	{
@@ -296,6 +294,8 @@ void gimmix_set_song_info()
 	}
 	else
 		gtk_label_set_text(GTK_LABEL(album_label), NULL);
+	
+	g_free(markup);
 
 	gimmix_free_song_info(song);
 }
@@ -380,13 +380,15 @@ void on_systray_checkbox_toggled(GtkWidget *widget, gpointer data)
 		pub->conf->systray_enable = 0;
 		g_object_unref(G_OBJECT(notify));
 		g_object_unref(tray_icon);
+		return;
 	}
-	else if(pub->conf->systray_enable == 0)
+	else
 	{
 		pub->conf->systray_enable = 1;
 		gimmix_systray_icon_create();
 		notify = gimmix_notify_init(tray_icon);
 	}
+	return;
 }
 
 void gimmix_about_show(void)
@@ -422,5 +424,5 @@ void gimmix_show_ver_info()
 	gtk_label_set_markup(GTK_LABEL(song_label), markup);
 	gtk_label_set_text(GTK_LABEL(artist_label), "http://priyank.one09.net/gimmix");
 	gtk_label_set_text(GTK_LABEL(album_label), NULL);
-	free(markup);
+	g_free(markup);
 }
