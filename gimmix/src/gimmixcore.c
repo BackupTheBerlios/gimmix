@@ -61,7 +61,7 @@ int gimmix_is_playing(MpdObj *mo)
 	return -1;
 }
 
-int gimmix_play(MpdObj *mo)
+bool gimmix_play(MpdObj *mo)
 {
 	mpd_status_update(mo);
 	if(mpd_playlist_get_playlist_length(mo))
@@ -73,16 +73,16 @@ int gimmix_play(MpdObj *mo)
 		if (state == MPD_PLAYER_PAUSE || state == MPD_PLAYER_STOP)
 		{	
 			mpd_player_play(mo);
-			return 0;
+			return true;
 		}
 
 		else if(state == MPD_PLAYER_PLAY)
-		{	
+		{
 			mpd_player_pause(mo);
-			return 1;
+			return false;
 		}
 	}
-	return -1;
+	return false;
 }
 
 bool gimmix_stop(MpdObj *mo)

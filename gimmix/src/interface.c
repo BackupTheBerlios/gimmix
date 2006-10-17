@@ -44,6 +44,7 @@ void gimmix_init()
 	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL);
 	g_signal_connect (G_OBJECT(button_apply), "clicked", G_CALLBACK(on_preferences_apply), NULL);
 
+
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
 	if(pub->conf->systray_enable == 1)
 	{	
@@ -247,10 +248,20 @@ void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
 
 void gimmix_window_visible()
 {
+	static int x;
+	static int y;
+
 	if(!GTK_WIDGET_VISIBLE(main_window))
+	{	
+		gtk_window_move(GTK_WINDOW(main_window), x, y);
 		gtk_widget_show(GTK_WIDGET(main_window));
+	}
 	else
+	{	
+		gtk_window_get_position(GTK_WINDOW(main_window), &x, &y);
 		gtk_widget_hide(GTK_WIDGET(main_window));
+	}
+	return;
 }
 
 GtkWidget * get_image(const gchar *id, GtkIconSize size)

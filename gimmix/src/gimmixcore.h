@@ -28,7 +28,7 @@ bool status_is_changed;
 MpdObj * gimmix_mpd_connect(Conf *);
 
 /* playback control */
-int gimmix_play(MpdObj *);
+bool gimmix_play(MpdObj *);
 bool gimmix_stop(MpdObj *);
 bool gimmix_prev(MpdObj *);
 bool gimmix_next(MpdObj *);
