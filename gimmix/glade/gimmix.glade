@@ -84,7 +84,7 @@
 		      <child>
 			<widget class="GtkLabel" id="song_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Title</property>
+			  <property name="label" translatable="yes"></property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -109,7 +109,7 @@
 		      <child>
 			<widget class="GtkLabel" id="artist_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Artist</property>
+			  <property name="label" translatable="yes"></property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -134,7 +134,7 @@
 		      <child>
 			<widget class="GtkLabel" id="album_label">
 			  <property name="visible">True</property>
-			  <property name="label" translatable="yes">Album</property>
+			  <property name="label" translatable="yes"></property>
 			  <property name="use_underline">False</property>
 			  <property name="use_markup">False</property>
 			  <property name="justify">GTK_JUSTIFY_LEFT</property>
