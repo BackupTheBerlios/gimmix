@@ -44,7 +44,6 @@ void gimmix_init()
 	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL);
 	g_signal_connect (G_OBJECT(button_apply), "clicked", G_CALLBACK(on_preferences_apply), NULL);
 
-
 	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
 	if(pub->conf->systray_enable == 1)
 	{	

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <libnotify/notify.h>
-#include "gimmixcore.h"
+#include "gimmix-core.h"
 
 /* Main window widgets */
 GtkWidget *main_window;

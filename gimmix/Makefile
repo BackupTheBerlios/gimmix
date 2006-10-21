@@ -20,7 +20,7 @@ GLIB_LIB=`pkg-config --libs glib-2.0 glib`
 CFLAGS=-march=i686 -pipe -O2 -Wall -fPIC $(NOTIFY_CFLAGS) $(GTK_CFLAGS) $(GLADE_CFLAGS) $(MPD_CFLAGS) $(GLIB_CFLAGS) -I.
 LIBS=$(CONFUSE_LIB) $(NOTIFY_LIB) $(GTK_LIB) $(GLADE_LIB) $(MPD_LIB) $(GLIB_LIB)
 
-OBJS = config.o gimmixcore.o interface.o gimmix.o
+OBJS = config.o gimmix-core.o interface.o gimmix.o
 
 CC=gcc
 
@@ -38,8 +38,8 @@ config.o:			src/config.c
 	$(CC) $(CFLAGS) -c src/config.c
 #prefs.o:		src/prefs.c
 #	$(CC) $(CFLAGS) -c src/prefs.c
-gimmixcore.o:		src/gimmixcore.c
-	$(CC) $(CFLAGS) -c src/gimmixcore.c
+gimmix-core.o:		src/gimmix-core.c
+	$(CC) $(CFLAGS) -c src/gimmix-core.c
 interface.o:		src/interface.c
 	$(CC) $(CFLAGS) -c src/interface.c
 #playlist.o:		src/playlist.c
