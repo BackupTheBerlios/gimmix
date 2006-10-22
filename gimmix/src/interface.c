@@ -62,6 +62,7 @@ void gimmix_init()
 		gimmix_show_ver_info();
 	}
 	g_timeout_add(300, gimmix_timer, NULL);
+	gimmix_playlist_show();
 }
 
 gboolean gimmix_timer()
@@ -108,7 +109,8 @@ void on_prev_button_clicked(GtkWidget *widget, gpointer data)
 		gimmix_set_song_info();
 }
 
-void on_next_button_clicked(GtkWidget *widget, gpointer data)
+void
+on_next_button_clicked (GtkWidget *widget, gpointer data)
 {
 	if(gimmix_next(pub->gmo))
 		gimmix_set_song_info();
@@ -120,7 +122,8 @@ void on_play_button_clicked(GtkWidget *widget, gpointer data)
 		gimmix_set_song_info();
 }
 
-void on_stop_button_clicked(GtkWidget *widget, gpointer data)
+void
+on_stop_button_clicked (GtkWidget *widget, gpointer data)
 {
 	GtkWidget *image;
 	
@@ -133,7 +136,8 @@ void on_stop_button_clicked(GtkWidget *widget, gpointer data)
 	return;
 }
 
-void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
+void
+on_prefs_button_clicked (GtkWidget *widget, gpointer data)
 {
 	Conf *conf;
 	gchar port[8];
@@ -155,7 +159,8 @@ void on_prefs_button_clicked(GtkWidget *widget, gpointer data)
 	gtk_widget_show(GTK_WIDGET(pref_window));
 }
 
-void on_info_button_clicked(GtkWidget *widget, gpointer data)
+void
+on_info_button_clicked (GtkWidget *widget, gpointer data)
 {
 	if(gimmix_is_playing(pub->gmo) == PLAY)
 	{
@@ -180,7 +185,8 @@ void on_info_button_clicked(GtkWidget *widget, gpointer data)
 	}
 }
 
-void on_preferences_apply(GtkWidget *widget, gpointer data)
+void
+on_preferences_apply (GtkWidget *widget, gpointer data)
 {
 	const gchar *host;
 	const gchar *port;
@@ -200,7 +206,8 @@ void on_preferences_apply(GtkWidget *widget, gpointer data)
 	gimmix_config_save(pub->conf);
 }
 
-void on_volume_scale_changed(GtkWidget *widget, gpointer data)
+void
+on_volume_scale_changed (GtkWidget *widget, gpointer data)
 {
 	gint value;
 
@@ -208,7 +215,8 @@ void on_volume_scale_changed(GtkWidget *widget, gpointer data)
 	gimmix_set_volume(pub->gmo, value);
 }
 
-void gimmix_scroll_volume_slider(GtkWidget *object, GdkEventScroll *event)
+void
+gimmix_scroll_volume_slider (GtkWidget *object, GdkEventScroll *event)
 {
 	if(event->type != GDK_SCROLL)
 		return;
@@ -229,7 +237,8 @@ void gimmix_scroll_volume_slider(GtkWidget *object, GdkEventScroll *event)
 	}
 }
 
-void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
+void
+gimmix_progress_seek (GtkWidget *progressbox, GdkEvent *event)
 {
 	GtkAllocation allocation;
 	gint x, newtime, totaltime;
@@ -245,7 +254,8 @@ void gimmix_progress_seek(GtkWidget *progressbox, GdkEvent *event)
 	return;
 }
 
-void gimmix_window_visible()
+void
+gimmix_window_visible ()
 {
 	static int x;
 	static int y;
@@ -263,7 +273,8 @@ void gimmix_window_visible()
 	return;
 }
 
-GtkWidget * get_image(const gchar *id, GtkIconSize size)
+GtkWidget *
+get_image (const gchar *id, GtkIconSize size)
 {
 	GtkWidget *image;
 
@@ -271,7 +282,8 @@ GtkWidget * get_image(const gchar *id, GtkIconSize size)
 	return image;
 }
 
-void gimmix_set_song_info()
+void
+gimmix_set_song_info ()
 {
 	gchar *markup;
 	gchar title[80];
@@ -310,7 +322,8 @@ void gimmix_set_song_info()
 	gimmix_free_song_info(song);
 }
 
-void gimmix_systray_icon_create()
+void
+gimmix_systray_icon_create ()
 {
 	/* gchar *icon_tooltip = "Gimmix";
 	gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);*/
@@ -367,7 +380,8 @@ void gimmix_systray_popup_menu()
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, NULL, NULL, 1,gtk_get_current_event_time());
 }
 
-NotifyNotification * gimmix_notify_init(GtkStatusIcon *status_icon)
+NotifyNotification *
+gimmix_notify_init (GtkStatusIcon *status_icon)
 {
 	NotifyNotification *notify;
 	
@@ -383,7 +397,8 @@ NotifyNotification * gimmix_notify_init(GtkStatusIcon *status_icon)
 }
 
 /* Enables / disables system tray icon */
-void on_systray_checkbox_toggled(GtkWidget *widget, gpointer data)
+void 
+on_systray_checkbox_toggled (GtkWidget *widget, gpointer data)
 {
 	if(pub->conf->systray_enable == 1)
 	{	

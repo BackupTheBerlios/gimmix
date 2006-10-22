@@ -25,6 +25,7 @@
 #include <glade/glade.h>
 #include "gimmix.h"
 #include "interface.h"
+#include "playlist.h"
 
 bool gimmix_connect(void)
 {
@@ -83,6 +84,11 @@ int main(int argc, char *argv[])
 		password_entry = glade_xml_get_widget(xml,"password_entry");
 		systray_toggle = glade_xml_get_widget(xml, "systray_checkbutton");
 		button_apply = glade_xml_get_widget(xml, "button_apply");
+		
+		/* Playlist */
+		playlist_window = glade_xml_get_widget(xml, "playlist");
+		album_view = glade_xml_get_widget(xml, "album");
+		list_view = glade_xml_get_widget(xml, "list");
 
 		gimmix_init();
 
