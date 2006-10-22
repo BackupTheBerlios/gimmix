@@ -33,7 +33,7 @@ gimmix_create_and_fill_albums_model (void)
 	
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter, 0, "Somewhere in Time", -1);
-	
+
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter, 0, "Purgatory", -1);
 	
@@ -48,11 +48,11 @@ gimmix_create_view_and_model (void)
 	
 	renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (album_view),
-													-1,
-													"Album",
-													renderer,
-													"text", 0,
-													NULL);
+							-1,
+							"Album",
+							renderer,
+							"text", 0,
+							NULL);
 	model = gimmix_create_and_fill_albums_model ();
 	
 	gtk_tree_view_set_model (GTK_TREE_VIEW (album_view), model);
@@ -62,6 +62,7 @@ gimmix_create_view_and_model (void)
 void 
 gimmix_playlist_show (void)
 {
-	gtk_widget_show (playlist_window);
+	gimmix_create_view_and_model();
+	gtk_widget_show_all (playlist_window);
 }
 

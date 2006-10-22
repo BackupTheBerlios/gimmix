@@ -1694,9 +1694,10 @@
 
   <child>
     <widget class="GtkHBox" id="hbox7">
+      <property name="border_width">5</property>
       <property name="visible">True</property>
       <property name="homogeneous">False</property>
-      <property name="spacing">3</property>
+      <property name="spacing">7</property>
 
       <child>
 	<widget class="GtkScrolledWindow" id="scrolledwindow2">
@@ -1709,9 +1710,10 @@
 
 	  <child>
 	    <widget class="GtkTreeView" id="album">
+	      <property name="border_width">3</property>
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
-	      <property name="headers_visible">True</property>
+	      <property name="headers_visible">False</property>
 	      <property name="rules_hint">False</property>
 	      <property name="reorderable">False</property>
 	      <property name="enable_search">True</property>
@@ -1739,6 +1741,7 @@
 
 	  <child>
 	    <widget class="GtkTreeView" id="list">
+	      <property name="border_width">3</property>
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="headers_visible">False</property>
