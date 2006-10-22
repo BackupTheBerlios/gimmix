@@ -28,14 +28,15 @@ gimmix_create_and_fill_albums_model (void)
 {
 	GtkListStore 	*store;
 	GtkTreeIter 	iter;
+	MpdData 		*data;
 
 	store = gtk_list_store_new (1, G_TYPE_STRING);
-	
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter, 0, "Somewhere in Time", -1);
 
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter, 0, "Purgatory", -1);
+	for (data = mpd_database_get_albums(pub->gmo, NULL); data != NULL; data = mpd_data_get_next(data))
+	{
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter, 0, data->tag, -1);
+	}
 	
 	return GTK_TREE_MODEL (store);
 }

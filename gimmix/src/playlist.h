@@ -1,5 +1,12 @@
 #ifndef PLAYLIST_H
 #define PLAYLIST_H
+
+#include "gimmix-core.h"
+#include "gimmix.h"
+#include <string.h>
+#include <stdbool.h>
+#include <libmpd/libmpd.h>
+#include <libmpd/libmpdclient.h>
 #include <gtk/gtk.h>
 
 /* Playlist */

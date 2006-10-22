@@ -31,7 +31,8 @@ enum {	PLAY,
 		STOP
 	};
 
-void gimmix_init()
+void
+gimmix_init (void)
 {
 	g_signal_connect (G_OBJECT(button_play), "clicked", G_CALLBACK(on_play_button_clicked), NULL);
 	g_signal_connect (G_OBJECT(button_prev), "clicked", G_CALLBACK(on_prev_button_clicked), NULL);
@@ -65,7 +66,8 @@ void gimmix_init()
 	gimmix_playlist_show();
 }
 
-gboolean gimmix_timer()
+gboolean
+gimmix_timer (void)
 {
 	gchar time[15];
 	gint state;
@@ -103,7 +105,8 @@ gboolean gimmix_timer()
 	return TRUE;
 }
 
-void on_prev_button_clicked(GtkWidget *widget, gpointer data)
+void
+on_prev_button_clicked (GtkWidget *widget, gpointer data)
 {
 	if(gimmix_prev(pub->gmo))
 		gimmix_set_song_info();
@@ -116,7 +119,8 @@ on_next_button_clicked (GtkWidget *widget, gpointer data)
 		gimmix_set_song_info();
 }
 
-void on_play_button_clicked(GtkWidget *widget, gpointer data)
+void
+on_play_button_clicked (GtkWidget *widget, gpointer data)
 {
 	if(gimmix_play(pub->gmo))
 		gimmix_set_song_info();
@@ -260,7 +264,7 @@ gimmix_window_visible ()
 	static int x;
 	static int y;
 
-	if(!GTK_WIDGET_VISIBLE(main_window))
+	if( !GTK_WIDGET_VISIBLE (main_window) )
 	{	
 		gtk_window_move(GTK_WINDOW(main_window), x, y);
 		gtk_widget_show(GTK_WIDGET(main_window));
@@ -283,35 +287,35 @@ get_image (const gchar *id, GtkIconSize size)
 }
 
 void
-gimmix_set_song_info ()
+gimmix_set_song_info (void)
 {
 	gchar *markup;
 	gchar title[80];
 	SongInfo *song = NULL;
 	
-	song = gimmix_get_song_info(pub->gmo);
+	song = gimmix_get_song_info (pub->gmo);
 
 	if(song->title)
 	{
-		g_sprintf(title, "Gimmix - %s", song->title);
-		gtk_window_set_title(GTK_WINDOW(main_window), title);
-		markup = g_markup_printf_escaped("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", song->title);
-		g_print(song->title);
-		gtk_label_set_markup(GTK_LABEL(song_label), markup);
+		g_sprintf (title, "Gimmix - %s", song->title);
+		gtk_window_set_title (GTK_WINDOW(main_window), title);
+		markup = g_markup_printf_escaped ("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", song->title);
+		g_print (song->title);
+		gtk_label_set_markup (GTK_LABEL(song_label), markup);
 	}
 	else
 	{
-		markup = g_markup_printf_escaped("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", g_path_get_basename(song->file));
-		gtk_label_set_markup(GTK_LABEL(song_label), markup);
-		gtk_window_set_title(GTK_WINDOW(main_window), "Gimmix");
+		markup = g_markup_printf_escaped ("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", g_path_get_basename(song->file));
+		gtk_label_set_markup (GTK_LABEL(song_label), markup);
+		gtk_window_set_title (GTK_WINDOW(main_window), "Gimmix");
 	}
 	if(song->artist)
-	{	gtk_label_set_text(GTK_LABEL(artist_label), song->artist);
+	{	gtk_label_set_text (GTK_LABEL(artist_label), song->artist);
 		g_print(song->artist);}
 	else
-		gtk_label_set_text(GTK_LABEL(artist_label), NULL);
+		gtk_label_set_text (GTK_LABEL(artist_label), NULL);
 	if(song->album)
-	{	gtk_label_set_text(GTK_LABEL(album_label), song->album);
+	{	gtk_label_set_text (GTK_LABEL(album_label), song->album);
 		g_print(song->album);
 	}
 	else
@@ -416,7 +420,8 @@ on_systray_checkbox_toggled (GtkWidget *widget, gpointer data)
 	return;
 }
 
-void gimmix_about_show(void)
+void
+gimmix_about_show(void)
 {
 	GdkPixbuf *about_pixbuf;
 	about_pixbuf= gdk_pixbuf_new_from_file("gimmix.png", NULL);
@@ -441,7 +446,8 @@ void gimmix_about_show(void)
 	return;
 }
 
-void gimmix_show_ver_info()
+void
+gimmix_show_ver_info()
 {
 	gchar *markup;
 

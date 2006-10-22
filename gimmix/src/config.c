@@ -26,7 +26,8 @@
 #include <confuse.h>
 #include "config.h"
 
-Conf * gimmix_config_init(void)
+Conf *
+gimmix_config_init (void)
 {
 	Conf *conf = (Conf*)malloc(sizeof(Conf));
 	
@@ -58,7 +59,8 @@ Conf * gimmix_config_init(void)
 	return conf;
 }
 
-void gimmix_config_save(Conf *conf)
+void
+gimmix_config_save (Conf *conf)
 {
 	FILE *fp;
 	cfg_t *cfg;
@@ -91,7 +93,8 @@ void gimmix_config_save(Conf *conf)
 	return;
 }
 
-void gimmix_config_free(Conf *conf)
+void
+gimmix_config_free (Conf *conf)
 {
 	free(conf);
 }

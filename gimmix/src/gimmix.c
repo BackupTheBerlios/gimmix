@@ -27,7 +27,8 @@
 #include "interface.h"
 #include "playlist.h"
 
-bool gimmix_connect(void)
+bool
+gimmix_connect (void)
 {
 	MpdObj *mo;
 	
@@ -39,7 +40,8 @@ bool gimmix_connect(void)
 	return false;
 }
 
-int main(int argc, char *argv[])
+int
+main (int argc, char *argv[])
 {
 	GladeXML *xml;
 
