@@ -24,7 +24,7 @@
 #include "playlist.h"
 
 GtkTreeModel * 
-gimmix_create_and_fill_albums_model (void)
+gimmix_create_and_fill_artists_model (void)
 {
 	GtkListStore 	*store;
 	GtkTreeIter 	iter;
@@ -32,7 +32,7 @@ gimmix_create_and_fill_albums_model (void)
 
 	store = gtk_list_store_new (1, G_TYPE_STRING);
 
-	for (data = mpd_database_get_albums(pub->gmo, NULL); data != NULL; data = mpd_data_get_next(data))
+	for (data = mpd_database_get_artists(pub->gmo); data != NULL; data = mpd_data_get_next(data))
 	{
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter, 0, data->tag, -1);
@@ -42,28 +42,106 @@ gimmix_create_and_fill_albums_model (void)
 }
 
 void
-gimmix_create_view_and_model (void)
+gimmix_update_artists_view_and_model (void)
 {
-	GtkCellRenderer *renderer;	
-	GtkTreeModel 	*model;
+	GtkCellRenderer 	*artists_renderer;
+	GtkListStore 		*artists_store;
+	GtkTreeModel 		*artists_model;
+	GtkTreeSelection	*selection;
 	
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (album_view),
+	artists_store 	= gtk_list_store_new (1, G_TYPE_STRING);
+	artists_renderer = gtk_cell_renderer_text_new ();
+	
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (artists_treeview),
 							-1,
-							"Album",
-							renderer,
+							"Artist",
+							artists_renderer,
 							"text", 0,
 							NULL);
-	model = gimmix_create_and_fill_albums_model ();
 	
-	gtk_tree_view_set_model (GTK_TREE_VIEW (album_view), model);
-	g_object_unref (model);
+	artists_model = gimmix_create_and_fill_artists_model ();
+
+	gtk_tree_view_set_model (GTK_TREE_VIEW (artists_treeview), artists_model);
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(artists_treeview));
+	g_signal_connect(selection, "changed", G_CALLBACK(on_artist_treeview_select), NULL);
+	g_object_unref (artists_model);
+	return;
 }
 
-void 
+int
+on_artist_treeview_select (void)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model;
+	GtkTreeSelection *s;
+	gchar *artist;
+	MpdData *data;
+
+	model = gtk_tree_view_get_model(GTK_TREE_VIEW(artists_treeview));
+	s = gtk_tree_view_get_selection(GTK_TREE_VIEW(artists_treeview));
+
+	if (gtk_tree_selection_get_selected(s, &model, &iter))
+	{
+		gtk_tree_model_get(model, &iter, 0, &artist, -1);
+		g_print(artist);
+		gimmix_update_songs_view_and_model (artist);
+		return 0;
+	}
+	else
+	{
+		return 1;
+	}
+}
+
+GtkTreeModel * 
+gimmix_create_and_fill_songs_model (gchar *artist)
+{
+	GtkListStore 	*store;
+	GtkTreeIter 	iter;
+	MpdData 		*data;
+
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+
+	for (data = mpd_database_get_albums(pub->gmo, artist); data != NULL; data = mpd_data_get_next(data))
+	{
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter, 0, data->tag, -1);
+	}
+	
+	return GTK_TREE_MODEL (store);
+}
+
+void
+gimmix_update_songs_view_and_model (gchar *artist)
+{
+	GtkCellRenderer 	*songs_renderer;
+	GtkListStore 		*songs_store;
+	GtkTreeModel 		*songs_model;
+	GtkTreeSelection	*selection;
+	
+	songs_store 	= gtk_list_store_new (1, G_TYPE_STRING);
+	songs_renderer 	= gtk_cell_renderer_text_new ();
+	
+	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (songs_treeview),
+							-1,
+							"Albums",
+							songs_renderer,
+							"text", 0,
+							NULL);
+	
+	songs_model = gimmix_create_and_fill_songs_model (artist);
+
+	gtk_tree_view_set_model (GTK_TREE_VIEW (songs_treeview), songs_model);
+	selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(songs_treeview));
+	//g_signal_connect(selection, "changed", G_CALLBACK(on_artist_treeview_select), NULL);
+	g_object_unref (songs_model);
+	return;
+}
+
+void
 gimmix_playlist_show (void)
 {
-	gimmix_create_view_and_model();
+	gimmix_update_artists_view_and_model ();
 	gtk_widget_show_all (playlist_window);
 }
 

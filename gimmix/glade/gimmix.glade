@@ -1675,12 +1675,12 @@
   </child>
 </widget>
 
-<widget class="GtkWindow" id="playlist">
+<widget class="GtkWindow" id="playlist_window">
   <property name="title" translatable="yes">Gimmix Playlist</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
-  <property name="default_width">420</property>
+  <property name="default_width">475</property>
   <property name="default_height">350</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
@@ -1711,7 +1711,7 @@
 	  <child>
 	    <widget class="GtkTreeView" id="album">
 	      <property name="border_width">3</property>
-	      <property name="width_request">137</property>
+	      <property name="width_request">205</property>
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="headers_visible">False</property>
