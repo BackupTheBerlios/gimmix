@@ -259,7 +259,7 @@ gimmix_progress_seek (GtkWidget *progressbox, GdkEvent *event)
 }
 
 void
-gimmix_window_visible ()
+gimmix_window_visible (void)
 {
 	static int x;
 	static int y;
@@ -327,7 +327,7 @@ gimmix_set_song_info (void)
 }
 
 void
-gimmix_systray_icon_create ()
+gimmix_systray_icon_create (void)
 {
 	/* gchar *icon_tooltip = "Gimmix";
 	gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);*/
@@ -336,7 +336,8 @@ gimmix_systray_icon_create ()
 	g_signal_connect (tray_icon, "activate", G_CALLBACK(gimmix_window_visible), NULL);
 }
 
-void gimmix_systray_popup_menu()
+void
+gimmix_systray_popup_menu (void)
 {
 	GtkWidget *menu, *menu_item;
 
@@ -421,7 +422,7 @@ on_systray_checkbox_toggled (GtkWidget *widget, gpointer data)
 }
 
 void
-gimmix_about_show(void)
+gimmix_about_show (void)
 {
 	GdkPixbuf *about_pixbuf;
 	about_pixbuf= gdk_pixbuf_new_from_file("gimmix.png", NULL);
@@ -447,7 +448,7 @@ gimmix_about_show(void)
 }
 
 void
-gimmix_show_ver_info()
+gimmix_show_ver_info (void)
 {
 	gchar *markup;
 
