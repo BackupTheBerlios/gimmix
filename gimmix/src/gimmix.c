@@ -89,7 +89,7 @@ main (int argc, char *argv[])
 		
 		/* Playlist */
 		playlist_window = glade_xml_get_widget(xml, "playlist_window");
-		artists_treeview = glade_xml_get_widget(xml, "album");
+		directory_treeview = glade_xml_get_widget(xml, "album");
 		songs_treeview = glade_xml_get_widget(xml, "list");
 
 		gimmix_init();

@@ -11,7 +11,7 @@
 
 /* Playlist */
 GtkWidget *playlist_window;
-GtkTreeView *artists_treeview;
+GtkTreeView *directory_treeview;
 GtkTreeView *songs_treeview;
 
 GtkTreeModel * gimmix_update_and_fill_artists_model (void);
@@ -24,5 +24,5 @@ void gimmix_playlist_show (void);
 
 /* Callbacks */
 int on_artist_treeview_select (void);
-
+void on_dir_selected (void);
 #endif
