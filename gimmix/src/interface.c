@@ -55,15 +55,14 @@ gimmix_init (void)
 
 	if(gimmix_is_playing(pub->gmo) == PLAY)
 	{
-		//gimmix_set_song_info();
-		
+		gimmix_set_song_info();
 	}
 	else
 	{	
 		gimmix_show_ver_info();
 	}
 	g_timeout_add(300, gimmix_timer, NULL);
-	gimmix_playlist_show();
+	gimmix_playlist_populate();
 }
 
 gboolean

@@ -88,8 +88,9 @@ main (int argc, char *argv[])
 		button_apply = glade_xml_get_widget(xml, "button_apply");
 		
 		/* Playlist */
-		directory_treeview = glade_xml_get_widget(xml, "album");
-		songs_treeview = glade_xml_get_widget(xml, "list");
+		directory_treeview = glade_xml_get_widget (xml, "album");
+		songs_treeview = glade_xml_get_widget (xml, "list");
+		current_playlist_treeview = glade_xml_get_widget (xml, "current_playlist_treeview");
 
 		gimmix_init();
 
