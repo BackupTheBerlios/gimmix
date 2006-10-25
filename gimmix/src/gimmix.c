@@ -88,7 +88,6 @@ main (int argc, char *argv[])
 		button_apply = glade_xml_get_widget(xml, "button_apply");
 		
 		/* Playlist */
-		playlist_window = glade_xml_get_widget(xml, "playlist_window");
 		directory_treeview = glade_xml_get_widget(xml, "album");
 		songs_treeview = glade_xml_get_widget(xml, "list");
 

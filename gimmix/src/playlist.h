@@ -10,7 +10,6 @@
 #include <gtk/gtk.h>
 
 /* Playlist */
-GtkWidget *playlist_window;
 GtkTreeView *directory_treeview;
 GtkTreeView *songs_treeview;
 

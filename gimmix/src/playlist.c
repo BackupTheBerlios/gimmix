@@ -187,8 +187,8 @@ void gimmix_playlist_populate (void)
 	dir_store 	= gtk_list_store_new (2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
 	song_store	= gtk_list_store_new (2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
 	
-	song_pixbuf = gtk_widget_render_icon (songs_treeview, GTK_STOCK_FILE, GTK_ICON_SIZE_BUTTON, NULL);
-	dir_pixbuf 	= gtk_widget_render_icon (directory_treeview, GTK_STOCK_DIRECTORY, GTK_ICON_SIZE_BUTTON, NULL);
+	song_pixbuf 	= gtk_widget_render_icon (songs_treeview, GTK_STOCK_FILE, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
+	dir_pixbuf 	= gtk_widget_render_icon (directory_treeview, GTK_STOCK_DIRECTORY, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
 	
 	for (data = mpd_database_get_directory(pub->gmo, NULL); data != NULL; data = mpd_data_get_next(data))
 	{
@@ -241,6 +241,6 @@ gimmix_playlist_show (void)
 {
 	//gimmix_update_artists_view_and_model ();
 	gimmix_playlist_populate ();
-	gtk_widget_show_all (playlist_window);
+	//gtk_widget_show_all (playlist_window);
 }
 
