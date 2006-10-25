@@ -29,40 +29,46 @@ enum {
 	PLAYLIST
 };
 
-GtkTreeModel *
-gimmix_create_and_fill_songs_model (gchar *artist)
-{
-	GtkListStore 	*store;
-	GtkTreeIter 	iter;
-	MpdData 		*data;
-
-	store = gtk_list_store_new (1, G_TYPE_STRING);
-
-	for (data = mpd_database_get_albums(pub->gmo, artist); data != NULL; data = mpd_data_get_next(data))
-	{
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter, 0, data->tag, -1);
-	}
-
-	return GTK_TREE_MODEL (store);
-}
-
 void
 gimmix_update_current_playlist (void)
 {
-	GtkCellRenderer 	*songs_renderer;
-	GtkListStore 		*songs_store;
-	GtkTreeModel 		*songs_model;
+	GtkCellRenderer 	*current_playlist_renderer;
+	GtkListStore 		*current_playlist_store;
+	GtkTreeModel 		*current_playlist_model;
+	GtkTreeIter			current_playlist_iter;
 	GtkTreeSelection	*selection;
+	MpdData 			*data;
+	gint 				new;
 	
-	gtk_tree_view_set_model (GTK_TREE_VIEW (songs_treeview), songs_model);
-	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(songs_treeview));
+	new = mpd_playlist_get_playlist_id (pub->gmo);
+	g_printf("\n === Current Playlist ID is %d === \n", new);
+	data = mpd_playlist_get_changes (pub->gmo, 0);
+	
+	current_playlist_model = gtk_tree_view_get_model (GTK_TREE_VIEW(current_playlist_treeview));
+	current_playlist_store = GTK_LIST_STORE (current_playlist_model);
+	
+	g_print ("\n === Getting playlist contents === \n");
+	while (data != NULL)
+	{
+		gchar *title;
+		
+		g_print (data->song->file);
+		title = data->song->title ? data->song->title : data->song->file;
+		gtk_list_store_append (current_playlist_store, &current_playlist_iter);
+		gtk_list_store_set (current_playlist_store, &current_playlist_iter, 0, title, -1);
+		data = mpd_data_get_next (data);
+	}
+	g_print ("\n === End === \n");
+	
+	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_model);
+	//selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(songs_treeview));
 	//g_signal_connect(selection, "changed", G_CALLBACK(on_artist_treeview_select), NULL);
-	g_object_unref (songs_model);
+	//g_object_unref (songs_model);
 	return;
 }
 
-void gimmix_playlist_populate (void)
+void
+gimmix_playlist_populate (void)
 {
 	GtkTreeModel 		*dir_model;
 	GtkTreeModel		*song_model;
@@ -168,7 +174,8 @@ void gimmix_playlist_populate (void)
 	//g_object_unref (current_playlist_tree_model);
 }
 
-void add_song (GtkTreeView *treeview)
+void
+add_song (GtkTreeView *treeview)
 {
 	GtkTreeSelection 	*selected;
 	GtkTreeModel		*current_playlist_tree_model;
@@ -200,7 +207,8 @@ void add_song (GtkTreeView *treeview)
 	//g_object_unref (current_playlist_tree_model);
 }
 
-void on_dir_selected (void)
+void
+on_dir_selected (void)
 {
 	GtkTreeIter iter;
 	GtkTreeModel *model;

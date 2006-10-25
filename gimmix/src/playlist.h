@@ -13,16 +13,11 @@
 GtkTreeView *current_playlist_treeview;
 GtkTreeView *directory_treeview;
 GtkTreeView *songs_treeview;
-
-GtkTreeModel * gimmix_update_and_fill_artists_model (void);
-void gimmix_update_artists_view_and_model (void);
-
-GtkTreeModel * gimmix_update_and_fill_songs_model (gchar *);
-void gimmix_update_songs_view_and_model (gchar *);
+void gimmix_update_current_playlist (void);
 void gimmix_playlist_populate (void);
 
+
 /* Callbacks */
-int on_artist_treeview_select (void);
 void on_dir_selected (void);
 void add_song (GtkTreeView *treeview);
 #endif

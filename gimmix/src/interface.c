@@ -63,6 +63,7 @@ gimmix_init (void)
 	}
 	g_timeout_add(300, gimmix_timer, NULL);
 	gimmix_playlist_populate();
+	gimmix_update_current_playlist();
 }
 
 gboolean
