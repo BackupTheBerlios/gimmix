@@ -21,14 +21,15 @@
  * Author: Priyank Gosalia <priyankmg@gmail.com>
  */
 
-#include "gimmixcore.h"
+#include "gimmix-core.h"
 
 enum { 	PLAY,
 		PAUSE,
 		STOP
 	};
 
-MpdObj * gimmix_mpd_connect(Conf *conf)
+MpdObj *
+gimmix_mpd_connect (Conf *conf)
 {
 	MpdObj *mo;
 
@@ -46,11 +47,12 @@ MpdObj * gimmix_mpd_connect(Conf *conf)
 	return NULL;
 }
 
-int gimmix_is_playing(MpdObj *mo)
+int
+gimmix_is_playing (MpdObj *mo)
 {
 	int status;
-	mpd_status_update(mo);
-	status = mpd_player_get_state(mo);
+	mpd_status_update (mo);
+	status = mpd_player_get_state (mo);
 	
 	if(status == MPD_PLAYER_PAUSE)
 		return PAUSE;
@@ -61,7 +63,8 @@ int gimmix_is_playing(MpdObj *mo)
 	return -1;
 }
 
-bool gimmix_play(MpdObj *mo)
+bool
+gimmix_play (MpdObj *mo)
 {
 	mpd_status_update(mo);
 	if(mpd_playlist_get_playlist_length(mo))
@@ -85,7 +88,8 @@ bool gimmix_play(MpdObj *mo)
 	return false;
 }
 
-bool gimmix_stop(MpdObj *mo)
+bool
+gimmix_stop (MpdObj *mo)
 {
 	int state;
 	state = gimmix_is_playing(mo);
@@ -98,7 +102,8 @@ bool gimmix_stop(MpdObj *mo)
 	return false;
 }
 
-bool gimmix_prev(MpdObj *mo)
+bool
+gimmix_prev (MpdObj *mo)
 {
 	int state;
 	state = gimmix_is_playing(mo);
@@ -111,7 +116,8 @@ bool gimmix_prev(MpdObj *mo)
 	return false;
 }
 
-bool gimmix_next(MpdObj *mo)
+bool
+gimmix_next (MpdObj *mo)
 {
 	int state;
 	state = gimmix_is_playing(mo);
@@ -124,7 +130,8 @@ bool gimmix_next(MpdObj *mo)
 	return false;
 }
 
-bool gimmix_seek(MpdObj *mo, int seektime)
+bool
+gimmix_seek (MpdObj *mo, int seektime)
 {
 	int state;
 	state = gimmix_is_playing(mo);
@@ -138,27 +145,32 @@ bool gimmix_seek(MpdObj *mo, int seektime)
 	return false;
 }
 
-void gimmix_set_volume(MpdObj *mo, int vol)
+void
+gimmix_set_volume (MpdObj *mo, int vol)
 {
 	mpd_status_set_volume(mo, vol);
 }
 
-int gimmix_get_volume(MpdObj *mo)
+int
+gimmix_get_volume (MpdObj *mo)
 {
 	int volume;
-	volume = mpd_status_get_volume(mo);
+
+	volume = mpd_status_get_volume (mo);
 	return volume;
 }
 
-int gimmix_get_total_song_time(MpdObj *mo)
+int
+gimmix_get_total_song_time (MpdObj *mo)
 {
 	int time;
 
-	time = mpd_status_get_total_song_time(mo);
+	time = mpd_status_get_total_song_time (mo);
 	return time;
 }
 
-SongInfo * gimmix_get_song_info(MpdObj *mo)
+SongInfo *
+gimmix_get_song_info (MpdObj *mo)
 {
 	mpd_Song *ms;
 	SongInfo *s = (SongInfo *)malloc(sizeof(SongInfo));
@@ -176,7 +188,8 @@ SongInfo * gimmix_get_song_info(MpdObj *mo)
 	return s;
 }
 
-char * gimmix_get_song_length(SongInfo *s)
+char *
+gimmix_get_song_length (SongInfo *s)
 {
 	int time;
 	char *length = malloc(10);
@@ -186,7 +199,8 @@ char * gimmix_get_song_length(SongInfo *s)
 	return length;
 }
 
-void gimmix_free_song_info(SongInfo *si)
+void
+gimmix_free_song_info (SongInfo *si)
 {
 	if(si != NULL)
 	{
@@ -208,7 +222,8 @@ void gimmix_free_song_info(SongInfo *si)
 	return;
 }
 
-int gimmix_get_progress_status(MpdObj *mo, float *fraction, char *time)
+int
+gimmix_get_progress_status (MpdObj *mo, float *fraction, char *time)
 {
 	int state;
 	int total, elapsed;
@@ -236,7 +251,8 @@ int gimmix_get_progress_status(MpdObj *mo, float *fraction, char *time)
 	return 1;
 }
 
-void status_changed(MpdObj *mo, ChangedStatusType id)
+void
+status_changed (MpdObj *mo, ChangedStatusType id)
 {
 	if(id&MPD_CST_SONGID)
 		status_is_changed = true;

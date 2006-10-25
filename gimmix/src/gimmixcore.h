@@ -1,5 +1,5 @@
-#ifndef GIMMIXCORE_H
-#define GIMMIXCORE_H
+#ifndef GIMMIX_CORE_H
+#define GIMMIX_CORE_H
 
 #include <stdio.h>
 #include <stdlib.h>
