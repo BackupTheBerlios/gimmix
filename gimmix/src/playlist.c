@@ -230,22 +230,11 @@ void gimmix_playlist_populate (void)
 	g_signal_connect(dir_selection, "changed", G_CALLBACK(on_dir_selected), NULL);
 	g_object_unref (dir_model);
 	g_object_unref (song_model);
-}
-
-void add_song (GtkTreeView *treeview)
-{
-	GtkTreeSelection 	*selected;
+	
 	GtkTreeModel		*current_playlist_tree_model;
 	GtkListStore		*current_playlist_tree_store;
 	GtkCellRenderer		*renderer;
-	GtkTreeIter			*current_playlist_tree_iter;
-	GtkTreeModel 		*model;
-	GtkTreeIter			iter;
-	gchar 				*path;
-	
-	selected = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
-	model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
-	
+
 	renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (current_playlist_treeview),
 							-1,
@@ -253,22 +242,44 @@ void add_song (GtkTreeView *treeview)
 							renderer,
 							"text", 0,
 							NULL);
-	current_playlist_tree_store 	= gtk_list_store_new (2,
-									G_TYPE_STRING, /* name */
-									G_TYPE_STRING); /* path */
+	current_playlist_tree_store = gtk_list_store_new (2,
+													G_TYPE_STRING, /* name */
+													G_TYPE_STRING); /* path */
+	current_playlist_tree_model	= GTK_TREE_MODEL (current_playlist_tree_store);
+	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_tree_model);
+	//g_object_unref (current_playlist_tree_model);
+}
+
+void add_song (GtkTreeView *treeview)
+{
+	GtkTreeSelection 	*selected;
+	GtkTreeModel		*current_playlist_tree_model;
+	GtkListStore		*current_playlist_tree_store;
+	
+	GtkTreeIter			current_playlist_tree_iter;
+	GtkTreeModel 		*model;
+	GtkTreeIter			iter;
+	gchar 				*path;
+	gchar 				*title;
+	
+	selected = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
 									
 	if (gtk_tree_selection_get_selected(selected, &model, &iter))
 	{
-		gtk_tree_model_get (model, &iter, 2, &path, -1);
+		gtk_tree_model_get (model, &iter, 1, &title, 2, &path, -1);
+		g_print (title);
 		g_print (path);
+		current_playlist_tree_model = gtk_tree_view_get_model (GTK_TREE_VIEW(current_playlist_treeview));
+		current_playlist_tree_store = GTK_LIST_STORE (current_playlist_tree_model);
 		mpd_playlist_add (pub->gmo, path);
 		gtk_list_store_append (current_playlist_tree_store, &current_playlist_tree_iter);
 		gtk_list_store_set (current_playlist_tree_store, &current_playlist_tree_iter, 0, path, -1);
 	}
-	
+
 	current_playlist_tree_model	= GTK_TREE_MODEL (current_playlist_tree_store);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_tree_model);
-	g_object_unref (current_playlist_tree_model);
+	//g_object_unref (current_playlist_tree_model);
 }
 
 void on_dir_selected (void)
