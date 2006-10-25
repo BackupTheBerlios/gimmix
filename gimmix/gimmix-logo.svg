@@ -19,6 +19,17 @@
   <defs
      id="defs4">
     <linearGradient
+       id="linearGradient2813">
+      <stop
+         style="stop-color:#2579a8;stop-opacity:1;"
+         offset="0"
+         id="stop2815" />
+      <stop
+         style="stop-color:#2579a8;stop-opacity:0;"
+         offset="1"
+         id="stop2817" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient2990">
       <stop
          style="stop-color:#5484cb;stop-opacity:0.72380954;"
@@ -273,13 +284,13 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.53138723"
      inkscape:cx="396.37209"
-     inkscape:cy="593.04122"
+     inkscape:cy="572.29729"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:window-width="866"
      inkscape:window-height="619"
-     inkscape:window-x="280"
-     inkscape:window-y="143" />
+     inkscape:window-x="59"
+     inkscape:window-y="163" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -296,7 +307,7 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="opacity:0.98901099;fill:#2579a8;fill-opacity:0.67955804;stroke:#040608;stroke-width:10.87997532;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0999999;stroke-dasharray:none;stroke-opacity:0.61878453"
+       style="opacity:0.84065934;fill:#2579a8;fill-opacity:0.90055251;stroke:#040608;stroke-width:10.87997532;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0999999;stroke-dasharray:none;stroke-opacity:0.61878453"
        id="rect2815"
        width="465.94113"
        height="556.27032"
@@ -321,13 +332,13 @@
        inkscape:r_cx="true"
        id="path3049"
        d="M 318.19545,221.15279 C 210.9694,245.56484 143.98269,349.6875 167.90473,454.76131 C 191.82678,559.83514 297.28607,624.69719 404.51212,600.28514 C 418.95948,596.99592 432.67632,592.25963 445.53872,586.2689 C 528.13903,547.79739 575.5017,457.59306 554.80284,366.6766 C 530.88079,261.60278 425.4215,196.74074 318.19545,221.15279 L 318.19545,221.15279 z M 371.71178,456.21485 C 346.28705,462.00327 320.59825,446.20354 314.92601,421.28912 C 309.25377,396.37472 325.57105,371.0115 350.99578,365.22308 C 376.42051,359.43466 402.10931,375.23439 407.78155,400.14879 C 413.45379,425.06321 397.13651,450.42642 371.71178,456.21485 z "
-       style="opacity:0.84065935;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:#616d7c;stroke-width:12;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0999999;stroke-dasharray:none;stroke-opacity:0.49171274"
+       style="opacity:0.84065935;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:#616d7c;stroke-width:12;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4.0999999;stroke-dasharray:none;stroke-opacity:0.519337"
        inkscape:export-filename="/home/priyank/pub/gimmix-96x96.png"
        inkscape:export-xdpi="24.12059"
        inkscape:export-ydpi="24.12059"
        sodipodi:nodetypes="csssscccsssc" />
     <path
-       style="opacity:0.58241763;fill:url(#radialGradient4944);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-miterlimit:4;stroke-opacity:1"
+       style="opacity:0.52747253;fill:url(#radialGradient4944);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-miterlimit:4;stroke-opacity:1"
        d="M 311.5803,228.64482 C 212.49292,255.08884 151.46739,353.31514 173.97549,452.17844 C 184.17917,496.99647 209.67649,534.03896 244.00525,559.56895 L 327.74167,450.44057 C 319.29655,444.29181 313.76631,434.06755 311.31557,423.30306 C 304.29204,392.4533 321.1788,367.77319 351.47836,360.87492 C 365.25743,357.73785 380.46162,360.72157 390.92399,368.60787 L 477.24074,260.08838 C 433.94966,227.60166 376.43301,213.87987 318.56968,227.05356 C 316.14836,227.60481 313.9584,228.01016 311.5803,228.64482 z "
        id="path3531"
        sodipodi:nodetypes="csccssccsc"
@@ -345,20 +356,20 @@
        inkscape:export-ydpi="24.12059" />
     <text
        xml:space="preserve"
-       style="font-size:61.27744293px;font-style:normal;font-weight:normal;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Notepad"
-       x="178.85225"
-       y="669.0802"
+       style="font-size:77.49516296px;font-style:normal;font-weight:normal;fill:white;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Notepad"
+       x="184.73203"
+       y="647.69336"
        id="text2827"
-       transform="scale(0.95746,1.04443)"
+       transform="scale(0.927069,1.078668)"
        inkscape:export-filename="/home/priyank/pub/gimmix-96x96.png"
        inkscape:export-xdpi="24.12059"
        inkscape:export-ydpi="24.12059"><tspan
          sodipodi:role="line"
          id="tspan2829"
-         x="178.85225"
-         y="669.0802"
-         style="font-size:68.93712616px"><tspan
-           style="font-size:72px"
+         x="184.73203"
+         y="647.69336"
+         style="font-size:87.18206024px;fill:white"><tspan
+           style="font-size:91.05555725px;fill:white"
            id="tspan2853">G </tspan></tspan></text>
     <text
        xml:space="preserve"
