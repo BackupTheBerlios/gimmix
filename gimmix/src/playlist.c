@@ -212,7 +212,11 @@ add_song (GtkTreeView *treeview)
 	if (gtk_tree_selection_get_selected(selected, &model, &iter))
 	{
 		
-		gtk_tree_model_get (model, &iter, 1, &title, 2, &path, 3, &id, -1);
+		gtk_tree_model_get (model, &iter,
+							1, &title,
+							2, &path,
+							3, &id,
+							-1);
 		mpd_playlist_add (pub->gmo, path);
 		data = mpd_playlist_get_changes (pub->gmo, 
 										mpd_playlist_get_playlist_id(pub->gmo));
@@ -273,7 +277,6 @@ on_dir_activated (GtkTreeView *treeview)
 
 	if ( gtk_tree_selection_get_selected (selection, &model, &iter) )
 		gtk_tree_model_get (model, &iter, 2, &dir, -1);
-	g_print (dir);
 	gimmix_update_dir_song_treeview_with_dir (dir);
 	return;
 }
@@ -290,15 +293,19 @@ gimmix_update_dir_song_treeview_with_dir (gchar *dir)
 	GdkPixbuf			*dir_pixbuf;
 	GdkPixbuf			*song_pixbuf;
 	MpdData				*data;
+	gchar				*parent;
 	
 	directory_model = gtk_tree_view_get_model (GTK_TREE_VIEW (directory_treeview));
 	songs_model		= gtk_tree_view_get_model (GTK_TREE_VIEW (songs_treeview));
 	
 	dir_store 	= GTK_LIST_STORE (directory_model);
 	songs_store	= GTK_LIST_STORE (songs_model);
-	
+
 	if (!dir)
+	{
+		g_print ("dir is blank");
 		return;
+	}
 
 	/* Clear the stores */
 	gtk_list_store_clear (dir_store);
@@ -310,13 +317,13 @@ gimmix_update_dir_song_treeview_with_dir (gchar *dir)
 	dir_pixbuf 	= gtk_widget_render_icon (GTK_WIDGET(directory_treeview), 											GTK_STOCK_DIRECTORY,
 										GTK_ICON_SIZE_SMALL_TOOLBAR,
 										NULL);
-
+	parent = gimmix_path_get_parent_dir (dir);
+	
 	gtk_list_store_append (dir_store, &dir_iter);
 	gtk_list_store_set (dir_store, &dir_iter,
 								0, dir_pixbuf,
 								1, "..",
-								2, gimmix_path_get_parent_dir (dir),
-								3, gimmix_path_get_parent_dir (dir),
+								2, parent,
 								-1);
 	for (data = mpd_database_get_directory(pub->gmo, dir); data != NULL; data = mpd_data_get_next(data))
 	{
@@ -327,7 +334,6 @@ gimmix_update_dir_song_treeview_with_dir (gchar *dir)
 								0, dir_pixbuf,
 								1, g_path_get_basename(data->directory),
 								2, data->directory,
-								3, gimmix_path_get_parent_dir (data->directory),
 								-1);
 		}
 		else if (data->type == MPD_DATA_TYPE_SONG)
@@ -359,10 +365,16 @@ gchar *
 gimmix_path_get_parent_dir (gchar *path)
 {
 	gchar *p, buf[128];
+	gchar *ret;
 
 	strcpy (buf, path);
 	p = strrchr (buf, '/');
 	if (p)
+	{	
 		*p = 0;
- 	return buf;
+		ret = g_strdup (buf);
+ 		return ret;
+ 	}
+ 	else
+ 	return "/";
 }
