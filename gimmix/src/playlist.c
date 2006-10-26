@@ -51,6 +51,8 @@ gimmix_current_playlist_init (void)
 	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_model);
 	g_signal_connect (current_playlist_treeview, "row-activated", G_CALLBACK(gimmix_current_playlist_play), NULL);
 	g_object_unref (current_playlist_model);
+	
+	return;
 }
 
 void
@@ -90,8 +92,9 @@ gimmix_update_current_playlist (void)
 	g_print (" === End === \n");
 	
 	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_model);
-	//selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(songs_treeview));
-	//g_signal_connect(selection, "changed", G_CALLBACK(on_artist_treeview_select), NULL);
+	
+	mpd_data_free (data);
+	
 	return;
 }
 
@@ -160,7 +163,7 @@ gimmix_playlist_populate (void)
 		if(data->type == MPD_DATA_TYPE_DIRECTORY)
 		{
 			gtk_list_store_append (dir_store, &dir_iter);
-			gtk_list_store_set (dir_store, &dir_iter, 0, dir_pixbuf, 1, data->directory, -1);
+			gtk_list_store_set (dir_store, &dir_iter, 0, dir_pixbuf, 1, g_path_get_basename(data->directory), 2, data->directory, -1);
 		}
 		else if (data->type == MPD_DATA_TYPE_SONG)
 		{
@@ -170,6 +173,8 @@ gimmix_playlist_populate (void)
 			gtk_list_store_set (song_store, &song_iter, 0, song_pixbuf, 1, title, 2, data->song->file, 3, data->song->id, -1);
 		}
 	}
+	
+	mpd_data_free (data);
 
 	dir_model	= GTK_TREE_MODEL (dir_store);
 	song_model	= GTK_TREE_MODEL (song_store);
@@ -181,6 +186,8 @@ gimmix_playlist_populate (void)
 	g_signal_connect(directory_treeview, "row-activated", G_CALLBACK(on_dir_activated), NULL);
 	g_object_unref (dir_model);
 	g_object_unref (song_model);
+
+	return;
 }
 
 void
@@ -207,7 +214,8 @@ add_song (GtkTreeView *treeview)
 
 	current_playlist_model	= GTK_TREE_MODEL (current_playlist_store);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_model);
-	//g_object_unref (current_playlist_tree_model);
+
+	return;
 }
 
 void
@@ -271,6 +279,9 @@ gimmix_update_dir_song_treeview_with_dir (gchar *dir)
 	
 	dir_store 	= GTK_LIST_STORE (directory_model);
 	songs_store	= GTK_LIST_STORE (songs_model);
+	
+	if (!dir)
+		return;
 
 	/* Clear the stores */
 	gtk_list_store_clear (dir_store);
@@ -298,10 +309,14 @@ gimmix_update_dir_song_treeview_with_dir (gchar *dir)
 			gtk_list_store_set (songs_store, &song_iter, 0, song_pixbuf, 1, title, 2, data->song->file, 3, data->song->id, -1);
 		}
 	}
+	
+	mpd_data_free (data);
 
 	directory_model = GTK_TREE_MODEL (dir_store);
 	songs_model		= GTK_TREE_MODEL (songs_store);
 
 	gtk_tree_view_set_model (GTK_TREE_VIEW(directory_treeview), directory_model);
 	gtk_tree_view_set_model (GTK_TREE_VIEW(songs_treeview), songs_model);
+	
+	return;
 }
