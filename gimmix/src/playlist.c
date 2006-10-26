@@ -22,6 +22,7 @@
  */
 
 #include "playlist.h"
+#include <glib.h>
 
 enum {
 	SONG = 1,
@@ -59,27 +60,22 @@ void
 gimmix_update_current_playlist (void)
 {
 	GtkTreeIter			current_playlist_iter;
-	GtkTreeSelection	*selection;
 	MpdData 			*data;
 	gint 				new;
 
 	new = mpd_playlist_get_playlist_id (pub->gmo);
-	g_printf("\n === Current Playlist ID is %d === \n", new);
+	g_printf("\nCurrent Playlist ID is %d\n", new);
 	data = mpd_playlist_get_changes (pub->gmo, 0);
 
 	current_playlist_model = gtk_tree_view_get_model (GTK_TREE_VIEW(current_playlist_treeview));
 	current_playlist_store = GTK_LIST_STORE (current_playlist_model);
 
-	g_print ("\n === Getting playlist contents === \n");
+	g_print ("\nGetting playlist contents... \n");
 	while (data != NULL)
 	{
-		gchar *title;
-		gint 	pos;
+		gchar 	*title;
 
-		title = data->song->title ? data->song->title : data->song->file;
-		pos = data->song->pos;
-		g_print (title);
-		g_printf (" Position: %d\n", pos);
+		title = data->song->title ? data->song->title : g_path_get_basename(data->song->file);
 		gtk_list_store_append (current_playlist_store, &current_playlist_iter);
 		gtk_list_store_set (current_playlist_store, 
 							&current_playlist_iter,
@@ -89,7 +85,6 @@ gimmix_update_current_playlist (void)
 							-1);
 		data = mpd_data_get_next (data);
 	}
-	g_print (" === End === \n");
 	
 	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_model);
 	
@@ -112,7 +107,6 @@ gimmix_playlist_populate (void)
 	MpdData 			*data = NULL;
 	GdkPixbuf 			*dir_pixbuf;
 	GdkPixbuf			*song_pixbuf;
-	GtkTreeSelection	*dir_selection;
 	
 	dir_renderer		= gtk_cell_renderer_pixbuf_new();
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (directory_treeview),
@@ -182,7 +176,6 @@ gimmix_playlist_populate (void)
 	gtk_tree_view_set_model (GTK_TREE_VIEW (directory_treeview), dir_model);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (songs_treeview), song_model);
 	g_signal_connect (songs_treeview, "row-activated", G_CALLBACK(add_song), NULL);
-	//dir_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(directory_treeview));
 	g_signal_connect(directory_treeview, "row-activated", G_CALLBACK(on_dir_activated), NULL);
 	g_object_unref (dir_model);
 	g_object_unref (song_model);
@@ -261,9 +254,13 @@ gimmix_current_playlist_play (GtkTreeView *treeview)
 
 	if ( gtk_tree_selection_get_selected (selected, &model, &iter) )
 	{
-		gtk_tree_model_get (model, &iter, 0, &title, 1, &path, 2, &id, -1);
-		g_printf ("You are playing song with id: %d\n", id);
+		gtk_tree_model_get (model, &iter,
+							0, &title,
+							1, &path,
+							2, &id,
+							-1);
 		mpd_player_play_id (pub->gmo, id);
+		mpd_status_update (pub->gmo);
 	}
 	return;
 }
@@ -306,14 +303,23 @@ gimmix_update_dir_song_treeview_with_dir (gchar *dir)
 		if(data->type == MPD_DATA_TYPE_DIRECTORY)
 		{
 			gtk_list_store_append (dir_store, &dir_iter);
-			gtk_list_store_set (dir_store, &dir_iter, 0, dir_pixbuf, 1, g_path_get_basename(data->directory), 2, data->directory, -1);
+			gtk_list_store_set (dir_store, &dir_iter,
+								0, dir_pixbuf,
+								1, g_path_get_basename(data->directory),
+								2, data->directory,
+								-1);
 		}
 		else if (data->type == MPD_DATA_TYPE_SONG)
 		{
 			gchar *title;
 			gtk_list_store_append (songs_store, &song_iter);
-			title = data->song->title ? data->song->title : data->song->file;
-			gtk_list_store_set (songs_store, &song_iter, 0, song_pixbuf, 1, title, 2, data->song->file, 3, data->song->id, -1);
+			title = data->song->title ? data->song->title : g_path_get_basename(data->song->file);
+			gtk_list_store_set (songs_store, &song_iter,
+								0, song_pixbuf,
+								1, title,
+								2, data->song->file,
+								3, data->song->id,
+								-1);
 		}
 	}
 	
