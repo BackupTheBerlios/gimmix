@@ -24,6 +24,7 @@
 #include <glib.h>
 #include <libnotify/notify.h>
 #include "interface.h"
+#include "playlist.h"
 #include "gimmix.h"
 
 enum {	PLAY,
@@ -62,7 +63,8 @@ gimmix_init (void)
 		gimmix_show_ver_info();
 	}
 	g_timeout_add(300, gimmix_timer, NULL);
-	gimmix_playlist_populate();
+	gimmix_playlist_populate ();
+	gimmix_current_playlist_init ();
 	gimmix_update_current_playlist();
 }
 
@@ -424,15 +426,16 @@ on_systray_checkbox_toggled (GtkWidget *widget, gpointer data)
 void
 gimmix_about_show (void)
 {
-	GdkPixbuf *about_pixbuf;
-	about_pixbuf= gdk_pixbuf_new_from_file("gimmix.png", NULL);
+    GdkPixbuf *about_pixbuf;
+	
+    about_pixbuf= gdk_pixbuf_new_from_file("gimmix.png", NULL);
 
 	gchar *website = "http://priyank.one09.net/";
 	gchar *website_label = "http://priyank.one09.net/";
 	gchar *authors[] = 	{ "Priyank M. Gosalia <priyankmg@gmail.com>",
 						 "Part of song seek code taken from Pygmy.",
 						 NULL
-						};
+					};
 	
 	gtk_show_about_dialog (NULL,
                            "name", "Gimmix",

@@ -13,6 +13,8 @@
 GtkTreeView *current_playlist_treeview;
 GtkTreeView *directory_treeview;
 GtkTreeView *songs_treeview;
+
+void gimmix_current_playlist_init (void);
 void gimmix_update_current_playlist (void);
 void gimmix_playlist_populate (void);
 
