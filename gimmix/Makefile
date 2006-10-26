@@ -1,7 +1,8 @@
 # Makefile for gimmix
+# gimmix-0.1beta
 
 # Installation directory
-PREFIX=/usr/local
+PREFIX=/usr
 
 ALLFILES=*.c
 
@@ -47,4 +48,4 @@ gimmix.o:			src/gimmix.c
 	
 install:
 	install -D gimmix $(PREFIX)/bin/gimmix
-#	install -D -m644 gimmix.png $(PREFIX)/share/pixmaps/
+	install -D -m644 pixmaps/gimmix.png $(PREFIX)/share/pixmaps/gimmix.png

@@ -64,13 +64,11 @@ gimmix_update_current_playlist (void)
 	gint 				new;
 
 	new = mpd_playlist_get_playlist_id (pub->gmo);
-	g_printf ("\nCurrent Playlist ID is %d\n", new);
 	data = mpd_playlist_get_changes (pub->gmo, 0);
 
 	current_playlist_model = gtk_tree_view_get_model (GTK_TREE_VIEW(current_playlist_treeview));
 	current_playlist_store = GTK_LIST_STORE (current_playlist_model);
 
-	g_print ("\nGetting playlist contents... \n");
 	while (data != NULL)
 	{
 		gchar 	*title;
@@ -139,11 +137,10 @@ gimmix_playlist_populate (void)
 							"text", 1,
 							NULL);
 	
-	dir_store 	= gtk_list_store_new (4, 
+	dir_store 	= gtk_list_store_new (3, 
 									GDK_TYPE_PIXBUF, 	/* icon */
 									G_TYPE_STRING, 		/* name */
-									G_TYPE_STRING, 		/* path */
-									G_TYPE_STRING); 	/* parent dir */
+									G_TYPE_STRING);		/* path */
 	song_store	= gtk_list_store_new (4, 
 									GDK_TYPE_PIXBUF, 	/* icon */
 									G_TYPE_STRING, 		/* name */
@@ -162,7 +159,6 @@ gimmix_playlist_populate (void)
 								0, dir_pixbuf,
 								1, g_path_get_basename(data->directory),
 								2, data->directory,
-								3, "/",
 								-1);
 		}
 		else if (data->type == MPD_DATA_TYPE_SONG)
@@ -221,7 +217,7 @@ add_song (GtkTreeView *treeview)
 		data = mpd_playlist_get_changes (pub->gmo, 
 										mpd_playlist_get_playlist_id(pub->gmo));
 		id = data->song->id;
-		mpd_status_update(pub->gmo);
+		mpd_status_update (pub->gmo);
 		mpd_data_free (data);
 		gtk_list_store_append (current_playlist_store, &current_playlist_tree_iter);
 		gtk_list_store_set (current_playlist_store, &current_playlist_tree_iter,
@@ -302,10 +298,7 @@ gimmix_update_dir_song_treeview_with_dir (gchar *dir)
 	songs_store	= GTK_LIST_STORE (songs_model);
 
 	if (!dir)
-	{
-		g_print ("dir is blank");
 		return;
-	}
 
 	/* Clear the stores */
 	gtk_list_store_clear (dir_store);

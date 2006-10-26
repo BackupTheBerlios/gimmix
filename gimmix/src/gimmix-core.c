@@ -33,11 +33,11 @@ gimmix_mpd_connect (Conf *conf)
 {
 	MpdObj *mo;
 
-	mo = mpd_new(conf->hostname, conf->port, conf->password);
+	mo = mpd_new (conf->hostname, conf->port, conf->password);
 	//mo = mpd_new_default();
-	mpd_connect(mo);
+	mpd_connect (mo);
 
-	if(mpd_check_connected(mo))
+	if (mpd_check_connected (mo))
 	{
 		mpd_signal_connect_status_changed(mo, (StatusChangedCallback)status_changed, NULL);
 		return mo;
@@ -54,11 +54,11 @@ gimmix_is_playing (MpdObj *mo)
 	mpd_status_update (mo);
 	status = mpd_player_get_state (mo);
 	
-	if(status == MPD_PLAYER_PAUSE)
+	if (status == MPD_PLAYER_PAUSE)
 		return PAUSE;
-	else if(status == MPD_PLAYER_PLAY)
+	else if (status == MPD_PLAYER_PLAY)
 		return PLAY;
-	else if(status == MPD_PLAYER_STOP)
+	else if (status == MPD_PLAYER_STOP)
 		return STOP;
 	return -1;
 }
@@ -66,22 +66,22 @@ gimmix_is_playing (MpdObj *mo)
 bool
 gimmix_play (MpdObj *mo)
 {
-	mpd_status_update(mo);
-	if(mpd_playlist_get_playlist_length(mo))
+	mpd_status_update (mo);
+	if (mpd_playlist_get_playlist_length (mo))
 	{
 		int state;
 
-		state = mpd_player_get_state(mo);
+		state = mpd_player_get_state (mo);
 
 		if (state == MPD_PLAYER_PAUSE || state == MPD_PLAYER_STOP)
 		{	
-			mpd_player_play(mo);
+			mpd_player_play (mo);
 			return true;
 		}
 
-		else if(state == MPD_PLAYER_PLAY)
+		else if (state == MPD_PLAYER_PLAY)
 		{
-			mpd_player_pause(mo);
+			mpd_player_pause (mo);
 			return false;
 		}
 	}
@@ -92,11 +92,11 @@ bool
 gimmix_stop (MpdObj *mo)
 {
 	int state;
-	state = gimmix_is_playing(mo);
+	state = gimmix_is_playing (mo);
 
 	if (state == PLAY || state == PAUSE)
 	{
-		mpd_player_stop(mo);
+		mpd_player_stop (mo);
 		return true;
 	}
 	return false;
@@ -106,11 +106,11 @@ bool
 gimmix_prev (MpdObj *mo)
 {
 	int state;
-	state = gimmix_is_playing(mo);
+	state = gimmix_is_playing (mo);
 
-	if(state == PLAY || state == PAUSE)
+	if (state == PLAY || state == PAUSE)
 	{
-		mpd_player_prev(mo);
+		mpd_player_prev (mo);
 		return true;
 	}
 	return false;
@@ -120,11 +120,11 @@ bool
 gimmix_next (MpdObj *mo)
 {
 	int state;
-	state = gimmix_is_playing(mo);
+	state = gimmix_is_playing (mo);
 
-	if(state == PLAY || state == PAUSE)
+	if (state == PLAY || state == PAUSE)
 	{
-		mpd_player_next(mo);
+		mpd_player_next (mo);
 		return true;
 	}
 	return false;
@@ -134,7 +134,7 @@ bool
 gimmix_seek (MpdObj *mo, int seektime)
 {
 	int state;
-	state = gimmix_is_playing(mo);
+	state = gimmix_is_playing (mo);
 
 	if(state == PLAY || state == PAUSE)
 	{
@@ -177,11 +177,11 @@ gimmix_get_song_info (MpdObj *mo)
 	
 	mpd_status_update(mo);
 	ms = mpd_playlist_get_current_song(mo);
-	s->file 	= (ms->file) 	? strdup(ms->file) : NULL;
-	s->title 	= (ms->title) 	? strdup(ms->title) : NULL;
-	s->artist 	= (ms->artist) 	? strdup(ms->artist) : NULL;
-	s->album 	= (ms->album) 	? strdup(ms->album) : NULL;
-	s->genre 	= (ms->genre) 	? strdup(ms->genre) : NULL;
+	s->file 	= (ms->file) 	? strdup (ms->file) : NULL;
+	s->title 	= (ms->title) 	? strdup (ms->title) : NULL;
+	s->artist 	= (ms->artist) 	? strdup (ms->artist) : NULL;
+	s->album 	= (ms->album) 	? strdup (ms->album) : NULL;
+	s->genre 	= (ms->genre) 	? strdup (ms->genre) : NULL;
 	s->length 	= ms->time;
 	//mpd_freeSong(ms);
 	
@@ -192,7 +192,7 @@ char *
 gimmix_get_song_length (SongInfo *s)
 {
 	int time;
-	char *length = malloc(10);
+	char *length = malloc (10);
 	
 	time = s->length;
 	snprintf(length, 10, "%02i:%02i", time/60, time%60);
@@ -204,20 +204,20 @@ gimmix_free_song_info (SongInfo *si)
 {
 	if(si != NULL)
 	{
-		if(si->title)
+		if (si->title)
 			free(si->title);
-		if(si->artist)
+		if (si->artist)
 			free(si->artist);
-		if(si->album)
+		if (si->album)
 			free(si->album);
-		if(si->file)
+		if (si->file)
 			free(si->file);
-		if(si->genre)
-			free(si->genre);
+		if (si->genre)
+			free (si->genre);
 		si->length = -1;
 		si->pos = -1;
 		si->id = -1;
-		free(si);
+		free (si);
 	}
 	return;
 }
@@ -228,16 +228,16 @@ gimmix_get_progress_status (MpdObj *mo, float *fraction, char *time)
 	int state;
 	int total, elapsed;
 		
-	state = mpd_player_get_state(mo);
+	state = mpd_player_get_state (mo);
 	
-	switch(state)
+	switch (state)
 	{
 		case MPD_PLAYER_PLAY:
 		case MPD_PLAYER_PAUSE:
 			mpd_status_update(mo);
-			total = mpd_status_get_total_song_time(mo);
-			elapsed = mpd_status_get_elapsed_song_time(mo);
-			snprintf(time, 20, "%02i:%02i / %02i:%02i", elapsed/60,
+			total = mpd_status_get_total_song_time (mo);
+			elapsed = mpd_status_get_elapsed_song_time (mo);
+			snprintf (time, 20, "%02i:%02i / %02i:%02i", elapsed/60,
 					elapsed%60,
 					total/60,
 					total%60);
@@ -254,7 +254,7 @@ gimmix_get_progress_status (MpdObj *mo, float *fraction, char *time)
 void
 status_changed (MpdObj *mo, ChangedStatusType id)
 {
-	if(id&MPD_CST_SONGID)
+	if (id&MPD_CST_SONGID)
 		status_is_changed = true;
 	else
 		status_is_changed = false;

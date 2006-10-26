@@ -32,29 +32,29 @@ gimmix_config_init (void)
 	Conf *conf = (Conf*)malloc(sizeof(Conf));
 	
 	cfg_opt_t opts[] = {
-		CFG_SIMPLE_INT("mpd_port", &conf->port),
-		CFG_SIMPLE_STR("mpd_hostname", &conf->hostname),
-		CFG_SIMPLE_STR("mpd_password", &conf->password),
-		CFG_SIMPLE_INT("enable_systray", &conf->systray_enable),
+		CFG_SIMPLE_INT ("mpd_port", &conf->port),
+		CFG_SIMPLE_STR ("mpd_hostname", &conf->hostname),
+		CFG_SIMPLE_STR ("mpd_password", &conf->password),
+		CFG_SIMPLE_INT ("enable_systray", &conf->systray_enable),
 		CFG_END()
 	};
 
 	cfg_t *cfg;
 	
 	cfg = cfg_init(opts, 0);
-	cfg_parse(cfg, "~/.gimmixrc");
+	cfg_parse (cfg, "~/.gimmixrc");
 	
 	/* Set default configuration values if reading from config file fails */
-	if(!conf->hostname)
+	if (!conf->hostname)
 		conf->hostname = "localhost";
-	if(!conf->port)
+	if (!conf->port)
 		conf->port = 6600;
-	if((conf->systray_enable != 0) && (conf->systray_enable != 1))
+	if ((conf->systray_enable != 0) && (conf->systray_enable != 1))
 		conf->systray_enable = 1;
 
 	/* Free the memory */
-	cfg_free_value(opts);
-	cfg_free(cfg);
+	cfg_free_value (opts);
+	cfg_free (cfg);
 
 	return conf;
 }
@@ -66,15 +66,15 @@ gimmix_config_save (Conf *conf)
 	cfg_t *cfg;
 	
 	cfg_opt_t opts[] = {
-		CFG_SIMPLE_STR("mpd_hostname", NULL),
-		CFG_SIMPLE_INT("mpd_port", 0),
-		CFG_SIMPLE_STR("mpd_password", NULL),
-		CFG_SIMPLE_INT("enable_systray", 0),
+		CFG_SIMPLE_STR ("mpd_hostname", NULL),
+		CFG_SIMPLE_INT ("mpd_port", 0),
+		CFG_SIMPLE_STR ("mpd_password", NULL),
+		CFG_SIMPLE_INT ("enable_systray", 0),
 		CFG_END()
 	};
 
 	cfg = cfg_init(opts, 0);
-    char *rcfile = cfg_tilde_expand("~/.gimmixrc");
+    char *rcfile = cfg_tilde_expand ("~/.gimmixrc");
 	if((fp = fopen(rcfile, "w")))
 	{	cfg_setstr(cfg, "mpd_hostname", conf->hostname);
 		cfg_setint(cfg, "mpd_port", conf->port);
@@ -85,10 +85,10 @@ gimmix_config_save (Conf *conf)
 		fclose(fp);
 	}
 	else
-		fprintf(stderr, "Error while saving config.\n");
+		fprintf (stderr, "Error while saving config.\n");
 
-	cfg_free_value(opts);
-	cfg_free(cfg);
+	cfg_free_value (opts);
+	cfg_free (cfg);
 
 	return;
 }
@@ -96,5 +96,5 @@ gimmix_config_save (Conf *conf)
 void
 gimmix_config_free (Conf *conf)
 {
-	free(conf);
+	free (conf);
 }
