@@ -43,12 +43,14 @@ gimmix_current_playlist_init (void)
 							current_playlist_renderer,
 							"text", 0,
 							NULL);
-	current_playlist_store = gtk_list_store_new (2,
+	current_playlist_store = gtk_list_store_new (3,
 												G_TYPE_STRING, /* name */
-												G_TYPE_STRING); /* path */
+												G_TYPE_STRING, /* path */
+												G_TYPE_INT); /* id */
 	current_playlist_model	= GTK_TREE_MODEL (current_playlist_store);
 	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_model);
-	//g_object_unref (current_playlist_tree_model);
+	g_signal_connect (current_playlist_treeview, "row-activated", G_CALLBACK(gimmix_current_playlist_play), NULL);
+	g_object_unref (current_playlist_model);
 }
 
 void
@@ -70,12 +72,19 @@ gimmix_update_current_playlist (void)
 	while (data != NULL)
 	{
 		gchar *title;
+		gint 	pos;
 		
 		title = data->song->title ? data->song->title : data->song->file;
+		pos = data->song->pos;
 		g_print (title);
-		g_print ("\n");
+		g_printf (" Position: %d\n", pos);
 		gtk_list_store_append (current_playlist_store, &current_playlist_iter);
-		gtk_list_store_set (current_playlist_store, &current_playlist_iter, 0, title, -1);
+		gtk_list_store_set (current_playlist_store, 
+							&current_playlist_iter,
+							0, title,
+							1, data->song->file,
+							2, data->song->id,
+							-1);
 		data = mpd_data_get_next (data);
 	}
 	g_print (" === End === \n");
@@ -137,10 +146,11 @@ gimmix_playlist_populate (void)
 									GDK_TYPE_PIXBUF, /* icon */
 									G_TYPE_STRING, /* name */
 									G_TYPE_STRING); /* path */
-	song_store	= gtk_list_store_new (3, 
+	song_store	= gtk_list_store_new (4, 
 									GDK_TYPE_PIXBUF, /* icon */
 									G_TYPE_STRING, /* name */
-									G_TYPE_STRING); /* path */
+									G_TYPE_STRING, /* path */
+									G_TYPE_INT); /* id */
 	
 	song_pixbuf 	= gtk_widget_render_icon (GTK_WIDGET(songs_treeview), GTK_STOCK_FILE, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
 	dir_pixbuf 	    = gtk_widget_render_icon (GTK_WIDGET(directory_treeview), GTK_STOCK_DIRECTORY, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
@@ -157,7 +167,7 @@ gimmix_playlist_populate (void)
 			gchar *title;
 			gtk_list_store_append (song_store, &song_iter);
 			title = data->song->title ? data->song->title : data->song->file;
-			gtk_list_store_set (song_store, &song_iter, 0, song_pixbuf, 1, title, 2, data->song->file, -1);
+			gtk_list_store_set (song_store, &song_iter, 0, song_pixbuf, 1, title, 2, data->song->file, 3, data->song->id, -1);
 		}
 	}
 
@@ -183,6 +193,7 @@ add_song (GtkTreeView *treeview)
 	GtkTreeIter			iter;
 	gchar 				*path;
 	gchar 				*title;
+	gint				id;
 	
 	selected = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
@@ -192,7 +203,7 @@ add_song (GtkTreeView *treeview)
 		gtk_tree_model_get (model, &iter, 1, &title, 2, &path, -1);
 		mpd_playlist_add (pub->gmo, path);
 		gtk_list_store_append (current_playlist_store, &current_playlist_tree_iter);
-		gtk_list_store_set (current_playlist_store, &current_playlist_tree_iter, 0, title, 1, path, -1);
+		gtk_list_store_set (current_playlist_store, &current_playlist_tree_iter, 0, title, 1, path, 2, id, -1);
 	}
 
 	current_playlist_model	= GTK_TREE_MODEL (current_playlist_store);
@@ -217,3 +228,23 @@ on_dir_selected (void)
 	return;
 }
 
+void
+gimmix_current_playlist_play (GtkTreeView *treeview)
+{
+	GtkTreeSelection 	*selected;
+	GtkTreeModel 		*model;
+	GtkTreeIter			iter;
+	gchar 				*path;
+	gchar 				*title;
+	gint 				id;
+	
+	selected = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
+									
+	if (gtk_tree_selection_get_selected(selected, &model, &iter))
+	{
+		gtk_tree_model_get (model, &iter, 0, &title, 1, &path, 2, &id, -1);
+		g_printf ("You clicked song with id: %d\n", id);
+		mpd_player_play_id (pub->gmo, id);
+	}
+}
