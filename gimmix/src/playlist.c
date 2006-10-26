@@ -200,14 +200,21 @@ add_song (GtkTreeView *treeview)
 	gchar 				*path;
 	gchar 				*title;
 	gint				id;
+	MpdData				*data;
 	
 	selected = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
 									
 	if (gtk_tree_selection_get_selected(selected, &model, &iter))
 	{
+		
 		gtk_tree_model_get (model, &iter, 1, &title, 2, &path, 3, &id, -1);
 		mpd_playlist_add (pub->gmo, path);
+		data = mpd_playlist_get_changes (pub->gmo, 
+								mpd_playlist_get_playlist_id(pub->gmo));
+		id = data->song->id;
+		mpd_status_update(pub->gmo);
+		mpd_data_free (data);
 		gtk_list_store_append (current_playlist_store, &current_playlist_tree_iter);
 		gtk_list_store_set (current_playlist_store, &current_playlist_tree_iter, 0, title, 1, path, 2, id, -1);
 	}
