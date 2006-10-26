@@ -18,6 +18,7 @@ void gimmix_current_playlist_init (void);
 void gimmix_update_current_playlist (void);
 void gimmix_playlist_populate (void);
 void gimmix_update_dir_song_treeview_with_dir (gchar *);
+gchar *gimmix_path_get_parent_dir (gchar *);
 
 /* Callbacks */
 void add_song (GtkTreeView *);
