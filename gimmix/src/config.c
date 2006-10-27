@@ -96,5 +96,8 @@ gimmix_config_save (Conf *conf)
 void
 gimmix_config_free (Conf *conf)
 {
-	free (conf);
+	if (conf)
+		free (conf);
+
+	return;
 }

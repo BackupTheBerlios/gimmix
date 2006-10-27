@@ -42,26 +42,60 @@ gimmix_connect (void)
 	return false;
 }
 
-int
+void
+gimmix_connect_error (void)
+{
+	GtkWidget 	*error_dialog;
+	GtkWidget	*error_label;
+	gchar 		*error_markup;
+
+	gchar *error = "ERROR: Couldn't connect to mpd. Check whether mpd is running.\nAlso check that you have specified the proper hostname, port \nand password in ~/.gimmixrc";
+	error_markup = g_markup_printf_escaped ("<span size=\"larger\">%s</span>", error);
+	error_label = gtk_label_new (NULL);
+	gtk_label_set_markup (GTK_LABEL(error_label), error_markup);
+	g_free (error_markup);
+	error_dialog = gtk_dialog_new_with_buttons ("Error",
+												main_window,
+												GTK_DIALOG_DESTROY_WITH_PARENT,
+												GTK_STOCK_OK,
+												GTK_RESPONSE_ACCEPT,
+												NULL);
+    g_signal_connect (error_dialog,
+					"response",
+					G_CALLBACK (error_dialog_response),
+					(gpointer)error_dialog);
+	
+	gtk_container_add (GTK_CONTAINER(GTK_DIALOG(error_dialog)->vbox), error_label);
+    gtk_widget_show_all (error_dialog);
+}
+
+void
+error_dialog_response (GtkDialog *err_dialog, gint arg1, gpointer dialog)
+{
+	if (arg1 == GTK_RESPONSE_ACCEPT || arg1 == GTK_RESPONSE_DELETE_EVENT)
+	{
+		gtk_widget_destroy (GTK_WIDGET(dialog));
+		gtk_main_quit ();
+	}
+}
+
 main (int argc, char *argv[])
 {
 	GladeXML *xml;
 	gchar 	*path;
 
 	pub = (GM *) malloc(sizeof(GM));
-	pub->conf = gimmix_config_init();
+	pub->conf = gimmix_config_init ();
+	gtk_init (&argc, &argv);
+	path = g_strdup_printf ("%s%s", PREFIX, GLADE_FILE);
+	xml = glade_xml_new (path, NULL, NULL);
+	g_free (path);
+	glade_xml_signal_autoconnect(xml);
+
+	main_window = glade_xml_get_widget(xml, "main_window");
 	
 	if(gimmix_connect())
 	{
-		gtk_init(&argc, &argv);
-
-        path = g_strdup_printf ("%s%s", PREFIX, GLADE_FILE);
-		xml = glade_xml_new (path, NULL, NULL);
-		g_free (path);
-		glade_xml_signal_autoconnect(xml);
-
-		main_window = glade_xml_get_widget(xml, "main_window");
-
 		song_label = glade_xml_get_widget(xml,"song_label");
 		artist_label = glade_xml_get_widget(xml,"artist_label");
 		album_label = glade_xml_get_widget(xml,"album_label");
@@ -96,18 +130,24 @@ main (int argc, char *argv[])
 		directory_treeview = glade_xml_get_widget(xml, "album");
 		songs_treeview = glade_xml_get_widget(xml, "list");
 		current_playlist_treeview = glade_xml_get_widget(xml, "current_playlist_treeview");
-
-		gimmix_init();
-
-		gtk_main();
-		gimmix_config_save(pub->conf);
-		exit_cleanup ();
+		
+		gtk_widget_show (main_window);
+		gimmix_init ();
 	}
-	return(0);
+	else
+	{
+		gimmix_connect_error ();
+	}
+
+	gtk_main ();
+	gimmix_config_save (pub->conf);
+	exit_cleanup ();
 }
 
 void exit_cleanup ()
 {
+	if (pub->conf)
+		gimmix_config_free (pub->conf);
 	if (pub)
 		g_free (pub);
 	return;

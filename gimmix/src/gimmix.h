@@ -22,6 +22,10 @@ GM *pub;
 
 bool gimmix_connect (void);
 
+/* Connection error dialog */
+void gimmix_connect_error (void);
+void error_dialog_response ();
+
 /* Finalize */
 void exit_cleanup (void);
 

@@ -34,7 +34,6 @@ gimmix_mpd_connect (Conf *conf)
 	MpdObj *mo;
 
 	mo = mpd_new (conf->hostname, conf->port, conf->password);
-	//mo = mpd_new_default();
 	mpd_connect (mo);
 
 	if (mpd_check_connected (mo))
@@ -43,7 +42,6 @@ gimmix_mpd_connect (Conf *conf)
 		return mo;
 	}
 
-	fprintf(stderr, "Error! Couldn't connect to mpd. Check whether mpd is running.\n");
 	return NULL;
 }
 
