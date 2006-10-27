@@ -27,6 +27,8 @@
 #include "interface.h"
 #include "playlist.h"
 
+#define GLADE_FILE "/share/gimmix/gimmix.glade"
+
 bool
 gimmix_connect (void)
 {
@@ -44,6 +46,7 @@ int
 main (int argc, char *argv[])
 {
 	GladeXML *xml;
+	gchar 	*path;
 
 	pub = (GM *) malloc(sizeof(GM));
 	pub->conf = gimmix_config_init();
@@ -52,7 +55,9 @@ main (int argc, char *argv[])
 	{
 		gtk_init(&argc, &argv);
 
-		xml = glade_xml_new("glade/gimmix.glade", NULL, NULL);
+        path = g_strdup_printf ("%s%s", PREFIX, GLADE_FILE);
+		xml = glade_xml_new (path, NULL, NULL);
+		g_free (path);
 		glade_xml_signal_autoconnect(xml);
 
 		main_window = glade_xml_get_widget(xml, "main_window");
@@ -96,6 +101,14 @@ main (int argc, char *argv[])
 
 		gtk_main();
 		gimmix_config_save(pub->conf);
+		exit_cleanup ();
 	}
 	return(0);
+}
+
+void exit_cleanup ()
+{
+	if (pub)
+		g_free (pub);
+	return;
 }

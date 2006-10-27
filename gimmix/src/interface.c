@@ -422,20 +422,23 @@ on_systray_checkbox_toggled (GtkWidget *widget, gpointer data)
 void
 gimmix_about_show (void)
 {
-    GdkPixbuf *about_pixbuf;
+    GdkPixbuf 	*about_pixbuf;
+	gchar		*path;
 	
-    about_pixbuf= gdk_pixbuf_new_from_file("/usr/share/pixmaps/gimmix.png", NULL);
+	path = g_strdup_printf ("%s%s", PREFIX, "/share/pixmaps/gimmix.png");
+    about_pixbuf = gdk_pixbuf_new_from_file (path, NULL);
+    g_free (path);
 
 	gchar *website = "http://priyank.one09.net/";
 	gchar *website_label = "http://priyank.one09.net/";
 	gchar *authors[] = 	{ "Priyank M. Gosalia <priyankmg@gmail.com>",
 						 "Part of song seek code taken from Pygmy.",
 						 NULL
-					};
+						};
 	
 	gtk_show_about_dialog (NULL,
-                           "name", "Gimmix",
-                           "version", "0.1 beta",
+                           "name", APPNAME,
+                           "version", VERSION,
                            "copyright", "\xC2\xA9 2006 Priyank Gosalia  (GPL)",
                            "comments", "Gimmix is a GUI MPD client written in C",
                            "authors", authors,
@@ -450,10 +453,13 @@ void
 gimmix_show_ver_info (void)
 {
 	gchar *markup;
+	gchar *appver;
 
-	markup = g_markup_printf_escaped ("<span size=\"large\"weight=\"bold\">%s</span>", "Gimmix 0.1 beta");
+	appver = g_strdup_printf ("%s %s", APPNAME, VERSION);
+	markup = g_markup_printf_escaped ("<span size=\"large\"weight=\"bold\">%s</span>", appver);
 	gtk_label_set_markup (GTK_LABEL(song_label), markup);
 	gtk_label_set_text (GTK_LABEL(artist_label), "http://priyank.one09.net/gimmix");
 	gtk_label_set_text (GTK_LABEL(album_label), NULL);
 	g_free (markup);
+	g_free (appver);
 }

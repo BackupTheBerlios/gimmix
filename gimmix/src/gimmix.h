@@ -22,4 +22,7 @@ GM *pub;
 
 bool gimmix_connect (void);
 
+/* Finalize */
+void exit_cleanup (void);
+
 #endif
