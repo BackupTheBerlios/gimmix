@@ -26,5 +26,6 @@ void add_song (GtkTreeView *);
 void on_dir_activated (GtkTreeView *);
 void gimmix_current_playlist_play (GtkTreeView *);
 void gimmix_current_playlist_right_click ();
-void gimmix_current_playlist_remove_song ();
+void gimmix_current_playlist_remove_song (void);
+void gimmix_current_playlist_clear (void);
 #endif

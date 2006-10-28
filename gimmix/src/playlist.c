@@ -391,21 +391,28 @@ gimmix_current_playlist_remove_song (void)
 }	
 
 void
+gimmix_current_playlist_clear (void)
+{
+	gtk_list_store_clear (GTK_LIST_STORE(current_playlist_store));
+	mpd_playlist_clear (pub->gmo);
+	mpd_status_update (pub->gmo);
+	return;
+}
+
+void
 gimmix_playlist_popup_menu (void)
 {
 	GtkWidget *menu, *menu_item;
 
 	menu = gtk_menu_new();
 
-	/*
-	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ADD, NULL);
-	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gtk_main_quit), NULL);
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-	gtk_widget_show (menu_item);
-	*/
-
 	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_REMOVE, NULL);
 	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_current_playlist_remove_song), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+	
+	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLEAR, NULL);
+	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_current_playlist_clear), NULL);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 	gtk_widget_show (menu_item);
 
