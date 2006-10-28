@@ -31,6 +31,7 @@ enum {
 };
 
 GtkTreeModel        *current_playlist_model;
+GtkTreeSelection	*current_playlist_selection;
 GtkListStore        *current_playlist_store;
 GtkCellRenderer     *current_playlist_renderer;
 
@@ -49,8 +50,10 @@ gimmix_current_playlist_init (void)
 												G_TYPE_STRING, 	/* path */
 												G_TYPE_INT); 	/* id */
 	current_playlist_model	= GTK_TREE_MODEL (current_playlist_store);
+
 	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_model);
 	g_signal_connect (current_playlist_treeview, "row-activated", G_CALLBACK(gimmix_current_playlist_play), NULL);
+	g_signal_connect (current_playlist_treeview, "button-release-event", G_CALLBACK (gimmix_current_playlist_right_click), NULL);
 	g_object_unref (current_playlist_model);
 	
 	return;
@@ -352,6 +355,62 @@ gimmix_update_dir_song_treeview_with_dir (gchar *dir)
 	gtk_tree_view_set_model (GTK_TREE_VIEW(songs_treeview), songs_model);
 	
 	return;
+}
+
+void
+gimmix_current_playlist_right_click (GtkTreeView *treeview, GdkEventButton *event)
+{	
+	if (event->button == 3) /* If right click */
+	{
+		gimmix_playlist_popup_menu ();
+	}
+}
+
+void
+gimmix_current_playlist_remove_song (void)
+{
+	GtkTreeSelection	*selection;
+	GtkTreeIter			iter;
+	gchar				*title;
+	gchar				*path;
+	gint				id;
+
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(current_playlist_treeview));
+	
+	if ( gtk_tree_selection_get_selected (selection, &current_playlist_model, &iter) )
+	{
+		gtk_tree_model_get (current_playlist_model, &iter,
+							0, &title,
+							1, &path,
+							2, &id,
+							-1);
+		mpd_playlist_delete_id (pub->gmo, id);
+		mpd_status_update (pub->gmo);
+		gtk_list_store_remove (GTK_LIST_STORE (current_playlist_model), &iter);	
+	}
+}	
+
+void
+gimmix_playlist_popup_menu (void)
+{
+	GtkWidget *menu, *menu_item;
+
+	menu = gtk_menu_new();
+
+	/*
+	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_ADD, NULL);
+	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gtk_main_quit), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+	*/
+
+	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_REMOVE, NULL);
+	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_current_playlist_remove_song), NULL);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	gtk_widget_show (menu_item);
+
+	gtk_widget_show (menu);
+	gtk_menu_popup (GTK_MENU(menu), NULL, NULL, NULL, NULL, 3,gtk_get_current_event_time());
 }
 
 gchar *
