@@ -172,19 +172,27 @@ on_info_button_clicked (GtkWidget *widget, gpointer data)
 	{
 		SongInfo *info = NULL;
 		gchar *length;
+		gchar *bitrate;
 		info = gimmix_get_song_info (pub->gmo);
 
 		gtk_entry_set_text (GTK_ENTRY(info_file), info->file ? info->file : NULL);
 		gtk_label_set_text (GTK_LABEL(info_title), info->title ? info->title : NULL);
 		gtk_label_set_text (GTK_LABEL(info_artist), info->artist ? info->artist : NULL);
 		gtk_label_set_text (GTK_LABEL(info_album), info->album ? info->album : NULL);
-		length = gimmix_get_song_length(info);
-		if(length)
+		length = gimmix_get_song_length (info);
+		if (length)
 		{
-			gtk_label_set_text(GTK_LABEL(info_length), length);
-			g_free(length);
+			gtk_label_set_text (GTK_LABEL(info_length), length);
+			g_free (length);
+		}
+		bitrate = gimmix_get_song_bitrate (info);
+		if (bitrate)
+		{
+			gtk_label_set_text (GTK_LABEL(info_bitrate), bitrate);
+			g_free (bitrate);
 		}
 		gtk_label_set_text (GTK_LABEL(info_genre), info->genre ? info->genre : NULL);
+
 		gimmix_free_song_info (info);
 
 		gtk_widget_show (GTK_WIDGET(info_window));
@@ -432,7 +440,7 @@ gimmix_about_show (void)
 	gchar *website = "http://priyank.one09.net/";
 	gchar *website_label = "http://priyank.one09.net/";
 	gchar *authors[] = 	{ "Priyank M. Gosalia <priyankmg@gmail.com>",
-						 "Part of song seek code taken from Pygmy.",
+						 "Part of the song seek code borrowed from Pygmy.",
 						 NULL
 						};
 	

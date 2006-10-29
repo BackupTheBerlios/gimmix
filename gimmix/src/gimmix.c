@@ -117,6 +117,7 @@ main (int argc, char *argv[])
 		info_album = glade_xml_get_widget(xml,"info_album");
 		info_genre = glade_xml_get_widget(xml,"info_genre");
 		info_length = glade_xml_get_widget(xml, "info_length");
+		info_bitrate = glade_xml_get_widget(xml, "info_bitrate");
 		
 		/* Preferences dialog */
 		pref_window = glade_xml_get_widget(xml, "prefs_window");

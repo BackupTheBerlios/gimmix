@@ -18,6 +18,7 @@ typedef struct songinfo
 	char *genre;
 	char *file;
 	int length;
+	int bitrate;
 	int id;
 	int pos;
 } SongInfo;
@@ -47,6 +48,7 @@ void gimmix_free_song_info (SongInfo *);
 int gimmix_get_progress_status (MpdObj *, float *, char *);
 int gimmix_get_total_song_time (MpdObj *);
 char * gimmix_get_song_length (SongInfo *);
+char * gimmix_get_song_bitrate (SongInfo *);
 
 /* Check whether gimmix is paused/playing or stopped */
 int gimmix_is_playing (MpdObj *);

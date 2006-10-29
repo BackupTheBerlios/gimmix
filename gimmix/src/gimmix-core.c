@@ -181,6 +181,10 @@ gimmix_get_song_info (MpdObj *mo)
 	s->album 	= (ms->album) 	? strdup (ms->album) : NULL;
 	s->genre 	= (ms->genre) 	? strdup (ms->genre) : NULL;
 	s->length 	= ms->time;
+	if (gimmix_is_playing(mo) == PLAY)
+		s->bitrate 	= mpd_status_get_bitrate (mo);
+	else
+		s->bitrate 	= -1;
 	//mpd_freeSong(ms);
 	
 	return s;
@@ -193,9 +197,23 @@ gimmix_get_song_length (SongInfo *s)
 	char *length = malloc (10);
 	
 	time = s->length;
-	snprintf(length, 10, "%02i:%02i", time/60, time%60);
+	snprintf (length, 10, "%02i:%02i", time/60, time%60);
 	return length;
 }
+
+char *
+gimmix_get_song_bitrate (SongInfo *s)
+{
+	int bitr;
+	char *bitrate = malloc (10);
+	
+	bitr = s->bitrate;
+	if (bitr != -1)
+		snprintf (bitrate, 10, "%i Kbps", bitr);
+	else
+		return NULL;
+	return bitrate;
+};
 
 void
 gimmix_free_song_info (SongInfo *si)

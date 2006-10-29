@@ -4,6 +4,7 @@
 <glade-interface>
   <widget class="GtkWindow" id="main_window">
     <property name="width_request">380</property>
+    <property name="visible">True</property>
     <property name="title" translatable="yes">Gimmix</property>
     <property name="resizable">False</property>
     <property name="icon_name">gtk-cdrom</property>
@@ -738,10 +739,33 @@
                     <property name="column_spacing">16</property>
                     <property name="row_spacing">3</property>
                     <child>
-                      <placeholder/>
+                      <widget class="GtkLabel" id="info_bitrate">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">6</property>
+                        <property name="bottom_attach">7</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                        <property name="y_padding">5</property>
+                      </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <widget class="GtkLabel" id="label1">
+                        <property name="visible">True</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Bitrate&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">6</property>
+                        <property name="bottom_attach">7</property>
+                        <property name="x_options">GTK_FILL</property>
+                        <property name="y_options"></property>
+                      </packing>
                     </child>
                     <child>
                       <widget class="GtkLabel" id="info_length">

@@ -364,6 +364,7 @@ gimmix_current_playlist_right_click (GtkTreeView *treeview, GdkEventButton *even
 	{
 		gimmix_playlist_popup_menu ();
 	}
+	return;
 }
 
 void
@@ -396,6 +397,7 @@ gimmix_current_playlist_clear (void)
 	gtk_list_store_clear (GTK_LIST_STORE(current_playlist_store));
 	mpd_playlist_clear (pub->gmo);
 	mpd_status_update (pub->gmo);
+
 	return;
 }
 
@@ -404,7 +406,7 @@ gimmix_playlist_popup_menu (void)
 {
 	GtkWidget *menu, *menu_item;
 
-	menu = gtk_menu_new();
+	menu = gtk_menu_new ();
 
 	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_REMOVE, NULL);
 	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (gimmix_current_playlist_remove_song), NULL);

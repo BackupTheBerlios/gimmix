@@ -41,6 +41,7 @@ GtkWidget *info_artist;
 GtkWidget *info_album;
 GtkWidget *info_genre;
 GtkWidget *info_length;
+GtkWidget *info_bitrate;
 
 /* Initializes default interface signals */
 void gimmix_init (void);
