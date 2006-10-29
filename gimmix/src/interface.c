@@ -46,7 +46,7 @@ gimmix_init (void)
 	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL);
 	g_signal_connect (G_OBJECT(button_apply), "clicked", G_CALLBACK(on_preferences_apply), NULL);
 
-	volume_adj = gtk_range_get_adjustment(GTK_RANGE(volume_scale));
+	volume_adj = gtk_range_get_adjustment (GTK_RANGE(volume_scale));
 	if (pub->conf->systray_enable == 1)
 	{	
 		gimmix_systray_icon_create ();
@@ -71,17 +71,16 @@ gimmix_init (void)
 gboolean
 gimmix_timer (void)
 {
-	gchar *time;
+	gchar time[15];
 	gint state;
 	float fraction;
 
 	state = gimmix_is_playing (pub->gmo);
 	if (state == PLAY || state == PAUSE)
 	{
-		time = gimmix_get_progress_status (pub->gmo, &fraction);
+		gimmix_get_progress_status (pub->gmo, &fraction, time);
 		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), fraction);
 		gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), time);
-		g_free (time);
 		if (state == PAUSE)
 		{
 			GtkWidget *image = get_image ("gtk-media-play", GTK_ICON_SIZE_BUTTON);
@@ -139,7 +138,6 @@ on_stop_button_clicked (GtkWidget *widget, gpointer data)
 	{
 		image = get_image("gtk-media-play", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image (GTK_BUTTON(button_play), image);
-		gimmix_show_ver_info();
 	}
 	return;
 }
@@ -147,24 +145,22 @@ on_stop_button_clicked (GtkWidget *widget, gpointer data)
 void
 on_prefs_button_clicked (GtkWidget *widget, gpointer data)
 {
-	Conf *conf;
 	gchar port[8];
 	gint systray_enable;
 
-	conf = pub->conf;
-	sprintf (port, "%d", conf->port);
-	systray_enable = conf->systray_enable;
+	sprintf (port, "%d", pub->conf->port);
+	systray_enable = pub->conf->systray_enable;
 
-	gtk_entry_set_text (GTK_ENTRY(host_entry), conf->hostname);
+	gtk_entry_set_text (GTK_ENTRY(host_entry), pub->conf->hostname);
 	gtk_entry_set_text (GTK_ENTRY(port_entry), port);
-	if(conf->password)
-		gtk_entry_set_text (GTK_ENTRY(password_entry), conf->password);
-	if(systray_enable == 1)
+	if (pub->conf->password)
+		gtk_entry_set_text (GTK_ENTRY(password_entry), pub->conf->password);
+	if (systray_enable == 1)
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(systray_toggle), TRUE);
 	else
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(systray_toggle), FALSE);
 	g_signal_connect (G_OBJECT(systray_toggle), "toggled", G_CALLBACK(on_systray_checkbox_toggled), NULL);
-	gtk_widget_show(GTK_WIDGET(pref_window));
+	gtk_widget_show (GTK_WIDGET(pref_window));
 }
 
 void

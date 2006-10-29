@@ -185,7 +185,6 @@ gimmix_get_song_info (MpdObj *mo)
 		s->bitrate 	= mpd_status_get_bitrate (mo);
 	else
 		s->bitrate 	= -1;
-	//mpd_freeSong(ms);
 	
 	return s;
 }
@@ -218,7 +217,7 @@ gimmix_get_song_bitrate (SongInfo *s)
 void
 gimmix_free_song_info (SongInfo *si)
 {
-	if(si != NULL)
+	if (si != NULL)
 	{
 		if (si->title)
 			free (si->title);
@@ -238,12 +237,11 @@ gimmix_free_song_info (SongInfo *si)
 	return;
 }
 
-char *
-gimmix_get_progress_status (MpdObj *mo, float *fraction)
+void
+gimmix_get_progress_status (MpdObj *mo, float *fraction, char *time)
 {
 	int state;
 	int total, elapsed;
-	char *time;
 		
 	state = mpd_player_get_state (mo);
 	
@@ -254,7 +252,6 @@ gimmix_get_progress_status (MpdObj *mo, float *fraction)
 			mpd_status_update(mo);
 			total = mpd_status_get_total_song_time (mo);
 			elapsed = mpd_status_get_elapsed_song_time (mo);
-			time = malloc (15);
 			snprintf (time, 20, "%02i:%02i / %02i:%02i", elapsed/60,
 					elapsed%60,
 					total/60,
@@ -265,8 +262,9 @@ gimmix_get_progress_status (MpdObj *mo, float *fraction)
 		case MPD_PLAYER_STOP:
 		case MPD_PLAYER_UNKNOWN:
 			time = NULL;
+			return;
 	}
-	return time;
+	return;
 }
 
 void
