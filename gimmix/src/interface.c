@@ -168,7 +168,10 @@ on_prefs_button_clicked (GtkWidget *widget, gpointer data)
 void
 on_info_button_clicked (GtkWidget *widget, gpointer data)
 {
-	if (gimmix_is_playing(pub->gmo) == PLAY)
+	gint state;
+	state = gimmix_is_playing (pub->gmo);
+	
+	if (state == PLAY || state == PAUSE)
 	{
 		SongInfo *info = NULL;
 		gchar *length;
@@ -191,6 +194,8 @@ on_info_button_clicked (GtkWidget *widget, gpointer data)
 			gtk_label_set_text (GTK_LABEL(info_bitrate), bitrate);
 			g_free (bitrate);
 		}
+		else
+			gtk_label_set_text (GTK_LABEL(info_bitrate), "(only available while playing)");
 		gtk_label_set_text (GTK_LABEL(info_genre), info->genre ? info->genre : NULL);
 
 		gimmix_free_song_info (info);
