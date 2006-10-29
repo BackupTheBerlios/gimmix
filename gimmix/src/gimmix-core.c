@@ -276,3 +276,15 @@ status_changed (MpdObj *mo, ChangedStatusType id)
 		status_is_changed = false;
 	return;
 }
+
+void
+gimmix_disconnect (MpdObj *mo)
+{
+	if (mpd_check_connected(mo))
+	{
+		mpd_disconnect (mo);
+		mpd_free (mo);
+	}
+	
+	return;
+}

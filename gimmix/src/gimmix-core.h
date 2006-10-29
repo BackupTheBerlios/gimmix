@@ -26,7 +26,8 @@ typedef struct songinfo
 bool status_is_changed;
 
 /* create a mpd object and connect to mpd using the conf */
-MpdObj * gimmix_mpd_connect(Conf *);
+MpdObj * gimmix_mpd_connect (Conf *);
+void gimmix_disconnect (MpdObj *);
 
 /* playback control */
 bool gimmix_play (MpdObj *);

@@ -150,6 +150,9 @@ void exit_cleanup ()
 	if (pub->conf)
 		gimmix_config_free (pub->conf);
 	if (pub)
+	{
+		gimmix_disconnect (pub->gmo);
 		g_free (pub);
+	}
 	return;
 }
