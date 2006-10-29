@@ -95,13 +95,14 @@ gimmix_timer (void)
 			gimmix_set_song_info ();
 		return TRUE;
 	}
-	
+
 	else if(state == STOP)
 	{
 		GtkWidget *image = get_image ("gtk-media-play", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image (GTK_BUTTON(button_play), image);
 		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), 0.0);
 		gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), "Stopped");
+		gimmix_show_ver_info ();
 		return TRUE;
 	}
 	return TRUE;
@@ -363,9 +364,17 @@ gimmix_systray_popup_menu (void)
 	menu_item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 	gtk_widget_show (menu_item);
-
-	menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_MEDIA_PLAY, NULL);
-	g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (on_play_button_clicked), NULL);
+	
+	if (gimmix_is_playing(pub->gmo) == PLAY)
+	{
+		menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_MEDIA_PAUSE, NULL);
+		g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (on_play_button_clicked), NULL);
+	}
+	else
+	{
+		menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_MEDIA_PLAY, NULL);
+		g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (on_play_button_clicked), NULL);
+	}
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 	gtk_widget_show (menu_item);
 
