@@ -71,16 +71,17 @@ gimmix_init (void)
 gboolean
 gimmix_timer (void)
 {
-	gchar time[15];
+	gchar *time;
 	gint state;
 	float fraction;
 
 	state = gimmix_is_playing (pub->gmo);
 	if (state == PLAY || state == PAUSE)
 	{
-		gimmix_get_progress_status (pub->gmo, &fraction, time);
+		time = gimmix_get_progress_status (pub->gmo, &fraction);
 		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), fraction);
 		gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), time);
+		g_free (time);
 		if (state == PAUSE)
 		{
 			GtkWidget *image = get_image ("gtk-media-play", GTK_ICON_SIZE_BUTTON);
@@ -306,15 +307,16 @@ void
 gimmix_set_song_info (void)
 {
 	gchar *markup;
-	gchar title[80];
+	gchar *title;
 	SongInfo *song = NULL;
 	
 	song = gimmix_get_song_info (pub->gmo);
 
 	if( song->title)
 	{
-		g_sprintf (title, "Gimmix - %s", song->title);
+		title = g_strdup_printf ("Gimmix - %s", song->title);
 		gtk_window_set_title (GTK_WINDOW(main_window), title);
+		g_free (title);
 		markup = g_markup_printf_escaped ("<span size=\"medium\"weight=\"bold\"><i>%s</i></span>", song->title);
 		gtk_label_set_markup (GTK_LABEL(song_label), markup);
 	}

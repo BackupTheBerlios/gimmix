@@ -46,7 +46,7 @@ SongInfo * gimmix_get_song_info (MpdObj *);
 /* Free memory allocated by gimmix_get_song_info() */
 void gimmix_free_song_info (SongInfo *);
 
-int gimmix_get_progress_status (MpdObj *, float *, char *);
+char * gimmix_get_progress_status (MpdObj *, float *);
 int gimmix_get_total_song_time (MpdObj *);
 char * gimmix_get_song_length (SongInfo *);
 char * gimmix_get_song_bitrate (SongInfo *);

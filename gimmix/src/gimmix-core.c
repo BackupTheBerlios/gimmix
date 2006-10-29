@@ -221,13 +221,13 @@ gimmix_free_song_info (SongInfo *si)
 	if(si != NULL)
 	{
 		if (si->title)
-			free(si->title);
+			free (si->title);
 		if (si->artist)
-			free(si->artist);
+			free (si->artist);
 		if (si->album)
-			free(si->album);
+			free (si->album);
 		if (si->file)
-			free(si->file);
+			free (si->file);
 		if (si->genre)
 			free (si->genre);
 		si->length = -1;
@@ -238,11 +238,12 @@ gimmix_free_song_info (SongInfo *si)
 	return;
 }
 
-int
-gimmix_get_progress_status (MpdObj *mo, float *fraction, char *time)
+char *
+gimmix_get_progress_status (MpdObj *mo, float *fraction)
 {
 	int state;
 	int total, elapsed;
+	char *time;
 		
 	state = mpd_player_get_state (mo);
 	
@@ -253,6 +254,7 @@ gimmix_get_progress_status (MpdObj *mo, float *fraction, char *time)
 			mpd_status_update(mo);
 			total = mpd_status_get_total_song_time (mo);
 			elapsed = mpd_status_get_elapsed_song_time (mo);
+			time = malloc (15);
 			snprintf (time, 20, "%02i:%02i / %02i:%02i", elapsed/60,
 					elapsed%60,
 					total/60,
@@ -262,9 +264,9 @@ gimmix_get_progress_status (MpdObj *mo, float *fraction, char *time)
 
 		case MPD_PLAYER_STOP:
 		case MPD_PLAYER_UNKNOWN:
-			return 0;
+			time = NULL;
 	}
-	return 1;
+	return time;
 }
 
 void
