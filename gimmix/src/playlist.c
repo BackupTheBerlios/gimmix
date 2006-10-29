@@ -259,6 +259,7 @@ gimmix_current_playlist_play (GtkTreeView *treeview)
 							-1);
 		mpd_player_play_id (pub->gmo, id);
 		mpd_status_update (pub->gmo);
+		gimmix_set_song_info (pub->gmo);
 	}
 	return;
 }
