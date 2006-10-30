@@ -22,7 +22,6 @@
  */
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include "gimmix.h"
 #include "interface.h"
 #include "playlist.h"
@@ -47,6 +46,7 @@ gimmix_connect_error (void)
 {
 	GtkWidget 	*error_dialog;
 	GtkWidget	*error_label;
+	GtkWidget	*window;
 	gchar 		*error_markup;
 
 	gchar *error = "ERROR: Couldn't connect to mpd. Check whether mpd is running.\nAlso check that you have specified the proper hostname, port \nand password in ~/.gimmixrc";
@@ -54,12 +54,15 @@ gimmix_connect_error (void)
 	error_label = gtk_label_new (NULL);
 	gtk_label_set_markup (GTK_LABEL(error_label), error_markup);
 	g_free (error_markup);
-	error_dialog = gtk_dialog_new_with_buttons ("Error",
-												GTK_WINDOW(main_window),
+	window = glade_xml_get_widget (xml, "main_window");
+	error_dialog = gtk_dialog_new_with_buttons ("Gimmx Error",
+												GTK_WINDOW(window),
 												GTK_DIALOG_DESTROY_WITH_PARENT,
 												GTK_STOCK_OK,
 												GTK_RESPONSE_ACCEPT,
 												NULL);
+	gtk_misc_set_padding (GTK_MISC(error_label), 5, 5);
+	gtk_container_set_border_width (GTK_CONTAINER(GTK_DIALOG(error_dialog)->vbox), 2);
     g_signal_connect (error_dialog,
 					"response",
 					G_CALLBACK (error_dialog_response),
@@ -81,8 +84,8 @@ error_dialog_response (GtkDialog *err_dialog, gint arg1, gpointer dialog)
 
 main (int argc, char *argv[])
 {
-	GladeXML *xml;
-	gchar 	*path;
+	gchar 		*path;
+	GtkWidget	*main_window;
 
 	pub = (GM *) malloc(sizeof(GM));
 	pub->conf = gimmix_config_init ();
@@ -92,45 +95,23 @@ main (int argc, char *argv[])
 	g_free (path);
 	glade_xml_signal_autoconnect(xml);
 
-	main_window = glade_xml_get_widget(xml, "main_window");
+	main_window = glade_xml_get_widget (xml, "main_window");
 	
-	if(gimmix_connect())
+	if (gimmix_connect())
 	{
-		song_label = glade_xml_get_widget(xml,"song_label");
-		artist_label = glade_xml_get_widget(xml,"artist_label");
-		album_label = glade_xml_get_widget(xml,"album_label");
-		button_play = glade_xml_get_widget(xml,"play_button");
-		button_prev = glade_xml_get_widget(xml,"prev_button");
-		button_next = glade_xml_get_widget(xml,"next_button");
-		button_stop = glade_xml_get_widget(xml,"stop_button");
-		button_prefs = glade_xml_get_widget(xml,"pref_button");
-		button_info = glade_xml_get_widget(xml,"info_button");
-		volume_scale = glade_xml_get_widget(xml,"volume_scale");
-		progress = glade_xml_get_widget(xml,"progress");
-		progressbox = glade_xml_get_widget(xml,"progress_event_box");
-
-		/* Info dialog */
-		info_window = glade_xml_get_widget(xml, "info_window");
-		info_file = glade_xml_get_widget(xml, "info_file");
-		info_title = glade_xml_get_widget(xml,"info_title");
-		info_artist = glade_xml_get_widget(xml,"info_artist");
-		info_album = glade_xml_get_widget(xml,"info_album");
-		info_genre = glade_xml_get_widget(xml,"info_genre");
-		info_length = glade_xml_get_widget(xml, "info_length");
-		info_bitrate = glade_xml_get_widget(xml, "info_bitrate");
+		song_label = glade_xml_get_widget (xml,"song_label");
+		artist_label = glade_xml_get_widget (xml,"artist_label");
+		album_label = glade_xml_get_widget (xml,"album_label");
+		progress = glade_xml_get_widget (xml,"progress");
+		progressbox = glade_xml_get_widget (xml,"progress_event_box");
 		
 		/* Preferences dialog */
-		pref_window = glade_xml_get_widget(xml, "prefs_window");
-		host_entry = glade_xml_get_widget(xml,"host_entry");
-		port_entry = glade_xml_get_widget(xml,"port_entry");
-		password_entry = glade_xml_get_widget(xml,"password_entry");
-		systray_toggle = glade_xml_get_widget(xml, "systray_checkbutton");
-		button_apply = glade_xml_get_widget(xml, "button_apply");
+		
 		
 		/* Playlist */
-		directory_treeview = glade_xml_get_widget(xml, "album");
-		songs_treeview = glade_xml_get_widget(xml, "list");
-		current_playlist_treeview = glade_xml_get_widget(xml, "current_playlist_treeview");
+		directory_treeview = glade_xml_get_widget (xml, "album");
+		songs_treeview = glade_xml_get_widget (xml, "list");
+		current_playlist_treeview = glade_xml_get_widget (xml, "current_playlist_treeview");
 		
 		gtk_widget_show (main_window);
 		gimmix_init ();
@@ -147,12 +128,9 @@ main (int argc, char *argv[])
 
 void exit_cleanup ()
 {
-	if (pub->conf)
-		gimmix_config_free (pub->conf);
-	if (pub)
-	{
-		gimmix_disconnect (pub->gmo);
-		g_free (pub);
-	}
+	gimmix_disconnect (pub->gmo);
+	gimmix_config_free (pub->conf);
+	g_free (pub);
+
 	return;
 }

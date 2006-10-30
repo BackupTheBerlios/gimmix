@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <libmpd/libmpd.h>
 #include <libmpd/libmpdclient.h>
+#include <glade/glade.h>
 #include "config.h"
 
 #define APPNAME "Gimmix"
@@ -19,6 +20,7 @@ typedef struct Gimmix
 } GM;
 
 GM *pub;
+GladeXML *xml;
 
 bool gimmix_connect (void);
 

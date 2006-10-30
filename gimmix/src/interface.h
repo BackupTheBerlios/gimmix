@@ -8,40 +8,13 @@
 #include "gimmix-core.h"
 
 /* Main window widgets */
-GtkWidget *main_window;
 GtkWidget *song_label;
 GtkWidget *artist_label;
 GtkWidget *album_label;
-GtkWidget *button_play;
-GtkWidget *button_stop;
-GtkWidget *button_prev;
-GtkWidget *button_next;
-GtkWidget *button_prefs;
-GtkWidget *button_info;
-GtkWidget *volume_scale;
 GtkWidget *progress;
 GtkWidget *progressbox;
-GtkAdjustment *volume_adj;
 GtkStatusIcon *tray_icon;
 NotifyNotification *notify;
-
-/* Preferences window widgets */
-GtkWidget *pref_window;
-GtkWidget *host_entry;
-GtkWidget *port_entry;
-GtkWidget *password_entry;
-GtkWidget *systray_toggle;
-GtkWidget *button_apply;
-
-/* Info dialog widgets */
-GtkWidget *info_window;
-GtkWidget *info_file;
-GtkWidget *info_title;
-GtkWidget *info_artist;
-GtkWidget *info_album;
-GtkWidget *info_genre;
-GtkWidget *info_length;
-GtkWidget *info_bitrate;
 
 /* Initializes default interface signals */
 void gimmix_init (void);
