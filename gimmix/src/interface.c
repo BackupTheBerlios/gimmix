@@ -62,7 +62,7 @@ gimmix_init (void)
 	{	
 		gimmix_show_ver_info();
 	}
-	g_timeout_add (300, gimmix_timer, NULL);
+	g_timeout_add (300, (GSourceFunc)gimmix_timer, NULL);
 	gimmix_playlist_populate ();
 	gimmix_current_playlist_init ();
 	gimmix_update_current_playlist ();
@@ -213,8 +213,8 @@ on_preferences_apply (GtkWidget *widget, gpointer data)
 	port = gtk_entry_get_text (GTK_ENTRY(port_entry));
 	password = gtk_entry_get_text (GTK_ENTRY(password_entry));
 
-	pub->conf->hostname = host;
-	pub->conf->password = password;
+	pub->conf->hostname = strdup(host);
+	pub->conf->password = strdup(password);
 	pub->conf->port = atoi (port);
 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(systray_toggle)))
 		pub->conf->systray_enable = 1;

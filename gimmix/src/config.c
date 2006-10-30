@@ -97,7 +97,10 @@ void
 gimmix_config_free (Conf *conf)
 {
 	if (conf)
+    {
+        free (conf->hostname);
+        free (conf->password);
 		free (conf);
-
+    }
 	return;
 }
