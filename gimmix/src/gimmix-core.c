@@ -38,7 +38,7 @@ gimmix_mpd_connect (Conf *conf)
 
 	if (mpd_check_connected (mo))
 	{
-		mpd_signal_connect_status_changed(mo, (StatusChangedCallback)status_changed, NULL);
+		mpd_signal_connect_status_changed(mo, (StatusChangedCallback)song_changed, NULL);
 		return mo;
 	}
 
@@ -46,7 +46,7 @@ gimmix_mpd_connect (Conf *conf)
 }
 
 int
-gimmix_is_playing (MpdObj *mo)
+gimmix_get_status (MpdObj *mo)
 {
 	int status;
 	mpd_status_update (mo);
@@ -90,7 +90,7 @@ bool
 gimmix_stop (MpdObj *mo)
 {
 	int state;
-	state = gimmix_is_playing (mo);
+	state = gimmix_get_status (mo);
 
 	if (state == PLAY || state == PAUSE)
 	{
@@ -104,7 +104,7 @@ bool
 gimmix_prev (MpdObj *mo)
 {
 	int state;
-	state = gimmix_is_playing (mo);
+	state = gimmix_get_status (mo);
 
 	if (state == PLAY || state == PAUSE)
 	{
@@ -118,7 +118,7 @@ bool
 gimmix_next (MpdObj *mo)
 {
 	int state;
-	state = gimmix_is_playing (mo);
+	state = gimmix_get_status (mo);
 
 	if (state == PLAY || state == PAUSE)
 	{
@@ -132,7 +132,7 @@ bool
 gimmix_seek (MpdObj *mo, int seektime)
 {
 	int state;
-	state = gimmix_is_playing (mo);
+	state = gimmix_get_status (mo);
 
 	if(state == PLAY || state == PAUSE)
 	{
@@ -181,7 +181,7 @@ gimmix_get_song_info (MpdObj *mo)
 	s->album 	= (ms->album) 	? strdup (ms->album) : NULL;
 	s->genre 	= (ms->genre) 	? strdup (ms->genre) : NULL;
 	s->length 	= ms->time;
-	if (gimmix_is_playing(mo) == PLAY)
+	if (gimmix_get_status(mo) == PLAY)
 		s->bitrate 	= mpd_status_get_bitrate (mo);
 	else
 		s->bitrate 	= -1;
@@ -268,12 +268,12 @@ gimmix_get_progress_status (MpdObj *mo, float *fraction, char *time)
 }
 
 void
-status_changed (MpdObj *mo, ChangedStatusType id)
+song_changed (MpdObj *mo, ChangedStatusType id)
 {
 	if (id&MPD_CST_SONGID)
-		status_is_changed = true;
+		song_is_changed = true;
 	else
-		status_is_changed = false;
+		song_is_changed = false;
 	return;
 }
 

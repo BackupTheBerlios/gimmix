@@ -43,7 +43,7 @@ gimmix_init (void)
 	GtkAdjustment	*vol_adj;
 	gint			state;
 	
-	status = gimmix_is_playing(pub->gmo);
+	status = gimmix_get_status(pub->gmo);
 
 	widget = glade_xml_get_widget (xml, "play_button");
 	g_signal_connect (G_OBJECT(widget), "clicked", G_CALLBACK(on_play_button_clicked), NULL);
@@ -73,8 +73,7 @@ gimmix_init (void)
 	g_signal_connect (G_OBJECT(widget), "scroll_event", G_CALLBACK(gimmix_scroll_volume_slider), NULL);
 	vol_adj = gtk_range_get_adjustment (GTK_RANGE(widget));
 	gtk_adjustment_set_value (GTK_ADJUSTMENT(vol_adj), gimmix_get_volume(pub->gmo));
-	
-//	widget = glade_xml_get_widget (xml, "
+
 	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL);
 
 	if (pub->conf->systray_enable == 1)
@@ -108,7 +107,13 @@ gimmix_timer (void)
 	int new_status;
 	float fraction;
 
-	new_status = gimmix_is_playing (pub->gmo);
+	new_status = gimmix_get_status (pub->gmo);
+	
+	if (song_is_changed)
+	{
+		gimmix_set_song_info ();
+		song_is_changed = false;
+	}
 	
 	if (status == new_status)
 	{
@@ -265,7 +270,7 @@ on_info_button_clicked (GtkWidget *widget, gpointer data)
 {
 	gint state;
 
-	state = gimmix_is_playing (pub->gmo);
+	state = gimmix_get_status (pub->gmo);
 	
 	if (state == PLAY || state == PAUSE)
 	{
@@ -467,7 +472,7 @@ gimmix_systray_popup_menu (void)
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 	gtk_widget_show (menu_item);
 	
-	if (gimmix_is_playing(pub->gmo) == PLAY)
+	if (gimmix_get_status(pub->gmo) == PLAY)
 	{
 		menu_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_MEDIA_PAUSE, NULL);
 		g_signal_connect (G_OBJECT (menu_item), "activate", G_CALLBACK (on_play_button_clicked), NULL);

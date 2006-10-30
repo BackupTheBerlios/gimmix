@@ -104,15 +104,12 @@ main (int argc, char *argv[])
 		album_label = glade_xml_get_widget (xml,"album_label");
 		progress = glade_xml_get_widget (xml,"progress");
 		progressbox = glade_xml_get_widget (xml,"progress_event_box");
-		
-		/* Preferences dialog */
-		
-		
+
 		/* Playlist */
 		directory_treeview = glade_xml_get_widget (xml, "album");
 		songs_treeview = glade_xml_get_widget (xml, "list");
 		current_playlist_treeview = glade_xml_get_widget (xml, "current_playlist_treeview");
-		
+
 		gtk_widget_show (main_window);
 		gimmix_init ();
 	}
