@@ -55,7 +55,7 @@ gimmix_connect_error (void)
 	gtk_label_set_markup (GTK_LABEL(error_label), error_markup);
 	g_free (error_markup);
 	error_dialog = gtk_dialog_new_with_buttons ("Error",
-												main_window,
+												GTK_WINDOW(main_window),
 												GTK_DIALOG_DESTROY_WITH_PARENT,
 												GTK_STOCK_OK,
 												GTK_RESPONSE_ACCEPT,
