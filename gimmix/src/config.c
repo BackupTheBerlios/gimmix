@@ -29,7 +29,12 @@
 Conf *
 gimmix_config_init (void)
 {
-	Conf *conf = (Conf*)malloc(sizeof(Conf));
+	cfg_t 	*cfg;
+	char	*rcfile;
+	Conf 	*conf;
+	int 	ret; 
+	
+	conf = (Conf*)malloc(sizeof(Conf));
 	
 	cfg_opt_t opts[] = {
 		CFG_SIMPLE_INT ("mpd_port", &conf->port),
@@ -39,23 +44,23 @@ gimmix_config_init (void)
 		CFG_END()
 	};
 
-	cfg_t *cfg;
-	
-	cfg = cfg_init(opts, 0);
-	cfg_parse (cfg, "~/.gimmixrc");
-	
-	/* Set default configuration values if reading from config file fails */
-	if (!conf->hostname)
-		conf->hostname = "localhost";
-	if (!conf->port)
-		conf->port = 6600;
-	if ((conf->systray_enable != 0) && (conf->systray_enable != 1))
-		conf->systray_enable = 1;
+	cfg = cfg_init (opts, 0);
+	rcfile = cfg_tilde_expand ("~/.gimmixrc");
+	ret = cfg_parse (cfg, rcfile);
 
+	if (!conf->hostname)
+		conf->hostname = NULL;
+		
+	if (!conf->port)
+		conf->port = 0;
+	
+	if ((conf->systray_enable != 0) && (conf->systray_enable != 1))
+		conf->systray_enable = -1;
+	
 	/* Free the memory */
 	cfg_free_value (opts);
 	cfg_free (cfg);
-
+	
 	return conf;
 }
 
@@ -76,13 +81,26 @@ gimmix_config_save (Conf *conf)
 	cfg = cfg_init(opts, 0);
     char *rcfile = cfg_tilde_expand ("~/.gimmixrc");
 	if((fp = fopen(rcfile, "w")))
-	{	cfg_setstr(cfg, "mpd_hostname", conf->hostname);
-		cfg_setint(cfg, "mpd_port", conf->port);
-		cfg_setint(cfg, "enable_systray", conf->systray_enable);
-		cfg_setstr(cfg, "mpd_password", conf->password);
-		cfg_print(cfg, fp);
-        free(rcfile);
-		fclose(fp);
+	{	
+		if (conf->hostname)
+			cfg_setstr(cfg, "mpd_hostname", conf->hostname);
+
+		if (conf->port > 0)
+			cfg_setint(cfg, "mpd_port", conf->port);
+		else
+			cfg_setint(cfg, "mpd_port", -1);
+
+		if (conf->systray_enable == 1 || conf->systray_enable == 0)
+			cfg_setint(cfg, "enable_systray", conf->systray_enable);
+		else
+			cfg_setint(cfg, "enable_systray", -1);
+
+		if (conf->password)
+			cfg_setstr(cfg, "mpd_password", conf->password);
+
+		cfg_print (cfg, fp);
+        free (rcfile);
+		fclose (fp);
 	}
 	else
 		fprintf (stderr, "Error while saving config.\n");
@@ -93,13 +111,29 @@ gimmix_config_save (Conf *conf)
 	return;
 }
 
+bool
+gimmix_config_exists ()
+{
+	FILE *fp;
+	char *rcfile = cfg_tilde_expand ("~/.gimmixrc");
+	if (fp = fopen(rcfile, "r"))
+	{
+		fclose (fp);
+		return true;
+	}
+	
+	return false;
+}
+
 void
 gimmix_config_free (Conf *conf)
 {
-	if (conf)
+	if (conf != NULL)
     {
-        free (conf->hostname);
-        free (conf->password);
+		if (conf->hostname)
+			free (conf->hostname);
+		if (conf->password)
+			free (conf->password);
 		free (conf);
     }
 	return;

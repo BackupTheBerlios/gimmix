@@ -38,7 +38,7 @@ gimmix_mpd_connect (Conf *conf)
 
 	if (mpd_check_connected (mo))
 	{
-		mpd_signal_connect_status_changed(mo, (StatusChangedCallback)song_changed, NULL);
+		mpd_signal_connect_status_changed (mo, (StatusChangedCallback)song_changed, NULL);
 		return mo;
 	}
 
@@ -280,9 +280,9 @@ song_changed (MpdObj *mo, ChangedStatusType id)
 void
 gimmix_disconnect (MpdObj *mo)
 {
-	if (mpd_check_connected(mo))
+	if (mo != NULL || mpd_check_connected(mo))
 	{
-		mpd_disconnect (mo);
+		
 		mpd_free (mo);
 	}
 	

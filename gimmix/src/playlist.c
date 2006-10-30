@@ -30,14 +30,22 @@ enum {
 	PLAYLIST
 };
 
+GtkWidget *current_playlist_treeview;
+GtkWidget *directory_treeview;
+GtkWidget *songs_treeview;
+
 GtkTreeModel        *current_playlist_model;
 GtkTreeSelection	*current_playlist_selection;
 GtkListStore        *current_playlist_store;
 GtkCellRenderer     *current_playlist_renderer;
 
 void
-gimmix_current_playlist_init (void)
+gimmix_playlist_init (void)
 {
+	directory_treeview = glade_xml_get_widget (xml, "album");
+	songs_treeview = glade_xml_get_widget (xml, "list");
+	current_playlist_treeview = glade_xml_get_widget (xml, "current_playlist_treeview");
+		
 	current_playlist_renderer = gtk_cell_renderer_text_new ();
 	gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (current_playlist_treeview),
 							-1,

@@ -34,6 +34,8 @@ enum {	PLAY,
 	};
 
 static int status;
+GtkWidget *progress;
+GtkWidget *progressbox;
 
 void
 gimmix_init (void)
@@ -44,14 +46,6 @@ gimmix_init (void)
 	gint			state;
 	
 	status = gimmix_get_status(pub->gmo);
-
-	widget = glade_xml_get_widget (xml, "play_button");
-	g_signal_connect (G_OBJECT(widget), "clicked", G_CALLBACK(on_play_button_clicked), NULL);
-	if (state == PLAY)
-	{
-		image = get_image ("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
-		gtk_button_set_image (GTK_BUTTON(widget), image);
-	}
 
 	widget = glade_xml_get_widget (xml, "prev_button");
 	g_signal_connect (G_OBJECT(widget), "clicked", G_CALLBACK(on_prev_button_clicked), NULL);
@@ -74,7 +68,12 @@ gimmix_init (void)
 	vol_adj = gtk_range_get_adjustment (GTK_RANGE(widget));
 	gtk_adjustment_set_value (GTK_ADJUSTMENT(vol_adj), gimmix_get_volume(pub->gmo));
 
+	progress = glade_xml_get_widget (xml,"progress");
+	progressbox = glade_xml_get_widget (xml,"progress_event_box");
 	g_signal_connect (G_OBJECT(progressbox), "button_press_event", G_CALLBACK(gimmix_progress_seek), NULL);
+	
+	widget = glade_xml_get_widget (xml, "play_button");
+	g_signal_connect (G_OBJECT(widget), "clicked", G_CALLBACK(on_play_button_clicked), NULL);
 
 	if (pub->conf->systray_enable == 1)
 	{	
@@ -86,17 +85,29 @@ gimmix_init (void)
 	{
 		gchar time[15];
 		float fraction;
+		image = get_image ("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
+		gtk_button_set_image (GTK_BUTTON(widget), image);
 		gimmix_get_progress_status (pub->gmo, &fraction, time);
 		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), fraction);
 		gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), time);
 		gimmix_set_song_info ();
 	}
-	else
+	else if (status == PAUSE)
+	{
+		image = get_image ("gtk-media-play", GTK_ICON_SIZE_BUTTON);
+		gtk_button_set_image (GTK_BUTTON(widget), image);
+		gimmix_set_song_info ();
+	}
+	else if (status == STOP)
+	{
 		gimmix_show_ver_info();
-
+	}
+	
+	song_is_changed = false;
 	g_timeout_add (300, (GSourceFunc)gimmix_timer, NULL);
+	
+	gimmix_playlist_init ();
 	gimmix_playlist_populate ();
-	gimmix_current_playlist_init ();
 	gimmix_update_current_playlist ();
 }
 
@@ -108,7 +119,7 @@ gimmix_timer (void)
 	float fraction;
 
 	new_status = gimmix_get_status (pub->gmo);
-	
+
 	if (song_is_changed)
 	{
 		gimmix_set_song_info ();
@@ -123,7 +134,7 @@ gimmix_timer (void)
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), fraction);
 			gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), time);
 		}
-		else if(status == STOP)
+		else if (status == STOP)
 		{
 			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), 0.0);
 			gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), "Stopped");
@@ -196,6 +207,9 @@ on_stop_button_clicked (GtkWidget *widget, gpointer data)
 		play_button = glade_xml_get_widget (xml, "play_button");
 		image = get_image ("gtk-media-play", GTK_ICON_SIZE_BUTTON);
 		gtk_button_set_image (GTK_BUTTON(play_button), image);
+		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), 0.0);
+		gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), "Stopped");
+		gimmix_show_ver_info ();
 	}
 	return;
 }
@@ -409,15 +423,21 @@ get_image (const gchar *id, GtkIconSize size)
 void
 gimmix_set_song_info (void)
 {
-	gchar *markup;
-	gchar *title;
-	SongInfo *song = NULL;
-	GtkWidget *window;
+	gchar 		*markup;
+	gchar 		*title;
+	SongInfo 	*song = NULL;
+	GtkWidget 	*window;
+	GtkWidget	*artist_label;
+	GtkWidget	*album_label;
+	GtkWidget	*song_label;
 	
 	song = gimmix_get_song_info (pub->gmo);
 	window = glade_xml_get_widget (xml, "main_window");
-
-	if( song->title)
+	song_label = glade_xml_get_widget (xml,"song_label");
+	artist_label = glade_xml_get_widget (xml,"artist_label");
+	album_label = glade_xml_get_widget (xml,"album_label");
+		
+	if (song->title)
 	{
 		title = g_strdup_printf ("Gimmix - %s", song->title);
 		gtk_window_set_title (GTK_WINDOW(window), title);
@@ -449,9 +469,8 @@ gimmix_set_song_info (void)
 void
 gimmix_systray_icon_create (void)
 {
-	/* gchar *icon_tooltip = "Gimmix";
-	gtk_status_icon_set_tooltip(tray_icon, icon_tooltip);*/
 	tray_icon = gtk_status_icon_new_from_stock("gtk-cdrom");
+	gtk_status_icon_set_tooltip(tray_icon, "Gimmix");
 	g_signal_connect (tray_icon, "popup-menu", G_CALLBACK (gimmix_systray_popup_menu), NULL);
 	g_signal_connect (tray_icon, "activate", G_CALLBACK(gimmix_window_visible), NULL);
 }
@@ -532,7 +551,7 @@ gimmix_notify_init (GtkStatusIcon *status_icon)
 void 
 on_systray_checkbox_toggled (GtkWidget *widget, gpointer data)
 {
-	if(pub->conf->systray_enable == 1)
+	if (pub->conf->systray_enable == 1)
 	{	
 		pub->conf->systray_enable = 0;
 		g_object_unref (G_OBJECT(notify));
@@ -581,8 +600,15 @@ gimmix_about_show (void)
 void
 gimmix_show_ver_info (void)
 {
-	gchar *markup;
-	gchar *appver;
+	gchar 		*markup;
+	gchar 		*appver;
+	GtkWidget	*artist_label;
+	GtkWidget	*album_label;
+	GtkWidget	*song_label;
+
+	song_label = glade_xml_get_widget (xml, "song_label");
+	artist_label = glade_xml_get_widget (xml, "artist_label");
+	album_label = glade_xml_get_widget (xml, "album_label");
 
 	appver = g_strdup_printf ("%s %s", APPNAME, VERSION);
 	markup = g_markup_printf_escaped ("<span size=\"large\"weight=\"bold\">%s</span>", appver);

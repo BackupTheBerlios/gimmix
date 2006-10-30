@@ -13,13 +13,16 @@ typedef struct
 	char *password;
 } Conf;
 
+/* Returns true if file exists otherwise false */
+bool gimmix_config_exists (void);
+
 /* Parse config file and set the initial config values */
-Conf * gimmix_config_init(void);
+Conf * gimmix_config_init (void);
 
 /* Save current settings back to gimmixrc */
-void gimmix_config_save(Conf *);
+void gimmix_config_save (Conf *);
 
 /* Free conf */
-void gimmix_config_free(Conf *);
+void gimmix_config_free (Conf *);
 
 #endif

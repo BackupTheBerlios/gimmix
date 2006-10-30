@@ -33,12 +33,18 @@ gimmix_connect (void)
 {
 	MpdObj *mo;
 	
-	if((mo = gimmix_mpd_connect(pub->conf)))
+	mo = gimmix_mpd_connect(pub->conf);
+	
+	if (mo != NULL)
 	{	
 		pub->gmo = mo;
 		return true;
 	}
-	return false;
+	else
+	{
+		pub->gmo = NULL;
+		return false;
+	}
 }
 
 void
@@ -82,44 +88,111 @@ error_dialog_response (GtkDialog *err_dialog, gint arg1, gpointer dialog)
 	}
 }
 
-main (int argc, char *argv[])
+void
+on_fr_close_clicked (GtkWidget *widget, gpointer data)
 {
-	gchar 		*path;
-	GtkWidget	*main_window;
-
-	pub = (GM *) malloc(sizeof(GM));
-	pub->conf = gimmix_config_init ();
-	gtk_init (&argc, &argv);
-	path = g_strdup_printf ("%s%s", PREFIX, GLADE_FILE);
-	xml = glade_xml_new (path, NULL, NULL);
-	g_free (path);
-	glade_xml_signal_autoconnect(xml);
-
-	main_window = glade_xml_get_widget (xml, "main_window");
+	gtk_widget_destroy (data);
 	
-	if (gimmix_connect())
+	GtkWidget *main_window = glade_xml_get_widget (xml, "main_window");
+	
+	if (!pub->conf)
 	{
-		song_label = glade_xml_get_widget (xml,"song_label");
-		artist_label = glade_xml_get_widget (xml,"artist_label");
-		album_label = glade_xml_get_widget (xml,"album_label");
-		progress = glade_xml_get_widget (xml,"progress");
-		progressbox = glade_xml_get_widget (xml,"progress_event_box");
-
-		/* Playlist */
-		directory_treeview = glade_xml_get_widget (xml, "album");
-		songs_treeview = glade_xml_get_widget (xml, "list");
-		current_playlist_treeview = glade_xml_get_widget (xml, "current_playlist_treeview");
-
-		gtk_widget_show (main_window);
-		gimmix_init ();
+		exit_cleanup ();
+		gtk_main_quit ();
 	}
 	else
 	{
-		gimmix_connect_error ();
+		if (gimmix_connect())
+		{
+			gtk_widget_show (main_window);
+			gimmix_init ();
+		}
+		else
+		{
+			gimmix_connect_error ();
+		}
 	}
+}
 
-	gtk_main ();
+void on_fr_apply_clicked (GtkWidget *widget, gpointer data)
+{
+	GtkWidget 	*entry;
+	const gchar *host;
+	const gchar *port;
+	const gchar *password;
+
+	pub->conf = (Conf*) malloc(sizeof(Conf));
+
+	entry = glade_xml_get_widget (xml,"fr_hostname");
+	host = gtk_entry_get_text (GTK_ENTRY(entry));
+	
+	entry = glade_xml_get_widget (xml,"fr_port");
+	port = gtk_entry_get_text (GTK_ENTRY(entry));
+	
+	entry = glade_xml_get_widget (xml,"fr_password");
+	password = gtk_entry_get_text (GTK_ENTRY(entry));
+
+	entry = glade_xml_get_widget (xml, "fr_systray_toggle");
+	
+	pub->conf->hostname = strdup(host);
+	pub->conf->password = strdup(password);
+	pub->conf->port = atoi(port);
+	
+	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(entry)))
+		pub->conf->systray_enable = 1;
+	else
+		pub->conf->systray_enable = 0;
+
 	gimmix_config_save (pub->conf);
+}
+
+main (int argc, char *argv[])
+{
+	gchar 		*path;
+	Conf		*conf;
+	GtkWidget	*main_window;
+
+	pub = (GM *) malloc(sizeof(GM));
+	pub->conf = NULL;
+	pub->gmo = NULL;
+
+	gtk_init (&argc, &argv);
+	
+	path = g_strdup_printf ("%s%s", PREFIX, GLADE_FILE);
+	xml = glade_xml_new (path, NULL, NULL);
+	glade_xml_signal_autoconnect (xml);
+	g_free (path);
+	
+	if (gimmix_config_exists())
+	{
+		pub->conf = gimmix_config_init ();
+		main_window = glade_xml_get_widget (xml, "main_window");
+		
+		if (gimmix_connect())
+		{
+			gtk_widget_show (main_window);
+			gimmix_init ();
+		}
+		else
+		{
+			gimmix_connect_error ();
+		}
+	}
+	else
+	{
+		GtkWidget *window;
+		GtkWidget *button;
+
+		window = glade_xml_get_widget (xml, "first_run_dialog");
+		button = glade_xml_get_widget (xml, "fr_apply");
+		g_signal_connect (G_OBJECT(button), "clicked", G_CALLBACK(on_fr_apply_clicked), NULL);
+		button = glade_xml_get_widget (xml, "fr_close");
+		g_signal_connect (G_OBJECT(button), "clicked", G_CALLBACK(on_fr_close_clicked), window);
+		
+		gtk_widget_show (window);
+	}
+	
+	gtk_main ();
 	exit_cleanup ();
 }
 
