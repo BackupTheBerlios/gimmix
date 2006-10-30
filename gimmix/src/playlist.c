@@ -79,6 +79,7 @@ gimmix_update_current_playlist (void)
 
 	current_playlist_model = gtk_tree_view_get_model (GTK_TREE_VIEW(current_playlist_treeview));
 	current_playlist_store = GTK_LIST_STORE (current_playlist_model);
+	gtk_list_store_clear (current_playlist_store);
 
 	while (data != NULL)
 	{
@@ -230,16 +231,9 @@ add_song (GtkTreeView *treeview)
 		id = data->song->id;
 		mpd_status_update (pub->gmo);
 		mpd_data_free (data);
-		gtk_list_store_append (current_playlist_store, &current_playlist_tree_iter);
-		gtk_list_store_set (current_playlist_store, &current_playlist_tree_iter,
-							0, title,
-							1, path,
-							2, id,
-							-1);
+		
+		gimmix_update_current_playlist ();
 	}
-
-	current_playlist_model	= GTK_TREE_MODEL (current_playlist_store);
-	gtk_tree_view_set_model (GTK_TREE_VIEW (current_playlist_treeview), current_playlist_model);
 
 	return;
 }
@@ -448,3 +442,4 @@ gimmix_path_get_parent_dir (gchar *path)
  	else
  	return "/";
 }
+

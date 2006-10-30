@@ -280,6 +280,12 @@ song_changed (MpdObj *mo, ChangedStatusType id)
 		song_is_changed = true;
 	else
 		song_is_changed = false;
+		
+	if (id&MPD_CST_PLAYLIST)
+		playlist_is_changed = true;
+	else
+		playlist_is_changed = false;
+
 	return;
 }
 
@@ -288,7 +294,6 @@ gimmix_disconnect (MpdObj *mo)
 {
 	if (mo != NULL || mpd_check_connected(mo))
 	{
-		
 		mpd_free (mo);
 	}
 	

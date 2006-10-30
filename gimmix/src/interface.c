@@ -126,6 +126,12 @@ gimmix_timer (void)
 		song_is_changed = false;
 	}
 	
+	if (playlist_is_changed)
+	{
+		gimmix_update_current_playlist ();
+		playlist_is_changed = false;
+	}
+	
 	if (status == new_status)
 	{
 		if (status == PLAY || status == PAUSE)
