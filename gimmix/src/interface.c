@@ -33,6 +33,8 @@ enum {	PLAY,
 		STOP
 	};
 
+static int status;
+
 void
 gimmix_init (void)
 {
@@ -41,7 +43,7 @@ gimmix_init (void)
 	GtkAdjustment	*vol_adj;
 	gint			state;
 	
-	state = gimmix_is_playing(pub->gmo);
+	status = gimmix_is_playing(pub->gmo);
 
 	widget = glade_xml_get_widget (xml, "play_button");
 	g_signal_connect (G_OBJECT(widget), "clicked", G_CALLBACK(on_play_button_clicked), NULL);
@@ -81,12 +83,19 @@ gimmix_init (void)
 		//notify = gimmix_notify_init (tray_icon);
 	}
 
-	if (state == PLAY)
+	if (status == PLAY)
+	{
+		gchar time[15];
+		float fraction;
+		gimmix_get_progress_status (pub->gmo, &fraction, time);
+		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), fraction);
+		gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), time);
 		gimmix_set_song_info ();
+	}
 	else
 		gimmix_show_ver_info();
 
-	g_timeout_add (400, (GSourceFunc)gimmix_timer, NULL);
+	g_timeout_add (300, (GSourceFunc)gimmix_timer, NULL);
 	gimmix_playlist_populate ();
 	gimmix_current_playlist_init ();
 	gimmix_update_current_playlist ();
@@ -96,40 +105,47 @@ gboolean
 gimmix_timer (void)
 {
 	gchar time[15];
-	gint state;
+	int new_status;
 	float fraction;
 
-	state = gimmix_is_playing (pub->gmo);
-	if (state == PLAY || state == PAUSE)
+	new_status = gimmix_is_playing (pub->gmo);
+	
+	if (status == new_status)
 	{
-		gimmix_get_progress_status (pub->gmo, &fraction, time);
-		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), fraction);
-		gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), time);
-		if (state == PAUSE)
+		if (status == PLAY || status == PAUSE)
 		{
-			//GtkWidget *image = get_image ("gtk-media-play", GTK_ICON_SIZE_BUTTON);
-			//gtk_button_set_image (GTK_BUTTON(button_play), image);
+			gimmix_get_progress_status (pub->gmo, &fraction, time);
+			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), fraction);
+			gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), time);
 		}
-		else
+		else if(status == STOP)
 		{
-			//GtkWidget *image = get_image ("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
-			//gtk_button_set_image (GTK_BUTTON(button_play), image);
+			gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), 0.0);
+			gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), "Stopped");
+			gimmix_show_ver_info ();
 		}
-		if (status_is_changed)
-			gimmix_set_song_info ();
-		return TRUE;
+		return;
 	}
+	else
+	{
+		GtkWidget *button;
+		GtkWidget *image;
 
-	else if(state == STOP)
-	{
-		//GtkWidget *image = get_image ("gtk-media-play", GTK_ICON_SIZE_BUTTON);
-		//gtk_button_set_image (GTK_BUTTON(button_play), image);
-		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(progress), 0.0);
-		gtk_progress_bar_set_text (GTK_PROGRESS_BAR(progress), "Stopped");
-		gimmix_show_ver_info ();
-		return TRUE;
+		status = new_status;
+		if (status == PLAY)
+		{
+			image = get_image ("gtk-media-pause", GTK_ICON_SIZE_BUTTON);
+			button = glade_xml_get_widget (xml, "play_button");
+			gtk_button_set_image (GTK_BUTTON(button), image);
+		}
+		else if (status == PAUSE)
+		{
+			image = get_image ("gtk-media-play", GTK_ICON_SIZE_BUTTON);
+			button = glade_xml_get_widget (xml, "play_button");
+			gtk_button_set_image (GTK_BUTTON(button), image);
+		}
+		return;
 	}
-	return TRUE;
 }
 
 void
