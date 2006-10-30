@@ -33,15 +33,21 @@ gimmix_mpd_connect (Conf *conf)
 {
 	MpdObj *mo;
 
-	mo = mpd_new (conf->hostname, conf->port, conf->password);
-	mpd_connect (mo);
-
-	if (mpd_check_connected (mo))
+	if (conf)
 	{
-		mpd_signal_connect_status_changed (mo, (StatusChangedCallback)song_changed, NULL);
-		return mo;
+		if ((conf->hostname!="") && (conf->port!=-1))
+		{
+			mo = mpd_new (conf->hostname, conf->port, conf->password);
+			mpd_connect (mo);
+			if (mpd_check_connected (mo))
+			{
+				mpd_signal_connect_status_changed (mo, (StatusChangedCallback)song_changed, NULL);
+			return mo;
+			}
+		}
+		else
+		return NULL;
 	}
-
 	return NULL;
 }
 

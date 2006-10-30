@@ -32,7 +32,7 @@ bool
 gimmix_connect (void)
 {
 	MpdObj *mo;
-	
+	g_print ("ok, getting mo\n");
 	mo = gimmix_mpd_connect(pub->conf);
 	
 	if (mo != NULL)
@@ -167,7 +167,7 @@ main (int argc, char *argv[])
 	{
 		pub->conf = gimmix_config_init ();
 		main_window = glade_xml_get_widget (xml, "main_window");
-		
+		g_print ("connecting..");
 		if (gimmix_connect())
 		{
 			gtk_widget_show (main_window);
@@ -175,6 +175,7 @@ main (int argc, char *argv[])
 		}
 		else
 		{
+			g_print ("starting to display error..\n");
 			gimmix_connect_error ();
 		}
 	}
