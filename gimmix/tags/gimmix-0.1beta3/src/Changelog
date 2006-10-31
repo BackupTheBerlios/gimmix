@@ -1,3 +1,7 @@
+0.1beta3 (31-10-2006)
+* Fixed a major bug that caused gimmix to become unstable when user
+removes a song from the playlist or due to other weird reason.
+
 0.1beta2 (31-10-2006)
 * Applied a patch to fix the hardcoded CFLAGS. Gimmix can now be built with x86_64 flags. (Patch by Alex Smith).
 * Fixed a LOT of bugs and memory leaks.
