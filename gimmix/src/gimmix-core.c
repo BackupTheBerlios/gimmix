@@ -110,11 +110,11 @@ bool
 gimmix_prev (MpdObj *mo)
 {
 	int state;
+	
+	mpd_player_prev (mo);
 	state = gimmix_get_status (mo);
-
 	if (state == PLAY || state == PAUSE)
 	{
-		mpd_player_prev (mo);
 		return true;
 	}
 	return false;
@@ -124,11 +124,11 @@ bool
 gimmix_next (MpdObj *mo)
 {
 	int state;
+	
+	mpd_player_next (mo);
 	state = gimmix_get_status (mo);
-
 	if (state == PLAY || state == PAUSE)
 	{
-		mpd_player_next (mo);
 		return true;
 	}
 	return false;
