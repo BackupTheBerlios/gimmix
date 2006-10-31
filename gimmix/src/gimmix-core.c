@@ -135,6 +135,56 @@ gimmix_next (MpdObj *mo)
 }
 
 bool
+gimmix_toggle_repeat (MpdObj *mo)
+{
+	int state;
+	
+	if (!mo)
+		return FALSE;
+		
+	state = mpd_player_get_repeat (mo) ? 0 : 1;
+	mpd_player_set_repeat (mo, state);
+	return TRUE;
+}
+
+bool
+gimmix_toggle_shuffle (MpdObj *mo)
+{
+	int state;
+
+	if (!mo)
+		return FALSE;
+		
+	state = mpd_player_get_random (mo) ? 0 : 1;
+	mpd_player_set_random (mo, state);
+	return TRUE;
+}
+
+bool
+is_gimmix_repeat (MpdObj *mo)
+{
+	int state;
+	
+	state = mpd_player_get_repeat (mo);
+	if (state == 1)
+		return TRUE;
+	
+	return FALSE;
+}
+
+bool
+is_gimmix_shuffle (MpdObj *mo)
+{
+	int state;
+	
+	state = mpd_player_get_random (mo);
+	if (state == 1)
+		return TRUE;
+	
+	return FALSE;
+}
+
+bool
 gimmix_seek (MpdObj *mo, int seektime)
 {
 	int state;

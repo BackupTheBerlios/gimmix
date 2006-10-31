@@ -35,6 +35,8 @@ void on_next_button_clicked (GtkWidget *, gpointer);
 void on_play_button_clicked (GtkWidget *, gpointer);
 void on_stop_button_clicked (GtkWidget *, gpointer);
 void on_info_button_clicked (GtkWidget *, gpointer);
+void on_repeat_button_toggled (GtkToggleButton *, gpointer);
+void on_shuffle_button_toggled (GtkToggleButton *, gpointer);
 void on_prefs_button_clicked (GtkWidget *, gpointer);
 void on_volume_scale_changed (GtkWidget *, gpointer data);
 void on_preferences_apply (GtkWidget *, gpointer);

@@ -58,6 +58,16 @@ gimmix_init (void)
 	
 	widget = glade_xml_get_widget (xml, "pref_button");
 	g_signal_connect (G_OBJECT(widget), "clicked", G_CALLBACK(on_prefs_button_clicked), NULL);
+	
+	widget = glade_xml_get_widget (xml, "repeat_toggle");
+	if (is_gimmix_repeat (pub->gmo))
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), TRUE);
+	g_signal_connect (G_OBJECT(widget), "clicked", G_CALLBACK(on_repeat_button_toggled), NULL);
+	
+	widget = glade_xml_get_widget (xml, "shuffle_toggle");
+	if (is_gimmix_shuffle (pub->gmo))
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), TRUE);
+	g_signal_connect (G_OBJECT(widget), "clicked", G_CALLBACK(on_shuffle_button_toggled), NULL);
 
 	widget = glade_xml_get_widget (xml, "info_button");
 	g_signal_connect (G_OBJECT(widget), "clicked", G_CALLBACK(on_info_button_clicked), NULL);
@@ -226,6 +236,20 @@ on_stop_button_clicked (GtkWidget *widget, gpointer data)
 	return;
 }
 
+void
+on_repeat_button_toggled (GtkToggleButton *button, gpointer data)
+{
+	gimmix_toggle_repeat (pub->gmo);
+	return;
+}
+
+void
+on_shuffle_button_toggled (GtkToggleButton *button, gpointer data)
+{
+	gimmix_toggle_shuffle (pub->gmo);
+	return;
+}
+		
 void
 on_prefs_button_clicked (GtkWidget *button, gpointer data)
 {

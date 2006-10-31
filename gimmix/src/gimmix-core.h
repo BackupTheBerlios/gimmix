@@ -38,6 +38,8 @@ bool gimmix_stop (MpdObj *);
 bool gimmix_prev (MpdObj *);
 bool gimmix_next (MpdObj *);
 bool gimmix_seek (MpdObj *, int);
+bool gimmix_toggle_repeat (MpdObj *);
+bool gimmix_toggle_shuffle (MpdObj *);
 
 /* voulme control */
 int gimmix_get_volume (MpdObj *);
@@ -56,6 +58,10 @@ char * gimmix_get_song_bitrate (SongInfo *);
 
 /* Check mpd status for PLAY/PAUSE/STOP */
 int gimmix_get_status (MpdObj *);
+
+/* repeat / shuffle status functions */
+bool is_gimmix_repeat (MpdObj *);
+bool is_gimmix_shuffle (MpdObj *);
 
 /* Status changed callback */
 /* Monitors song, volume, and playlist changes */
