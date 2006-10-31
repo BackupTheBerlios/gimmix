@@ -58,6 +58,7 @@ char * gimmix_get_song_bitrate (SongInfo *);
 int gimmix_get_status (MpdObj *);
 
 /* Status changed callback */
+/* Monitors song, volume, and playlist changes */
 void song_changed (MpdObj *, ChangedStatusType);
 
 #endif
