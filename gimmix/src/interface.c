@@ -120,7 +120,7 @@ gimmix_timer (void)
 
 	new_status = gimmix_get_status (pub->gmo);
 
-	if (song_is_changed)
+	if (song_is_changed && new_status == PLAY)
 	{
 		gimmix_set_song_info ();
 		song_is_changed = false;
@@ -160,7 +160,7 @@ gimmix_timer (void)
 			button = glade_xml_get_widget (xml, "play_button");
 			gtk_button_set_image (GTK_BUTTON(button), image);
 		}
-		else if (status == PAUSE)
+		else if (status == PAUSE || status == STOP)
 		{
 			image = get_image ("gtk-media-play", GTK_ICON_SIZE_BUTTON);
 			button = glade_xml_get_widget (xml, "play_button");
