@@ -673,16 +673,19 @@ gimmix_show_ver_info (void)
 	GtkWidget	*artist_label;
 	GtkWidget	*album_label;
 	GtkWidget	*song_label;
+	GtkWidget	*window;
 
 	song_label = glade_xml_get_widget (xml, "song_label");
 	artist_label = glade_xml_get_widget (xml, "artist_label");
 	album_label = glade_xml_get_widget (xml, "album_label");
+	window = glade_xml_get_widget (xml, "main_window");
 
 	appver = g_strdup_printf ("%s %s", APPNAME, VERSION);
 	markup = g_markup_printf_escaped ("<span size=\"large\"weight=\"bold\">%s</span>", appver);
 	gtk_label_set_markup (GTK_LABEL(song_label), markup);
 	gtk_label_set_text (GTK_LABEL(artist_label), "http://priyank.one09.net/gimmix");
 	gtk_label_set_text (GTK_LABEL(album_label), NULL);
+	gtk_window_set_title (GTK_WINDOW(window), APPNAME);
 	g_free (markup);
 	g_free (appver);
 }
