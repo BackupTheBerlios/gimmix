@@ -597,8 +597,23 @@ on_systray_checkbox_toggled (GtkWidget *widget, gpointer data)
 void
 gimmix_about_show (void)
 {
-    GdkPixbuf 	*about_pixbuf;
+ 	GdkPixbuf 	*about_pixbuf;
 	gchar		*path;
+	gchar 		*license = 
+      ("This program is free software; you can redistribute it and/or "
+	  "modify it under the terms of the GNU General Public Licence as "
+	  "published by the Free Software Foundation; either version 2 of the "
+	  "Licence, or (at your option) any later version.\n"
+	  "\n"
+	  "This program is distributed in the hope that it will be useful, "
+	  "but WITHOUT ANY WARRANTY; without even the implied warranty of "
+	  "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU "
+	  "General Public Licence for more details.\n"
+	  "\n"
+	  "You should have received a copy of the GNU General Public Licence "
+	  "along with this program; if not, write to the Free Software "
+	  "Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, "
+	  "MA  02110-1301  USA");
 	
 	path = g_strdup_printf ("%s%s", PREFIX, "/share/pixmaps/gimmix.png");
     about_pixbuf = gdk_pixbuf_new_from_file (path, NULL);
@@ -616,10 +631,12 @@ gimmix_about_show (void)
                            "version", VERSION,
                            "copyright", "\xC2\xA9 2006 Priyank Gosalia  (GPL)",
                            "comments", "Gimmix is a GUI MPD client written in C",
+                           "license", license,
                            "authors", authors,
                            "website", website,
                            "website-label", website_label,
-                           "logo", about_pixbuf, 
+                           "logo", about_pixbuf,
+                           "wrap-license", true,
                            NULL);
 	return;
 }
