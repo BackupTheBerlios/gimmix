@@ -39,6 +39,7 @@ void on_prefs_button_clicked (GtkWidget *, gpointer);
 void on_volume_scale_changed (GtkWidget *, gpointer data);
 void on_preferences_apply (GtkWidget *, gpointer);
 void gimmix_scroll_volume_slider (GtkWidget *, GdkEventScroll *);
+void gimmix_update_volume (void);
 void gimmix_progress_seek (GtkWidget *, GdkEvent *);
 void gimmix_about_show (void);
 void gimmix_window_visible (void);

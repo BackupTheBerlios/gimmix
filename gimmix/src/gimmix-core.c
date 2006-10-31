@@ -285,6 +285,11 @@ song_changed (MpdObj *mo, ChangedStatusType id)
 		playlist_is_changed = true;
 	else
 		playlist_is_changed = false;
+		
+	if (id&MPD_CST_VOLUME)
+		volume_is_changed = true;
+	else
+		volume_is_changed = false;
 
 	return;
 }

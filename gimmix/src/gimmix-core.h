@@ -23,9 +23,10 @@ typedef struct songinfo
 	int pos;
 } SongInfo;
 
-/* True when song changes */
+/* some status flags */
 bool song_is_changed;
 bool playlist_is_changed;
+bool volume_is_changed;
 
 /* create a mpd object and connect to mpd using the conf */
 MpdObj * gimmix_mpd_connect (Conf *);

@@ -132,6 +132,12 @@ gimmix_timer (void)
 		playlist_is_changed = false;
 	}
 	
+	if (volume_is_changed)
+	{
+		gimmix_update_volume ();
+		volume_is_changed = false;
+	}
+
 	if (status == new_status)
 	{
 		if (status == PLAY || status == PAUSE)
@@ -367,16 +373,31 @@ gimmix_scroll_volume_slider (GtkWidget *widget, GdkEventScroll *event)
 	switch (event->direction)
 	{
 		case GDK_SCROLL_UP:
-			volume = gtk_adjustment_get_value(GTK_ADJUSTMENT(volume_adj)) + 2;
-			gtk_adjustment_set_value(GTK_ADJUSTMENT (volume_adj), volume);
+			volume = gtk_adjustment_get_value (GTK_ADJUSTMENT(volume_adj)) + 2;
+			gtk_adjustment_set_value (GTK_ADJUSTMENT (volume_adj), volume);
 			break;
 		case GDK_SCROLL_DOWN:
-			volume = gtk_adjustment_get_value(GTK_ADJUSTMENT(volume_adj)) - 2;
-			gtk_adjustment_set_value(GTK_ADJUSTMENT(volume_adj), volume);
+			volume = gtk_adjustment_get_value (GTK_ADJUSTMENT(volume_adj)) - 2;
+			gtk_adjustment_set_value (GTK_ADJUSTMENT(volume_adj), volume);
 			break;
 		default:
 			return;
 	}
+}
+
+void
+gimmix_update_volume ()
+{
+	gint 			volume;
+	GtkWidget		*widget;
+	GtkAdjustment	*volume_adj;
+	
+	widget = glade_xml_get_widget (xml, "volume_scale");
+	volume_adj = gtk_range_get_adjustment (GTK_RANGE(widget));
+	volume = gimmix_get_volume (pub->gmo);
+	gtk_adjustment_set_value (GTK_ADJUSTMENT(volume_adj), volume);
+	
+	return;
 }
 
 void
