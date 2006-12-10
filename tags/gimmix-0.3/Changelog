@@ -1,0 +1,69 @@
+Version 0.3 (xx-12-2006)
+* Replaced the old libconfuse based config system with wejpconfig (written by Johannes Heimansberg)
+* Configuration file layout is changed completely.
+* Fixed a bad bad bug on x86_64 where gimmix crashed if compiled with -O2 flags.
+* Dropped notification using libnotify. Song info is now displayed as a tooltip in the system tray icon.
+* Tooltip notifications are now enabled by default and not user-configurable.
+* Added key bindings for play/pause/stop/prev/next/info buttons.
+* Fixed a bug that caused blank entires to be displayed in filebrower.
+* Current playlist can now be saved.
+* Added support for managing mpd playlists. (load/save)
+* Added a new tab for playlists.
+* Added support for enabling/disabling Crossfade.
+* Gimmix now remembers the window position when the user quits.
+* Gimmix also remembers the window mode (full/compact) when gimmix
+quits.
+* Users can now select whether a song should be played immediately when he adds it to the playlist. (Requested by Kedar Desai)
+* Users can also set whether gimmix should stop playback when user quits gimmix.
+* Fixed a random bug that caused garbage values to be displayed in password entry of preferences.
+* Implemented ID3 Tag editor using taglib. Now users can edit ID3 information of songs.
+* Display Bitrate, Channels, and song length in the tag editor window.
+* Fixed a major race condition which caused gimmix to use too much of memory when gimmix is not playing any song.
+* Replaced old error dialogs with GtkMessageDialog.
+* Fixed major memory leaks in the playlist code.
+* Completely re-organized code and lots of code cleanups.
+* Lots of other fixes and improvements.
+* Better error handling.
+
+
+Version 0.2 (16-11-2006)
+* A l33t-new logo.
+* Fixed several memory leaks.
+* Lots of bugfixes.
+* Display the currently playing song in a notification bubble in system tray.
+* Added a configuration option for disabling notifications.
+* Modified the First run dialog a bit.
+* Library browser is now integrated with the main window again.
+* Changed icon of files in library browser.
+* Added icons for current playlist and library tabs.
+* Added "Search-As-You-Type" support for searching songs in the mpd database.
+* Added a popup menu item for updating mpd library/database.
+* Songs can be deleted from the playlist by pressing the DEL key.
+* Gimmix is now minimised to systray (if systray icon is enabled) when user closes the player window. (Reported by Rohan Dhruva)
+* Fixed a small bug in Makefile (Thanks to Alex Smith)
+* Fixed a race condition in playlist repeat and shuffle code.
+* Fixed a bug where the status of repeat and shuffle buttons was not updated if other mpd client changed the status of repeat and shuffle. (Reported by Rohan Dhruva)
+* Fixed the buggy config code which caused random segfaults.
+* Fixed bugs with the confi system on x86_64.
+* Added tooltips for buttons.
+* Display '*' instead of actual text in password entries.
+* Added a .desktop file with the source.
+
+Version 0.1 (3-11-2006)
+* Made the ui more cleaner and compact.
+* File browser is now separated from the main playlist window.
+* Another bunch of bug fixes.
+* Fixed a random crash on x86_64 systems.
+
+Version 0.1beta2 (31-10-2006)
+* Applied a patch to fix the hardcoded CFLAGS. Gimmix can now be built with x86_64 flags. (Patch by Alex Smith).
+* Fixed a LOT of bugs and memory leaks.
+* Gimmix now also displays the bitrate of the currently playing song in info window.
+* Added support for "Repeat" and "Shuffle"
+* Playlist items can now be removed or cleared.
+* Added a new first run dialog which is displayed when gimmix is run for the first time.
+* Improved cpu and memory usage.
+* Lots of small fixes.
+
+Version 0.1-beta (27-10-2006)
+* Initial public release.
